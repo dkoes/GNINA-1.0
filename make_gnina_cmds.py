@@ -31,9 +31,10 @@ def gen_docking_prefix(receptor,ligand):
 	Helper function to generate the outfile prefix for a given receptor ligand pair
 	'''
 	r=receptor.split('.')[0]
-	l=ligand.split('/')[-1].split()[0]
+	l=ligand.split('/')[-1].split('.')[0]
 	outname=f'{r}_{l}_'
 	return outname
+
 
 
 parser=argparse.ArgumentParser(description='Create a text file containing all the gnina commands you specify to run.')
@@ -66,8 +67,10 @@ if args.cnn:
 	'general_default2018_4','general_default2018_5',
 	]
 	if args.cnn in possible:
+		single_cnn=True
 		pass
 	else:
+		single_cnn=False
 		for cnn in args.cnn:
 			assert(cnn in possible),"Specified cnn not built into gnina!"
 
@@ -84,6 +87,14 @@ with open(args.input) as infile:
 print(todock)
 
 #main part of the program
+
+#step1 -- check if we just want all defaults
+only_defaults=True
+for arg in vars(args):
+	if arg not in skip:
+		if getattr(args,arg):
+			not_defaults=False
+
 with open(args.output,'w') as outfile:
 	for arg in vars(args):
 		if arg not in skip:
@@ -93,7 +104,7 @@ with open(args.output,'w') as outfile:
 					print(val)
 					for r, l, box, out_prefix in todock:
 						sent=f'gnina -r {r} -l {l} --autobox_ligand {l} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
-						if args.cnn:
+						if not single_cnn:
 							dock_out=out_prefix+'_'.join[args.cnn]+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
 							sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
 						else:
@@ -104,5 +115,18 @@ with open(args.output,'w') as outfile:
 						sent+=f' --{arg} {val}'
 						if args.gpu:
 							sent+=' --gpu'
-
 						outfile.write(sent+'\n')
+	#HACK -- if only specified defaults E.G. passed no arguments into the script we still want to dock
+	if only_defaults:
+		for r, l, box, out_prefix in todock:
+			sent=f'gnina -r {r} -l {l} --autobox_ligand {l} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
+			if not single_cnn:
+				dock_out=out_prefix+'_'.join[args.cnn]+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+				sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
+			else:
+				dock_out=out_prefix+'_crossdock_default2018_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+				sent+=f' --out {dock_out}'
+
+			if args.gpu:
+				sent+=' --gpu'
+			outfile.write(send+'\n')
