@@ -65,8 +65,11 @@ if args.cnn:
 	'general_default2018_1','general_default2018_2','general_default2018_3',
 	'general_default2018_4','general_default2018_5',
 	]
-	for cnn in args.cnn:
-		assert(cnn in possible),"Specified cnn not built into gnina!"
+	if args.cnn in possible:
+		pass
+	else:
+		for cnn in args.cnn:
+			assert(cnn in possible),"Specified cnn not built into gnina!"
 
 #Specifying arguments to skip over
 skip=set(['input','output','cnn','cnn_scoring','gpu'])
