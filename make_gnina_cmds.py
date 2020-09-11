@@ -116,7 +116,7 @@ with open(args.output,'w') as outfile:
 						if args.gpu:
 							sent+=' --gpu'
 						outfile.write(sent+'\n')
-	#HACK -- if only specified defaults E.G. passed no arguments into the script we still want to dock
+	#TENP WORKAROUND -- if only specified defaults E.G. passed no arguments into the script we still want to dock
 	if only_defaults:
 		for r, l, box, out_prefix in todock:
 			sent=f'gnina -r {r} -l {l} --autobox_ligand {l} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
@@ -129,4 +129,4 @@ with open(args.output,'w') as outfile:
 
 			if args.gpu:
 				sent+=' --gpu'
-			outfile.write(send+'\n')
+			outfile.write(send+'')
