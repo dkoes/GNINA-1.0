@@ -81,20 +81,23 @@ with open(args.input) as infile:
 #main part of the program
 with open(args.output,'w') as outfile:
 	for arg in vars(args):
+		print(arg)
 		if arg not in skip:
-			for val in getattr(args,arg):
-				for r, l, box, out_prefix in todock:
-					sent=f'gnina -r {r} -l {l} --autobox_ligand {l} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
-					if args.cnn:
-						dock_out=out_prefix+'_'.join[args.cnn]+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
-						sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
-					else:
-						dock_out=out_prefix+'_crossdock_default2018_'+args.cnn_scoring+'_'+arg+val+'.sdf'
-						sent+=f' --out {dock_out}'
+			if getattr(args,arg):
+				for val in getattr(args,arg):
+					print(val)
+					for r, l, box, out_prefix in todock:
+						sent=f'gnina -r {r} -l {l} --autobox_ligand {l} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
+						if args.cnn:
+							dock_out=out_prefix+'_'.join[args.cnn]+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+							sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
+						else:
+							dock_out=out_prefix+'_crossdock_default2018_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+							sent+=f' --out {dock_out}'
 
-					#adding in the stuff for the specified argument
-					sent+=f' --{arg} {val}'
-					if args.gpu:
-						sent+=' --gpu'
+						#adding in the stuff for the specified argument
+						sent+=f' --{arg} {val}'
+						if args.gpu:
+							sent+=' --gpu'
 
-					outfile.write(sent+'\n')
+						outfile.write(sent+'\n')
