@@ -39,7 +39,7 @@ def gen_docking_prefix(receptor,ligand):
 parser=argparse.ArgumentParser(description='Create a text file containing all the gnina commands you specify to run.')
 parser.add_argument('-i','--input',required=True,help='Space-delimited file containing the Receptor file, Ligand file, and autobox ligand file')
 parser.add_argument('-o','--output',default='gnina_cmds.txt',help='Name of the output file containing the commands to run. Defaults to "gnina_cmds.txt"')
-parser.add_argument('--cnn',required=True,nargs='+',help="Specify built-in CNN model for gnina. Default is to use gnina's default. If multiple models are specified, an ensemble will be evaluated.")
+parser.add_argument('--cnn',default='crossdock_default2018',nargs='+',help="Specify built-in CNN model for gnina. Default is to use crossdock_default2018. If multiple models are specified, an ensemble will be evaluated.")
 parser.add_argument('--cnn_scoring',default='rescore',help='Specify what method of CNN scoring. Must be [none, rescore,refinement,all]. Defaults to rescore')
 parser.add_argument('--exhaustiveness',default=None,nargs='+',help='exhaustiveness arguments for gnina. Accepts any number of arguments.')
 parser.add_argument('--min_rmsd_filter',default=None,nargs='+',help='Filters for min_rmsd_filter for gnina. Accepts any number of arguments.')
