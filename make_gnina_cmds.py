@@ -56,7 +56,7 @@ if args.cnn_rotation:
 		assert (0<=int(rot) and int(rot)<=24),"cnn_rotations need to be in [0,24]!"
 
 assert (args.cnn_scoring in ['none','rescore','refinement','all']),"cnn_scoring must be one of none,rescore,refinement,all!"
-
+print(args.cnn)
 if args.cnn:
 	possible=[
 	'crossdock_default2018','crossdock_default2018_1','crossdock_default2018_2',
