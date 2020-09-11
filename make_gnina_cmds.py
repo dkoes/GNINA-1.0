@@ -93,7 +93,7 @@ only_defaults=True
 for arg in vars(args):
 	if arg not in skip:
 		if getattr(args,arg):
-			not_defaults=False
+			only_defaults=False
 
 with open(args.output,'w') as outfile:
 	for arg in vars(args):
