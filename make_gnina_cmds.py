@@ -30,7 +30,9 @@ def gen_docking_prefix(receptor,ligand):
 	'''
 	Helper function to generate the outfile prefix for a given receptor ligand pair
 	'''
-	outname=f'{receptor.split('.')[0]}_{ligand.split('/')[-1].split()[0]}_'
+	r=receptor.split('.')[0]
+	l=ligand.split('/')[-1].split()[0]
+	outname=f'{r}_{l}_'
 	return outname
 
 
