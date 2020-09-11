@@ -39,20 +39,20 @@ def gen_docking_prefix(receptor,ligand):
 parser=argparse.ArgumentParser(description='Create a text file containing all the gnina commands you specify to run.')
 parser.add_argument('-i','--input',required=True,help='Space-delimited file containing the Receptor file, Ligand file, and autobox ligand file')
 parser.add_argument('-o','--output',default='gnina_cmds.txt',help='Name of the output file containing the commands to run. Defaults to "gnina_cmds.txt"')
-parser.add_argument('--cnn',default='',nargs='+',help="Specify built-in CNN model for gnina. Default is to use gnina's default. If multiple models are specified, an ensemble will be evaluated.")
+parser.add_argument('--cnn',default=None,nargs='+',help="Specify built-in CNN model for gnina. Default is to use gnina's default. If multiple models are specified, an ensemble will be evaluated.")
 parser.add_argument('--cnn_scoring',default='rescore',help='Specify what method of CNN scoring. Must be [none, rescore,refinement,all]. Defaults to rescore')
-parser.add_argument('--exhaustiveness',default='',nargs='+',help='exhaustiveness arguments for gnina. Accepts any number of arguments.')
-parser.add_argument('--min_rmsd_filter',default='',nargs='+',help='Filters for min_rmsd_filter for gnina. Accepts any number of arguments.')
-parser.add_argument('--cnn_rotation',default='',nargs='+',help='Options for cnn_rotation for gnina. Accepts any number of arguments. All must be [0,24].')
-parser.add_argument('--num_modes',default='',nargs='+',help='Options for num_modes for gnina. Accepts any number of arguments.')
-parser.add_argument('--autobox_add',default='',nargs='+',help='Options for autobox_add for gnina. Accepts any number of arguments.')
-parser.add_argument('--num_mc_saved',default='',nargs='+',help='Options for num_mc_saved for gnina. Accepts any number of arguments.')
+parser.add_argument('--exhaustiveness',default=None,nargs='+',help='exhaustiveness arguments for gnina. Accepts any number of arguments.')
+parser.add_argument('--min_rmsd_filter',default=None,nargs='+',help='Filters for min_rmsd_filter for gnina. Accepts any number of arguments.')
+parser.add_argument('--cnn_rotation',default=None,nargs='+',help='Options for cnn_rotation for gnina. Accepts any number of arguments. All must be [0,24].')
+parser.add_argument('--num_modes',default=None,nargs='+',help='Options for num_modes for gnina. Accepts any number of arguments.')
+parser.add_argument('--autobox_add',default=None,nargs='+',help='Options for autobox_add for gnina. Accepts any number of arguments.')
+parser.add_argument('--num_mc_saved',default=None,nargs='+',help='Options for num_mc_saved for gnina. Accepts any number of arguments.')
 parser.add_argument('--gpu',action='store_true',help='Flag to turn on gpu acceleration for gnina.')
 args=parser.parse_args()
 
 #Checking that the input arguments make sense
-if args.cnn_rotations:
-	for rot in args.cnn_rotations:
+if args.cnn_rotation:
+	for rot in args.cnn_rotation:
 		assert (0<=int(rot) and int(rot)<=24),"cnn_rotations need to be in [0,24]!"
 
 assert (args.cnn_scoring in ['none','rescore','refinement','all']),"cnn_scoring must be one of none,rescore,refinement,all!"
