@@ -3,6 +3,10 @@
 '''
 This script aims to create a text file with a line per gnina command that needs to be run.
 
+NOTE if an option(s) is selected, the script will write a command for that option while keeping the others as gnina's defaults!
+
+IE if you specify --exhaustiveness 1 2 3 AND --cnn_rotations 1 2 3 you will get 6 jobs (not 9)!
+
 Input:
 	infile         -- a space-delimited file containing: <recfile> <ligfile> <autobox_ligand file>
 	cnn            -- defaults to gnina default. Must be in [crossdock_default2018, crossdock_default2018_<1-4>, 
