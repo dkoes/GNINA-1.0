@@ -108,7 +108,7 @@ with open(args.output,'w') as outfile:
 							dock_out=out_prefix+'_'.join[args.cnn]+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
 							sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
 						else:
-							dock_out=out_prefix+'_crossdock_default2018_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+							dock_out=out_prefix+'_'+args.cnn+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
 							sent+=f' --out {dock_out}'
 
 						#adding in the stuff for the specified argument
@@ -121,12 +121,12 @@ with open(args.output,'w') as outfile:
 		for r, l, box, out_prefix in todock:
 			sent=f'gnina -r {r} -l {l} --autobox_ligand {l} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
 			if not single_cnn:
-				dock_out=out_prefix+'_'.join[args.cnn]+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+				dock_out=out_prefix+'_'.join[args.cnn]+'_'+args.cnn_scoring+'_defaults.sdf'
 				sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
 			else:
-				dock_out=out_prefix+'_crossdock_default2018_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+				dock_out=out_prefix+'_'+args.cnn+'_'+args.cnn_scoring+'_defaults.sdf'
 				sent+=f' --out {dock_out}'
 
 			if args.gpu:
 				sent+=' --gpu'
-			outfile.write(send+'')
+			outfile.write(sent+'\n')
