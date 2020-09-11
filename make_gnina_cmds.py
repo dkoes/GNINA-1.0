@@ -82,7 +82,7 @@ with open(args.input) as infile:
 with open(args.output,'w') as outfile:
 	for arg in vars(args):
 		if arg not in skip:
-			for val in getattr(args.arg):
+			for val in getattr(args,arg):
 				for r, l, box, out_prefix in todock:
 					sent=f'gnina -r {r} -l {l} --autobox_ligand {l} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
 					if args.cnn:
