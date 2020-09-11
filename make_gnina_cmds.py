@@ -81,6 +81,8 @@ with open(args.input) as infile:
 		rec,lig,box=line.rstrip().split()
 		todock.append((rec,lig,box,gen_docking_prefix(rec,lig)))
 
+print(todock)
+
 #main part of the program
 with open(args.output,'w') as outfile:
 	for arg in vars(args):
