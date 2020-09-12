@@ -66,7 +66,7 @@ possible=[
 'crossdock_default2018_3','crossdock_default2018_4','default2017',
 'dense','dense_1','dense_2','dense_3','dense_4','general_default2018',
 'general_default2018_1','general_default2018_2','general_default2018_3',
-'general_default2018_4','general_default2018_5',
+'general_default2018_4',
 ]
 if args.cnn in possible:
 	single_cnn=True
