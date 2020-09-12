@@ -61,21 +61,20 @@ if args.cnn_rotation:
 		assert (0<=int(rot) and int(rot)<=24),"cnn_rotations need to be in [0,24]!"
 
 assert (args.cnn_scoring in ['none','rescore','refinement','all']),"cnn_scoring must be one of none,rescore,refinement,all!"
-if args.cnn:
-	possible=[
-	'crossdock_default2018','crossdock_default2018_1','crossdock_default2018_2',
-	'crossdock_default2018_3','crossdock_default2018_4','default2017',
-	'dense','dense_1','dense_2','dense_3','dense_4','general_default2018',
-	'general_default2018_1','general_default2018_2','general_default2018_3',
-	'general_default2018_4','general_default2018_5',
-	]
-	if args.cnn in possible:
-		single_cnn=True
-		pass
-	else:
-		single_cnn=False
-		for cnn in args.cnn:
-			assert(cnn in possible),"Specified cnn not built into gnina!"
+possible=[
+'crossdock_default2018','crossdock_default2018_1','crossdock_default2018_2',
+'crossdock_default2018_3','crossdock_default2018_4','default2017',
+'dense','dense_1','dense_2','dense_3','dense_4','general_default2018',
+'general_default2018_1','general_default2018_2','general_default2018_3',
+'general_default2018_4','general_default2018_5',
+]
+if args.cnn in possible:
+	single_cnn=True
+	pass
+else:
+	single_cnn=False
+	for cnn in args.cnn:
+		assert(cnn in possible),"Specified cnn not built into gnina!"
 
 #Specifying arguments to skip over
 skip=set(['input','output','cnn','cnn_scoring','gpu'])
@@ -106,7 +105,11 @@ with open(args.output,'w') as outfile:
 					for r, l, box, out_prefix in todock:
 						sent=f'gnina -r {r} -l {l} --autobox_ligand {l} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
 						if not single_cnn:
-							dock_out=out_prefix+'_'.join(args.cnn)+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+							if len(args.cnn)==len(possible):
+								dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+							else:
+								dock_out=out_prefix+'_'.join(args.cnn)+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+
 							sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
 						else:
 							dock_out=out_prefix+args.cnn+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
