@@ -126,7 +126,7 @@ with open(args.output,'w') as outfile:
 			sent=f'gnina -r {r} -l {l} --autobox_ligand {l} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
 			if not single_cnn:
 				if len(args.cnn)==len(possible):
-					dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+					dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_defaults.sdf'
 				else:
 					dock_out=out_prefix+'_'.join(args.cnn)+'_'+args.cnn_scoring+'_defaults.sdf'
 				sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
