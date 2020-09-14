@@ -33,7 +33,7 @@ with open(args.outfilename, 'w') as outfile:
 			for line in lines2write:
 
 				if line:
-					m=re.search(r'(\S+)_rec_(\S+)_lig',item)
+					m=re.search(r'(\S+)_PRO_(\S+)_LIG',item)
 
 					rec=m.group(1)
 					lig=m.group(2)
