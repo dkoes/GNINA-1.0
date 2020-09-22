@@ -8,7 +8,7 @@ NOTE if an option(s) is selected, the script will write a command for that optio
 IE if you specify --exhaustiveness 1 2 3 AND --cnn_rotations 1 2 3 you will get 6 jobs (not 9)!
 
 Input:
-	infile         -- a space-delimited file containing: <recfile> <ligfile> <autobox_ligand file>
+	infile         -- a space-delimited file containing: <recfile> <ligfile> <autobox_ligand file> <outfile prefix>
 	cnn            -- defaults to gnina default. Must be in [crossdock_default2018, crossdock_default2018_<1-4>, 
 																default2017, dense, dense_<1-4>, 
 																general_default2018, general_default2018_<1-4>]. *if multiple args are given, it is an ensemble
@@ -22,7 +22,7 @@ Input:
 
 	--gpu : this will turn on gpu acceleration for the command.
 
-The name of the output file for the gnina command will be the name of the receptor+ligand+"option"+.sdf
+The name of the output file for the gnina command will be the name of the outfile_prefix+"option"+.sdf
 
 Output:
 	a text file with a command per line.
@@ -30,19 +30,8 @@ Output:
 
 import argparse,os
 
-def gen_docking_prefix(receptor,ligand):
-	'''
-	Helper function to generate the outfile prefix for a given receptor ligand pair
-	'''
-	r=receptor.split('.')[0]
-	l=ligand.split('/')[-1].split('.')[0]
-	outname=f'{r}_{l}_'
-	return outname
-
-
-
 parser=argparse.ArgumentParser(description='Create a text file containing all the gnina commands you specify to run.')
-parser.add_argument('-i','--input',required=True,help='Space-delimited file containing the Receptor file, Ligand file, and autobox ligand file')
+parser.add_argument('-i','--input',required=True,help='Space-delimited file containing: <Receptor file> <Ligand file> <autobox ligand file> <outfile prefix>.')
 parser.add_argument('-o','--output',default='gnina_cmds.txt',help='Name of the output file containing the commands to run. Defaults to "gnina_cmds.txt"')
 parser.add_argument('--cnn',default='crossdock_default2018',nargs='+',help="Specify built-in CNN model for gnina. Default is to use crossdock_default2018. If multiple models are specified, an ensemble will be evaluated.")
 parser.add_argument('--cnn_scoring',default='rescore',help='Specify what method of CNN scoring. Must be [none, rescore,refinement,all]. Defaults to rescore')
@@ -83,11 +72,9 @@ skip=set(['input','output','cnn','cnn_scoring','gpu'])
 todock=[] #list of tuples (recfile,ligfile,autobox_ligand,outf_prefix)
 with open(args.input) as infile:
 	for line in infile:
-		rec,lig,box=line.rstrip().split()
-		todock.append((rec,lig,box,gen_docking_prefix(rec,lig)))
+		rec,lig,box,outf_prefix=line.rstrip().split()
 
 #main part of the program
-
 #step1 -- check if we just want all defaults
 only_defaults=True
 for arg in vars(args):
