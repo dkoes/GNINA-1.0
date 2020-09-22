@@ -73,7 +73,8 @@ todock=[] #list of tuples (recfile,ligfile,autobox_ligand,outf_prefix)
 with open(args.input) as infile:
 	for line in infile:
 		rec,lig,box,outf_prefix=line.rstrip().split()
-
+		todock.append((rec,lig,box,outf_prefix))
+		
 #main part of the program
 #step1 -- check if we just want all defaults
 only_defaults=True
