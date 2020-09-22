@@ -74,7 +74,7 @@ with open(args.input) as infile:
 	for line in infile:
 		rec,lig,box,outf_prefix=line.rstrip().split()
 		todock.append((rec,lig,box,outf_prefix))
-		
+
 #main part of the program
 #step1 -- check if we just want all defaults
 only_defaults=True
@@ -91,7 +91,7 @@ with open(args.output,'w') as outfile:
 				for val in getattr(args,arg):
 					print(val)
 					for r, l, box, out_prefix in todock:
-						sent=f'gnina -r {r} -l {l} --autobox_ligand {l} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
+						sent=f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
 						if not single_cnn:
 							if len(args.cnn)==len(possible):
 								dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_'+arg+val+'.sdf'
@@ -111,7 +111,7 @@ with open(args.output,'w') as outfile:
 	#TENP WORKAROUND -- if only specified defaults E.G. passed no arguments into the script we still want to dock
 	if only_defaults:
 		for r, l, box, out_prefix in todock:
-			sent=f'gnina -r {r} -l {l} --autobox_ligand {l} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
+			sent=f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
 			if not single_cnn:
 				if len(args.cnn)==len(possible):
 					dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_defaults.sdf'
