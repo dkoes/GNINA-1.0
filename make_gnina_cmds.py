@@ -94,9 +94,9 @@ with open(args.output,'w') as outfile:
 						sent=f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
 						if not single_cnn:
 							if len(args.cnn)==len(possible):
-								dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+								dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_'+arg+val+'.sdf.gz'
 							else:
-								dock_out=out_prefix+'_'.join(args.cnn)+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+								dock_out=out_prefix+'_'.join(args.cnn)+'_'+args.cnn_scoring+'_'+arg+val+'.sdf.gz'
 
 							sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
 						else:
@@ -114,9 +114,9 @@ with open(args.output,'w') as outfile:
 			sent=f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
 			if not single_cnn:
 				if len(args.cnn)==len(possible):
-					dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_defaults.sdf'
+					dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_defaults.sdf.gz'
 				else:
-					dock_out=out_prefix+'_'.join(args.cnn)+'_'+args.cnn_scoring+'_defaults.sdf'
+					dock_out=out_prefix+'_'.join(args.cnn)+'_'+args.cnn_scoring+'_defaults.sdf.gz'
 				sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
 			else:
 				dock_out=out_prefix+args.cnn+'_'+args.cnn_scoring+'_defaults.sdf'
