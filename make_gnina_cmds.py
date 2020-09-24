@@ -33,7 +33,7 @@ import argparse,os
 parser=argparse.ArgumentParser(description='Create a text file containing all the gnina commands you specify to run.')
 parser.add_argument('-i','--input',required=True,help='Space-delimited file containing: <Receptor file> <Ligand file> <autobox ligand file> <outfile prefix>.')
 parser.add_argument('-o','--output',default='gnina_cmds.txt',help='Name of the output file containing the commands to run. Defaults to "gnina_cmds.txt"')
-parser.add_argument('--cnn',default='crossdock_default2018',nargs='+',help="Specify built-in CNN model for gnina. Default is to use crossdock_default2018. If multiple models are specified, an ensemble will be evaluated.")
+parser.add_argument('--cnn',default='crossdock_default2018',nargs='+',help="Specify built-in CNN model for gnina. Default is to use crossdock_default2018. If multiple models are specified, an ensemble will be evaluated.(ensembles can also be specified through the same notation as Gnina, i.e. '<model>_ensemble' to specify the ensemble of <model>")
 parser.add_argument('--cnn_scoring',default='rescore',help='Specify what method of CNN scoring. Must be [none, rescore,refinement,all]. Defaults to rescore')
 parser.add_argument('--exhaustiveness',default=None,nargs='+',help='exhaustiveness arguments for gnina. Accepts any number of arguments.')
 parser.add_argument('--min_rmsd_filter',default=None,nargs='+',help='Filters for min_rmsd_filter for gnina. Accepts any number of arguments.')
@@ -57,6 +57,10 @@ possible=[
 'general_default2018_1','general_default2018_2','general_default2018_3',
 'general_default2018_4',
 ]
+if args.cnn.split('_')[-1] == 'ensemble':
+    assert args.cnn[:-len('_ensemble')] in possible+[''], "Must be ensemble of built in model(s)" ##can also be ensemble of all models which would be '_ensemble' so '' is a validmodel
+    base_cnn = args.cnn[:-len('_ensemble')]
+    args.cnn = [cnn_model for cnn_model in possible if base_cnn in cnn_model]
 if args.cnn in possible:
 	single_cnn=True
 	pass
