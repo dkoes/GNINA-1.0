@@ -57,9 +57,9 @@ possible=[
 'general_default2018_1','general_default2018_2','general_default2018_3',
 'general_default2018_4',
 ]
-if args.cnn.split('_')[-1] == 'ensemble':
-    assert args.cnn[:-len('_ensemble')] in possible+[''], "Must be ensemble of built in model(s)" ##can also be ensemble of all models which would be '_ensemble' so '' is a validmodel
-    base_cnn = args.cnn[:-len('_ensemble')]
+if len(args.cnn) == 1 and args.cnn[0].split('_')[-1] == 'ensemble':
+    assert args.cnn[0][:-len('_ensemble')] in possible+[''], "Must be ensemble of built in model(s)" ##can also be ensemble of all models which would be '_ensemble' so '' is a validmodel
+    base_cnn = args.cnn[0][:-len('_ensemble')]
     args.cnn = [cnn_model for cnn_model in possible if base_cnn in cnn_model]
 if args.cnn in possible:
 	single_cnn=True
