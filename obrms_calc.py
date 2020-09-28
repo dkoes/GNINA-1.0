@@ -12,7 +12,7 @@ The --CNNscore flag will trigger the use of sdsorter to sort the molecule by CNN
 
 import argparse, re
 from plumbum.cmd import obrms
-from plumbum.cmd import sdsorter
+from plumbum.cmd import grep
 
 def get_lig_out(instring):
 	'''
@@ -37,7 +37,7 @@ parser=argparse.ArgumentParser(description='Run OBRMS on docking outputs')
 parser.add_argument('-i','--input',type=str, required=True, help='Name of docking jobs file.')
 parser.add_argument('-d','--dirname',type=str,required=True, help='Name of directory the job will work on')
 parser.add_argument('-s','--splitprefix',type=str,default=None, help='Text prefix to split off of filepaths in input. Defaults to None')
-parser.add_argument('--cnnscore',action='store_true', help='Flag to trigger sdsorter to sort by CNNscore before obrms')
+parser.add_argument('--cnnscore',action='store_true', help='Flag to output the CNNscore in the output file.')
 
 args=parser.parse_args()
 
@@ -54,8 +54,10 @@ for lig, dockedlig in todo:
 	outname=dockedlig.split('.sdf')[0]+'.rmsds'
 
 	if args.cnnscore:
-		tmp_outname=dockedlig.replace('docked','sorted')
-		(sdsorter["-reversesort=CNNscore",dockedlig,tmp_outname])()
-		(obrms[tmp_outname,lig] > outname)()
+		scores=re.findall("\d+\.\d+",(grep['-A1','CNNscore',dockedlig])())
+		items=(obrms[dockedlig,lig])().split('\n')
+		with open(outname,'w') as outfile:
+			for start,score in zip(items,scores):
+				outfile.write(f'{start} {score}\n')
 	else:
 		(obrms[dockedlig,lig] > outname)()

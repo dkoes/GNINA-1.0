@@ -12,6 +12,7 @@ parser.add_argument('-v','--values',type=str, default="",nargs='+',help='Values 
 parser.add_argument('-r','--dataroot',type=str,required=True, help='Root of directories to search')
 parser.add_argument('-o','--outfilename',type=str,required=True, help='Name of output file')
 parser.add_argument('-d','--dirlist',type=str,required=True, help='File containing directory names to work on.')
+parser.add_argument('--cnnscore',action='store_true',help='Flag to expect cnnscore data fields in the .rmsds file.')
 
 args=parser.parse_args()
 
@@ -23,7 +24,10 @@ else:
 dirs=[x.rstrip() for x in open(args.dirlist).readlines()]
 
 with open(args.outfilename, 'w') as outfile:
-	outfile.write('tag,molids,rmsd,pocket,rec,lig\n')
+	if args.cnnscore:
+		outfile.write('tag,molids,rmsd,cnnscore,pocket,rec,lig\n')
+	else:
+		outfile.write('tag,molids,rmsd,pocket,rec,lig\n')
 	for pocket in dirs:
 		print(pocket)
 		for val in args.values:
@@ -35,7 +39,10 @@ with open(args.outfilename, 'w') as outfile:
 				for line in lines2write:
 
 					if line:
-						tag,molids,rmsd=line.rstrip().split()
+						if args.cnnscore:
+							tag,molids,rmsd,cnnscore=line.rstrip().split()
+						else:
+							tag,molids,rmsd=line.rstrip().split()
 						if val!="":
 							tag=val
 						m=re.search(r'(\S+)_PRO_(\S+)_LIG',item)
@@ -43,6 +50,9 @@ with open(args.outfilename, 'w') as outfile:
 						rec=m.group(1)
 						lig=m.group(2)
 
-						newline=f"{tag},{molids},{rmsd},{pocket},{rec},{lig}\n"#line.replace(' ',',').rstrip()+','+','.join([pocket,rec,lig])+'\n'
+						if args.cnnscore:
+							newline=f"{tag},{molids},{rmsd},{cnnscore},{pocket},{rec},{lig}\n"#line.replace(' ',',').rstrip()+','+','.join([pocket,rec,lig])+'\n'
+						else:
+							newline=f"{tag},{molids},{rmsd},{pocket},{rec},{lig}\n"#line.replace(' ',',').rstrip()+','+','.join([pocket,rec,lig])+'\n'
 
 						outfile.write(newline)
