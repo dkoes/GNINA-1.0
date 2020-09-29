@@ -42,6 +42,7 @@ parser.add_argument('--num_modes',default=None,nargs='+',help='Options for num_m
 parser.add_argument('--autobox_add',default=None,nargs='+',help='Options for autobox_add for gnina. Accepts any number of arguments.')
 parser.add_argument('--num_mc_saved',default=None,nargs='+',help='Options for num_mc_saved for gnina. Accepts any number of arguments.')
 parser.add_argument('--gpu',action='store_true',help='Flag to turn on gpu acceleration for gnina.')
+parser.add_argument('--seed',default=420,type=int,help='Seed for Gnina (default: %(default)d)')
 args=parser.parse_args()
 
 #Checking that the input arguments make sense
@@ -55,7 +56,8 @@ possible=[
 'crossdock_default2018_3','crossdock_default2018_4','default2017',
 'dense','dense_1','dense_2','dense_3','dense_4','general_default2018',
 'general_default2018_1','general_default2018_2','general_default2018_3',
-'general_default2018_4',
+'general_default2018_4','redock_default2018','redock_default2018_1',
+'redock_default2018_2','redock_default2018_3','redock_default2018_4'
 ]
 if len(args.cnn) == 1 and args.cnn[0].split('_')[-1] == 'ensemble':
     assert args.cnn[0][:-len('_ensemble')] in possible+[''], "Must be ensemble of built in model(s)" ##can also be ensemble of all models which would be '_ensemble' so '' is a validmodel
@@ -70,7 +72,7 @@ else:
 		assert(cnn in possible),"Specified cnn not built into gnina!"
 
 #Specifying arguments to skip over
-skip=set(['input','output','cnn','cnn_scoring','gpu'])
+skip=set(['input','output','cnn','cnn_scoring','gpu','seed'])
 
 #Gathering the receptor, ligand, and autobox_ligand arguments from input
 todock=[] #list of tuples (recfile,ligfile,autobox_ligand,outf_prefix)
@@ -95,7 +97,7 @@ with open(args.output,'w') as outfile:
 				for val in getattr(args,arg):
 					print(val)
 					for r, l, box, out_prefix in todock:
-						sent=f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
+						sent=f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed {args.seed}'
 						if not single_cnn:
 							if len(args.cnn)==len(possible):
 								dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_'+arg+val+'.sdf.gz'
