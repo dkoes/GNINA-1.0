@@ -117,7 +117,7 @@ with open(args.output,'w') as outfile:
 	#TENP WORKAROUND -- if only specified defaults E.G. passed no arguments into the script we still want to dock
 	if only_defaults:
 		for r, l, box, out_prefix in todock:
-			sent=f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed 420'
+			sent=f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed {args.seed}'
 			if not single_cnn:
 				if len(args.cnn)==len(possible):
 					dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_defaults.sdf.gz'
