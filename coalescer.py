@@ -50,8 +50,8 @@ with open(args.outfilename, 'w') as outfile:
 						#if the match fails, we assume that redocking is happening
 						#   So the first 4 characters of the filename are the corresponding PDB code
 						if m is None:
-							rec=item[:4]
-							lig=item[:4]
+							rec=item.split('/')[-1][:4]
+							lig=item.split('/')[-1][:4]
 						else:
 							rec=m.group(1)
 							lig=m.group(2)
