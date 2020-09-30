@@ -56,7 +56,7 @@ for lig, dockedlig in todo:
 
 	if args.getscores:
 		cnnscores=re.findall("-?\d+\.\d+",(grep['-A1','CNNscore',dockedlig])())
-		cnnaffs=re.findall("-?\d+\.\d+",(grep['-A1','CNNaffintity',dockedlig])())
+		cnnaffs=re.findall("-?\d+\.\d+",(grep['-A1','CNNaffinity',dockedlig])())
 		vinascores=re.findall("-?\d+\.\d+",(grep['-A1','minimizedAffinity',dockedlig])())
 		items=(obrms[dockedlig,lig])().split('\n')
 		with open(outname,'w') as outfile:
