@@ -41,7 +41,7 @@ parser.add_argument('--cnn_rotation',default=None,nargs='+',help='Options for cn
 parser.add_argument('--num_modes',default=None,nargs='+',help='Options for num_modes for gnina. Accepts any number of arguments.')
 parser.add_argument('--autobox_add',default=None,nargs='+',help='Options for autobox_add for gnina. Accepts any number of arguments.')
 parser.add_argument('--num_mc_saved',default=None,nargs='+',help='Options for num_mc_saved for gnina. Accepts any number of arguments.')
-parser.add_argument('--gpu',action='store_true',help='Flag to turn on gpu acceleration for gnina.')
+parser.add_argument('--nogpu',action='store_true',help='Flag to turn OFF gpu acceleration for gnina.')
 parser.add_argument('--seed',default=420,type=int,help='Seed for Gnina (default: %(default)d)')
 args=parser.parse_args()
 
@@ -111,8 +111,8 @@ with open(args.output,'w') as outfile:
 
 						#adding in the stuff for the specified argument
 						sent+=f' --{arg} {val}'
-						if args.gpu:
-							sent+=' --gpu'
+						if args.nogpu:
+							sent+=' --no_gpu'
 						outfile.write(sent+'\n')
 	#TENP WORKAROUND -- if only specified defaults E.G. passed no arguments into the script we still want to dock
 	if only_defaults:
@@ -128,6 +128,6 @@ with open(args.output,'w') as outfile:
 				dock_out=out_prefix+args.cnn+'_'+args.cnn_scoring+'_defaults.sdf'
 				sent+=f' --out {dock_out}'
 
-			if args.gpu:
-				sent+=' --gpu'
+			if args.nogpu:
+				sent+=' --no_gpu'
 			outfile.write(sent+'\n')
