@@ -37,9 +37,10 @@ parser=argparse.ArgumentParser(description='Run OBRMS on docking outputs')
 parser.add_argument('-i','--input',type=str, required=True, help='Name of docking jobs file.')
 parser.add_argument('-d','--dirname',type=str,required=True, help='Name of directory the job will work on')
 parser.add_argument('-s','--splitprefix',type=str,default=None, help='Text prefix to split off of filepaths in input. Defaults to None')
-parser.add_argument('--cnnscore',action='store_true', help='Flag to output the CNNscore in the output file.')
+parser.add_argument('--getscores',action='store_true', help='Flag to output the CNNscore, CNNaffinity, and minimizedAffinity in the output file (in that order)')
 
 args=parser.parse_args()
+
 
 todo=open(args.input).readlines()
 todo=[get_lig_out(x) for x in todo if args.dirname in x]
@@ -53,11 +54,13 @@ for lig, dockedlig in todo:
 
 	outname=dockedlig.split('.sdf')[0]+'.rmsds'
 
-	if args.cnnscore:
-		scores=re.findall("\d+\.\d+",(grep['-A1','CNNscore',dockedlig])())
+	if args.getscores:
+		cnnscores=re.findall("-?\d+\.\d+",(grep['-A1','CNNscore',dockedlig])())
+		cnnaffs=re.findall("-?\d+\.\d+",(grep['-A1','CNNaffintity',dockedlig])())
+		vinascores=re.findall("-?\d+\.\d+",(grep['-A1','minimizedAffinity',dockedlig])())
 		items=(obrms[dockedlig,lig])().split('\n')
 		with open(outname,'w') as outfile:
-			for start,score in zip(items,scores):
-				outfile.write(f'{start} {score}\n')
+			for start,cnnscore,cnnaff,vina in zip(items,cnnscores,cnnaffs,vinascores):
+				outfile.write(f'{start} {cnnscore} {cnnaff} {vina}\n')
 	else:
 		(obrms[dockedlig,lig] > outname)()

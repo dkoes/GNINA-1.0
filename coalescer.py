@@ -12,7 +12,7 @@ parser.add_argument('-v','--values',type=str, default="",nargs='+',help='Values 
 parser.add_argument('-r','--dataroot',type=str,required=True, help='Root of directories to search')
 parser.add_argument('-o','--outfilename',type=str,required=True, help='Name of output file')
 parser.add_argument('-d','--dirlist',type=str,required=True, help='File containing directory names to work on.')
-parser.add_argument('--cnnscore',action='store_true',help='Flag to expect cnnscore data fields in the .rmsds file.')
+parser.add_argument('--getscores',action='store_true',help='Flag to expect CNNscore, CNNaffinity, and minimizedAffinity data fields in the .rmsds file.')
 
 args=parser.parse_args()
 
@@ -25,7 +25,7 @@ dirs=[x.rstrip() for x in open(args.dirlist).readlines()]
 
 with open(args.outfilename, 'w') as outfile:
 	if args.cnnscore:
-		outfile.write('tag,molids,rmsd,cnnscore,pocket,rec,lig\n')
+		outfile.write('tag,molids,rmsd,cnnscore,cnnaffinity,minimizedAffinity,pocket,rec,lig\n')
 	else:
 		outfile.write('tag,molids,rmsd,pocket,rec,lig\n')
 	for pocket in dirs:
@@ -39,8 +39,8 @@ with open(args.outfilename, 'w') as outfile:
 				for line in lines2write:
 
 					if line:
-						if args.cnnscore:
-							tag,molids,rmsd,cnnscore=line.rstrip().split()
+						if args.getscores:
+							tag,molids,rmsd,cnnscore,cnnaff,vina=line.rstrip().split()
 						else:
 							tag,molids,rmsd=line.rstrip().split()
 						if val!="":
@@ -51,7 +51,7 @@ with open(args.outfilename, 'w') as outfile:
 						lig=m.group(2)
 
 						if args.cnnscore:
-							newline=f"{tag},{molids},{rmsd},{cnnscore},{pocket},{rec},{lig}\n"#line.replace(' ',',').rstrip()+','+','.join([pocket,rec,lig])+'\n'
+							newline=f"{tag},{molids},{rmsd},{cnnscore},{cnnaff},{vina},{pocket},{rec},{lig}\n"#line.replace(' ',',').rstrip()+','+','.join([pocket,rec,lig])+'\n'
 						else:
 							newline=f"{tag},{molids},{rmsd},{pocket},{rec},{lig}\n"#line.replace(' ',',').rstrip()+','+','.join([pocket,rec,lig])+'\n'
 
