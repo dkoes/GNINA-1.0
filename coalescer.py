@@ -24,7 +24,7 @@ else:
 dirs=[x.rstrip() for x in open(args.dirlist).readlines()]
 
 with open(args.outfilename, 'w') as outfile:
-	if args.cnnscore:
+	if args.getscores:
 		outfile.write('tag,molids,rmsd,cnnscore,cnnaffinity,minimizedAffinity,pocket,rec,lig\n')
 	else:
 		outfile.write('tag,molids,rmsd,pocket,rec,lig\n')
