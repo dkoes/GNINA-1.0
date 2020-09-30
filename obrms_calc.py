@@ -13,6 +13,7 @@ The --CNNscore flag will trigger the use of sdsorter to sort the molecule by CNN
 import argparse, re
 from plumbum.cmd import obrms
 from plumbum.cmd import grep
+from plumbum.cmd import zgrep
 
 def get_lig_out(instring):
 	'''
@@ -55,9 +56,14 @@ for lig, dockedlig in todo:
 	outname=dockedlig.split('.sdf')[0]+'.rmsds'
 
 	if args.getscores:
-		cnnscores=re.findall("-?\d+\.\d+",(grep['-A1','CNNscore',dockedlig])())
-		cnnaffs=re.findall("-?\d+\.\d+",(grep['-A1','CNNaffinity',dockedlig])())
-		vinascores=re.findall("-?\d+\.\d+",(grep['-A1','minimizedAffinity',dockedlig])())
+		if dockedlig.endswith('.gz'):
+			cnnscores=re.findall("-?\d+\.\d+",(zgrep['-A1','CNNscore',dockedlig])())
+			cnnaffs=re.findall("-?\d+\.\d+",(zgrep['-A1','CNNaffinity',dockedlig])())
+			vinascores=re.findall("-?\d+\.\d+",(zgrep['-A1','minimizedAffinity',dockedlig])())
+		else:
+			cnnscores=re.findall("-?\d+\.\d+",(grep['-A1','CNNscore',dockedlig])())
+			cnnaffs=re.findall("-?\d+\.\d+",(grep['-A1','CNNaffinity',dockedlig])())
+			vinascores=re.findall("-?\d+\.\d+",(grep['-A1','minimizedAffinity',dockedlig])())
 		items=(obrms[dockedlig,lig])().split('\n')
 		with open(outname,'w') as outfile:
 			for start,cnnscore,cnnaff,vina in zip(items,cnnscores,cnnaffs,vinascores):
