@@ -50,7 +50,7 @@ with open(args.outfilename, 'w') as outfile:
 						rec=m.group(1)
 						lig=m.group(2)
 
-						if args.cnnscore:
+						if args.getscores:
 							newline=f"{tag},{molids},{rmsd},{cnnscore},{cnnaff},{vina},{pocket},{rec},{lig}\n"#line.replace(' ',',').rstrip()+','+','.join([pocket,rec,lig])+'\n'
 						else:
 							newline=f"{tag},{molids},{rmsd},{pocket},{rec},{lig}\n"#line.replace(' ',',').rstrip()+','+','.join([pocket,rec,lig])+'\n'
