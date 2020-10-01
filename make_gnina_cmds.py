@@ -72,7 +72,7 @@ else:
 		assert(cnn in possible),"Specified cnn not built into gnina!"
 
 #Specifying arguments to skip over
-skip=set(['input','output','cnn','cnn_scoring','gpu','seed'])
+skip=set(['input','output','cnn','cnn_scoring','nogpu','seed'])
 
 #Gathering the receptor, ligand, and autobox_ligand arguments from input
 todock=[] #list of tuples (recfile,ligfile,autobox_ligand,outf_prefix)
@@ -106,7 +106,7 @@ with open(args.output,'w') as outfile:
 
 							sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
 						else:
-							dock_out=out_prefix+args.cnn+'_'+args.cnn_scoring+'_'+arg+val+'.sdf'
+							dock_out=out_prefix+args.cnn+'_'+args.cnn_scoring+'_'+arg+val+'.sdf.gz'
 							sent+=f' --out {dock_out}'
 
 						#adding in the stuff for the specified argument
@@ -125,7 +125,7 @@ with open(args.output,'w') as outfile:
 					dock_out=out_prefix+'_'.join(args.cnn)+'_'+args.cnn_scoring+'_defaults.sdf.gz'
 				sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
 			else:
-				dock_out=out_prefix+args.cnn+'_'+args.cnn_scoring+'_defaults.sdf'
+				dock_out=out_prefix+args.cnn+'_'+args.cnn_scoring+'_defaults.sdf.gz'
 				sent+=f' --out {dock_out}'
 
 			if args.nogpu:
