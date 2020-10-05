@@ -59,10 +59,19 @@ possible=[
 'general_default2018_4','redock_default2018','redock_default2018_1',
 'redock_default2018_2','redock_default2018_3','redock_default2018_4'
 ]
-if len(args.cnn) == 1 and args.cnn[0].split('_')[-1] == 'ensemble':
-    assert args.cnn[0][:-len('_ensemble')] in possible+[''], "Must be ensemble of built in model(s)" ##can also be ensemble of all models which would be '_ensemble' so '' is a validmodel
-    base_cnn = args.cnn[0][:-len('_ensemble')]
-    args.cnn = [cnn_model for cnn_model in possible if base_cnn in cnn_model]
+ensemble_models=['crossdock_default2018','dense','general_default2018','redock_default2018']
+if 'ensemble' in '_'.join(args.cnn):  # See if '_ensemble' in any of the arguments
+    new_args_cnn = set()  # Using set so don't have two of the same model in the ensemble
+    for model in args.cnn:
+        if not 'ensemble' in model:
+            new_args_cnn.add(model)
+        else:
+            assert model[:-len('_ensemble')] in possible+[''], "Must be ensemble of built in model(s)"  #can also be ensemble of all models which would be '_ensemble' so '' is a valid model
+            base_cnn = model[:-len('_ensemble')]
+            ensemble = [cnn_model for cnn_model in possible if base_cnn in cnn_model]
+            new_args_cnn.update(ensemble)
+    args.cnn = list(new_args_cnn)
+
 if args.cnn in possible:
 	single_cnn=True
 	pass
