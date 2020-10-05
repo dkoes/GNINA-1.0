@@ -70,7 +70,7 @@ if 'ensemble' in '_'.join(args.cnn):  # See if '_ensemble' in any of the argumen
             base_cnn = model[:-len('_ensemble')]
             ensemble = [cnn_model for cnn_model in possible if base_cnn in cnn_model]
             new_args_cnn.update(ensemble)
-    args.cnn = list(new_args_cnn)
+    args.cnn = sorted(list(new_args_cnn))
 
 if args.cnn in possible:
 	single_cnn=True
