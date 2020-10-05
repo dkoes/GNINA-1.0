@@ -30,7 +30,8 @@ Output:
 
 import argparse, os, re
 
-def make_out_name(cnns):
+def make_out_name(cnns):  # make sure names of output sdf is consistent for single models and ensembles
+        # Ensembles will be named <model>_<seed_values>
         ensemble_models = ['crossdock_default2018', 'dense', 'general_default2018', 'redock_default2018']
         cnn_string = '+'.join(cnns)
         out_strings = []
@@ -50,7 +51,7 @@ def make_out_name(cnns):
 parser=argparse.ArgumentParser(description='Create a text file containing all the gnina commands you specify to run.')
 parser.add_argument('-i','--input',required=True,help='Space-delimited file containing: <Receptor file> <Ligand file> <autobox ligand file> <outfile prefix>.')
 parser.add_argument('-o','--output',default='gnina_cmds.txt',help='Name of the output file containing the commands to run. Defaults to "gnina_cmds.txt"')
-parser.add_argument('--cnn',default='crossdock_default2018',nargs='+',help="Specify built-in CNN model for gnina. Default is to use crossdock_default2018. If multiple models are specified, an ensemble will be evaluated.(ensembles can also be specified through the same notation as Gnina, i.e. '<model>_ensemble' to specify the ensemble of <model>")
+parser.add_argument('--cnn',default=['crossdock_default2018'],nargs='+',help="Specify built-in CNN model for gnina. Default is to use crossdock_default2018. If multiple models are specified, an ensemble will be evaluated.(ensembles can also be specified through the same notation as Gnina, i.e. '<model>_ensemble' to specify the ensemble of <model>")
 parser.add_argument('--cnn_scoring',default='rescore',help='Specify what method of CNN scoring. Must be [none, rescore,refinement,all]. Defaults to rescore')
 parser.add_argument('--exhaustiveness',default=None,nargs='+',help='exhaustiveness arguments for gnina. Accepts any number of arguments.')
 parser.add_argument('--min_rmsd_filter',default=None,nargs='+',help='Filters for min_rmsd_filter for gnina. Accepts any number of arguments.')
@@ -79,83 +80,72 @@ possible=[
 if '_ensemble' in '_'.join(args.cnn):  # See if '_ensemble' in any of the arguments
     new_args_cnn = set()  # Using set so don't have two of the same model in the ensemble
     for model in args.cnn:
-        if not 'ensemble' in model:
+        if 'ensemble' not in model:
             new_args_cnn.add(model)
         else:
-            assert model[:-len('_ensemble')] in possible+[''], "Must be ensemble of built in model(s)"  #can also be ensemble of all models which would be '_ensemble' so '' is a valid model
+            assert model[:-len('_ensemble')] in possible+[''], "Must be ensemble of built in model(s)"  # can also be ensemble of all models which would be '_ensemble' so '' is a valid model
             base_cnn = model[:-len('_ensemble')]
             ensemble = [cnn_model for cnn_model in possible if base_cnn in cnn_model]
             new_args_cnn.update(ensemble)
     args.cnn = sorted(list(new_args_cnn))
 
-if args.cnn in possible:
-        single_cnn=True
-        pass
-else:
-        single_cnn=False
-        for cnn in args.cnn:
-                assert(cnn in possible),"Specified cnn not built into gnina!"
-print(f'single_cnn={single_cnn}')
+for cnn in args.cnn:
+        assert(cnn in possible), "Specified cnn not built into gnina!"
 
-#Specifying arguments to skip over
-skip=set(['input', 'output', 'cnn', 'cnn_scoring', 'nogpu', 'seed'])
+# Specifying arguments to skip over
+skip = set(['input', 'output', 'cnn', 'cnn_scoring', 'nogpu', 'seed'])
 
-#Gathering the receptor, ligand, and autobox_ligand arguments from input
-todock=[] #list of tuples (recfile,ligfile,autobox_ligand,outf_prefix)
+# Gathering the receptor, ligand, and autobox_ligand arguments from input
+todock = []  # list of tuples (recfile,ligfile,autobox_ligand,outf_prefix)
 with open(args.input) as infile:
         for line in infile:
-                rec,lig,box,outf_prefix=line.rstrip().split()
-                todock.append((rec,lig,box,outf_prefix))
+                rec, lig, box, outf_prefix = line.rstrip().split()
+                todock.append((rec, lig, box, outf_prefix))
 
-#main part of the program
-#step1 -- check if we just want all defaults
-only_defaults=True
+# main part of the program
+# step1 -- check if we just want all defaults
+only_defaults = True
 for arg in vars(args):
         if arg not in skip:
-                if getattr(args,arg):
-                        only_defaults=False
+                if getattr(args, arg):
+                        only_defaults = False
 
-with open(args.output,'w') as outfile:
-        for arg in vars(args):
-                if arg not in skip:
-                        print(arg)
-                        if getattr(args,arg):
-                                for val in getattr(args,arg):
-                                        print(val)
-                                        for r, l, box, out_prefix in todock:
-                                                sent=f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed {args.seed}'
-                                                if not single_cnn:
-                                                        if len(args.cnn)==len(possible):
-                                                                dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_'+arg+val+'.sdf.gz'
-                                                        else:
-                                                                cnn_out_string = make_out_name(args.cnn)
-                                                                dock_out = out_prefix+cnn_out_string+'_'+args.cnn_scoring+'_'+arg+val+'.sdf.gz'
-
-                                                        sent+=f' --cnn {" ".join(args.cnn)} --out {dock_out}'
-                                                else:
-                                                        dock_out=out_prefix+args.cnn+'_'+args.cnn_scoring+'_'+arg+val+'.sdf.gz'
-                                                        sent+=f' --out {dock_out}'
-
-                                                # adding in the stuff for the specified argument
-                                                sent+=f' --{arg} {val}'
-                                                if args.nogpu:
-                                                        sent+=' --no_gpu'
-                                                outfile.write(sent+'\n')
+with open(args.output, 'w') as outfile:
         # TEMP WORKAROUND -- if only specified defaults E.G. passed no arguments into the script we still want to dock
         if only_defaults:
+                print('default arguments')
                 for r, l, box, out_prefix in todock:
                         sent = f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed {args.seed}'
-                        if not single_cnn:
-                                if len(args.cnn)==len(possible):
-                                        dock_out=out_prefix+'_all_ensemble_'+args.cnn_scoring+'_defaults.sdf.gz'
-                                else:
-                                        cnn_out_string = make_out_name(args.cnn)
-                                        dock_out=out_prefix+cnn_out_string+'_'+args.cnn_scoring+'_defaults.sdf.gz'
-                                sent += f' --cnn {" ".join(args.cnn)} --out {dock_out}'
+                        if len(args.cnn) == len(possible):
+                                dock_out = out_prefix+'all_ensemble_'+args.cnn_scoring+'_defaults.sdf.gz'
                         else:
-                                dock_out = out_prefix+args.cnn+'_'+args.cnn_scoring+'_defaults.sdf.gz'
-                                sent += f' --out {dock_out}'
+                                cnn_out_string = make_out_name(args.cnn)
+                                dock_out = out_prefix+cnn_out_string+'_'+args.cnn_scoring+'_defaults.sdf.gz'
+                        sent += f' --cnn {" ".join(args.cnn)} --out {dock_out}'
 
                         if args.nogpu:
                                 sent += ' --no_gpu'
                         outfile.write(sent+'\n')
+        else:
+                for arg in vars(args):
+                        if arg not in skip:
+                                print(arg)
+                                if getattr(args, arg):
+                                        for val in getattr(args, arg):
+                                                print(val)
+                                                for r, l, box, out_prefix in todock:
+                                                        sent = f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed {args.seed}'
+                                                        if len(args.cnn) == len(possible):
+                                                                dock_out = out_prefix+'all_ensemble_'+args.cnn_scoring+'_'+arg+val+'.sdf.gz'
+                                                        else:
+                                                                cnn_out_string = make_out_name(args.cnn)
+                                                                dock_out = out_prefix+cnn_out_string+'_'+args.cnn_scoring+'_'+arg+val+'.sdf.gz'
+
+                                                        sent += f' --cnn {" ".join(args.cnn)} --out {dock_out}'
+
+                                                        # adding in the stuff for the specified argument
+                                                        sent += f' --{arg} {val}'
+
+                                                        if args.nogpu:
+                                                                sent += ' --no_gpu'
+                                                        outfile.write(sent+'\n')
