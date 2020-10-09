@@ -1,0 +1,181 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% This is a (brief) model paper using the achemso class
+%% The document class accepts keyval options, which should include
+%% the target journal and optionally the manuscript type. 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\documentclass[journal=jcisd8,manuscript=article]{achemso}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Place any additional packages needed here.  Only include packages
+%% which are essential, to avoid problems later. Do NOT use any
+%% packages which require e-TeX (for example etoolbox): the e-TeX
+%% extensions are not currently available on the ACS conversion
+%% servers.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\usepackage[version=3]{mhchem} % Formula subscripts using \ce{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% If issues arise when submitting your manuscript, you may want to
+%% un-comment the next line.  This provides information on the
+%% version of every file you have used.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%\listfiles
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Place any additional macros here.  Please use \newcommand* where
+%% possible, and avoid layout-changing macros (which are not used
+%% when typesetting).
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\newcommand*\mycommand[1]{\texttt{\emph{#1}}}
+
+\author{Andrew McNutt}
+\altaffiliation{Contributed equally to this work}
+\author{Paul Francoeur}
+\altaffiliation{Contributed equally to this work}
+\author{Tomohide Masuda}
+\affiliation[University of Pittsburgh]
+{Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA}
+\author{Rocco Meli}
+\affiliation[Oxford]{Oxford}
+\author{Matthew Ragoza}
+\author{Jocelyn Sunseri}
+\author{David Ryan Koes}
+\email{dkoes@pitt.edu}
+\affiliation[University of Pittsburgh]
+{Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The document title should be given as usual. Some journals require
+%% a running title from the author: this should be supplied as an
+%% optional argument to \title.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\title[GNINA 1.0]
+  {GNINA 1.0: Molecular docking with deep learning}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Some journals require a list of abbreviations or keywords to be
+%% supplied. These should be set up here, and will be printed after
+%% the title and author information, if needed.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\keywords{molecular docking, deep learning, structure-based drug design}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The manuscript does not need to include \maketitle, which is
+%% executed automatically.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{document}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The "tocentry" environment can be used to create an entry for the
+%% graphical table of contents. It is given here as some journals
+%% require that it is printed as part of the abstract page. It will
+%% be automatically moved as appropriate.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{tocentry}
+
+\end{tocentry}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The abstract environment will automatically gobble the contents
+%% if an abstract is not used by the target journal.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{abstract}
+
+\end{abstract}
+
+\paragraph{Authorship}  I want everyone who has contributed meaningfully to gnina to be included in this paper, but am anticipating that Paul and Drew will do most of the analysis with feedback from everyone else.\
+
+\paragraph{Journal} Most likely JCIM, but if the results are impressive might take a stab at Nature Methods (which would involve a lot of refactoring to shove things into the supplement).
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% Start the main part of the manuscript here.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\section{Introduction}
+
+
+Deep learning scoring functions demonstrate state-of-the-art performance at scoring protein-ligand complexes for affinity prediction, pose selection, and virtual screening\cite{Ragoza2017}.  However, pose scoring is a distinctly different task than molecular docking, where instead of being presented with pre-generated poses, the scoring function guides what poses are generated during sampling.  Here we describe for the first time the application of a grid-based convolutional neural network protein-ligand scoring function evaluated in the context of a full molecular docking workflow.
+
+\textit{Add more of an introduction, add extended discussion of related work with citations, preview what is to come}
+
+\section{Methods}
+
+\subsection{Evaluations}
+These are the tasks we are going to evaluate GNINA on.  Note there is no training in this paper so there will be overlap with the training set.  This is somewhat justified by the fact that we are generating all new poses, but we will need to (at a minimum) construct time-split subsets of all the datasets.  We need to follow the same system preparation steps.
+
+\begin{itemize}
+    \item Redocking - latest PDBbind (2019?), define binding site with autobox\_ligand on crystal ligand
+    \item Crossdocking - \url{https://onlinelibrary.wiley.com/doi/full/10.1002/pro.3784}, define binding site with autobox\_ligand on crystal ligand
+    \item Whole protein docking - define binding site with autobox\_ligand on receptor structure.  Ideally we do this for both redocking and crossdocking.
+    \item With/without additional hetatms.  In no case will we evaluate with water, but evaluate including ions and cofactors and see what he result is.
+    \item Flexible docking - I don't think we will have the full story here (training a flex-specific model probably deserves its own paper, gnina 1.1), but we might be able to assess existing models and make best-practices recommendations (which might be to avoid CNN scoring in this case for now)
+\end{itemize}
+
+\subsubsection{Parameterizations}
+Part of the goal of this paper is to determine the best default parameters for each task (changing the built-in defaults as needed).  This is particularly important for CNN related options.  I'm thinking we can get away with doing a grid search across this space using a reduced dataset (PDBbind Core) and only exploring a few interesting variation on the larger datasets.
+
+\begin{itemize}
+    \item How to use cnn model 
+    \begin{itemize}
+        \item rescoring only
+        \item refinement only
+    \end{itemize}
+    \item cnn\_rotation - presumably will make result more robust - but how many?
+    \item which model? built-in models (first model, full ensemble), ensemble of all models (\texttt{--cnn\_ensemble})?
+  \item exhaustiveness
+  \item number of poses  --num\_mc\_saved
+  \item min\_rmsd\_filter
+  \item smina vs. gnina - the main difference is gnina using single precision floating point to enable GPU computation, we need to assess what impact this has
+\end{itemize}
+
+\subsubsection{Evaluation}
+For this paper we are looking exclusively at pose prediction performance. How do we determine which approach is better?  RMSD is the go-to metric, but there are other ones out there (e.g. conserved contacts).  We should use at least one additional such metric.  But we also have to consider what we do with RMSD.  
+
+\begin{itemize}
+    \item Top1 - how often a low RMSD pose is top ranked
+    \item Mean1 - average rmsd of top ranked pose
+    \item TopN/MeanN - extend analysis beyond first pose
+    \item sampling performance (max N) - when scoring is guiding sampling, we are going to get different poses samples
+    \item \textbf{model confidence} - for CNN models we should assess how well the model can rank its confidence in its prediction
+    \begin{itemize}
+        \item look at the score value itself - does a higher score mean the result is more likely to be correct
+        \item ensemble methods - how does variance in predictions (either from rotation sampling or different models) map to quality of prediction
+    \end{itemize}
+    \item per-target effects - there is target bias in the data sets, need to explore ways to normalize and report on this
+\end{itemize}
+
+
+\section{Results}
+Hopefully good.
+
+\section{Discussion}
+
+
+
+\begin{acknowledgement}
+
+Please use ``The authors thank \ldots'' rather than ``The
+authors would like to thank \ldots''.
+
+
+
+\end{acknowledgement}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The same is true for Supporting Information, which should use the
+%% suppinfo environment.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\begin{suppinfo}
+
+
+
+\end{suppinfo}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%% The appropriate \bibliography command should be placed here.
+%% Notice that the class file automatically sets \bibliographystyle
+%% and also names the section correctly.
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\bibliography{references}
+
+\end{document}
