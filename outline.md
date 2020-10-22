@@ -15,9 +15,10 @@
 		1. Empirical
 			- Background
 				- Based on protein-ligand structure properties
-				- Summation of forces between the protein and ligand
+				- Combination of Knowledge Based with Force Field
 			- Pros
-				- 
+				- less prone to overfitting
+				- can extract what contributes to score
 			- Cons
 				- Hard to determine where errors come from
 				- Does not generalize well if tuned parameters
@@ -31,16 +32,20 @@
 			- Cons
 				- Requires large database of known structures
 				- Underestimate solvent effects
+				- Difficult to understand meaning
+		3. Limit of all of "Normal" SF
 	3. Machine Learning for Scoring
+		1. Learns arbitrary function
+		2. 
 		
 	4. Related Works
 	5. Brief Summary of Method
 
 
 # Methods:
-    Data
-         Redocking
-         Crossdocking
+    1. Data
+         1. Redocking
+         2. Crossdocking
 	Background of Gnina workings
     Gnina/Smina comparison
     Selecting the optimal model (selection of new default ensemble)
