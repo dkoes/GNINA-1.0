@@ -116,11 +116,23 @@ Molecular docking is a computational procedure in which the non-covalent bonding
         \item Defined Pocket (Exhaustiveness, CNN Rotations, Min RMSD Filter, Num MC Saved, Number of Modes)
         \item Whole Protein (Exhaustiveness, Number of Modes)
     \end{enumerate}
-    \item Comparison to Other State of the Art Methods?
 \end{enumerate}
 
 \subsection{Data}
-Molecular docking can be properly evaluated when redocking the cognate ligand in a holo protein structure. Redocking the cognate ligand easily demonstrates the sampling and scoring power of the molecular docking pipeline, as the root mean square deviation (RMSD) from the crystallized pose can be measured to determine the accuracy of the produced poses. However, this is not the normal use case of a molecular docking pipeline.  Docking will ordinarily be performed on new systems of proteins and ligands that have no co-crystalized structure. Often a ligand will be docked on a apo protein structure or a structure in which the ligand was a different molecule. To account for both of these tasks we analyze the docking power of gnina by performing both redocking of co-crystallized ligands and crossdocking of new ligands. Analysis of redocking requires a set of high quality structures in which the native binding pose of the ligand has been solved, for this purpose we utilize the PDBbind 2019 refined set. The PDBbind database is a collection of protein data bank (PDB) structures with experimentally measured binding affinity. The database is re-released every year with newly added structures and is composed of a larger general set and a smaller refined subset. The refined set is a subset of the general set that filters the structures with resolution higher than 2.5 A, high quality affinity measurements, and proper protein-ligand complexes.  The PDBBind 2019 general set is composed of 21,382 complexes with measured binding affinity and 4,852 of those complexes are contained within the refined set.
+Molecular docking can be properly evaluated when redocking the cognate ligand in a holo protein structure. Redocking the cognate ligand easily demonstrates the sampling and scoring power of the molecular docking pipeline, as the root mean square deviation (RMSD) from the crystallized pose can be measured to determine the accuracy of the produced poses. However, this is not the normal use case of a molecular docking pipeline.  Docking will ordinarily be performed on new systems of proteins and ligands that have no co-crystalized structure. Often a ligand will be docked on a apo protein structure or a structure in which the ligand was a different molecule. To account for both of these tasks we analyze the docking power of gnina by performing both redocking of co-crystallized ligands and crossdocking of new ligands. 
+Analysis of redocking requires a set of high quality structures in which the native binding pose of the ligand has been solved, for this purpose we utilize the PDBbind 2019 refined set. The PDBbind database is a collection of protein data bank (PDB) structures with experimentally measured binding affinity. The database is re-released every year with newly added structures and is composed of a larger general set and a smaller refined subset. The refined set is a subset of the general set that filters the structures with resolution higher than 2.5 A, high quality affinity measurements, and proper protein-ligand complexes.  The PDBBind 2019 general set is composed of 21,382 complexes with measured binding affinity and 4,852 of those complexes are contained within the refined set.
+(Paragraph about crossdocking dataset)
+Both datasets were filtered with RDKit to remove systems with a ligand larger than 2 KDa or less than 150 Da. ProDy was used to separate the cognate ligand and the protein into separate files.
+
+\subsection{Optimal Model Selection}
+
+\subsection{Settings Exploration}
+Define Settings here:
+Exhaustiveness
+CNN Rotations
+Min RMSD Filter
+Number MC Saved
+Number of Modes
 
 \subsection{Evaluations}
 These are the tasks we are going to evaluate GNINA on.  Note there is no training in this paper so there will be overlap with the training set.  This is somewhat justified by the fact that we are generating all new poses, but we will need to (at a minimum) construct time-split subsets of all the datasets.  We need to follow the same system preparation steps.
