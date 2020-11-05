@@ -69,7 +69,9 @@
 # Methods:
     1. Data
          1. Redocking
+            - PDBbind2019
          2. Crossdocking
+            - 
 	Background of Gnina workings
     Gnina/Smina comparison
     Selecting the optimal model (selection of new default ensemble)

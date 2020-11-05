@@ -102,21 +102,6 @@ Molecular docking is a computational procedure in which the non-covalent bonding
 
 \section{Methods}
 
-\subsection{Outline}
-\begin{enumerate}
-    \item Data
-    \begin{enumerate}
-        \item Redocking
-        \item Crossdocking
-    \end{enumerate}
-    \item Gnina/Smina comparison
-    \item Selecting the optimal model (selection of new default ensemble)
-    \item Exploration of Settings (Selecting Default Settings)
-    \begin{enumerate}
-        \item Defined Pocket (Exhaustiveness, CNN Rotations, Min RMSD Filter, Num MC Saved, Number of Modes)
-        \item Whole Protein (Exhaustiveness, Number of Modes)
-    \end{enumerate}
-\end{enumerate}
 
 \subsection{Data}
 Molecular docking can be properly evaluated when redocking the cognate ligand in a holo protein structure. Redocking the cognate ligand easily demonstrates the sampling and scoring power of the molecular docking pipeline, as the root mean square deviation (RMSD) from the crystallized pose can be measured to determine the accuracy of the produced poses. However, this is not the normal use case of a molecular docking pipeline.  Docking will ordinarily be performed on new systems of proteins and ligands that have no co-crystalized structure. Often a ligand will be docked on a apo protein structure or a structure in which the ligand was a different molecule. To account for both of these tasks we analyze the docking power of gnina by performing both redocking of co-crystallized ligands and crossdocking of new ligands. 
@@ -124,7 +109,9 @@ Analysis of redocking requires a set of high quality structures in which the nat
 (Paragraph about crossdocking dataset)
 Both datasets were filtered with RDKit to remove systems with a ligand larger than 2 KDa or less than 150 Da. ProDy was used to separate the cognate ligand and the protein into separate files.
 
+
 \subsection{Optimal Model Selection}
+The scoring function is vital to the performance of the molecular docking. Due to the high computational cost of applying the convolutional models to the conformations selected by the smina scoring function, we must select a subset of the available models that provides accurate dockings while not increasing computational cost. The default gnina scoring function was then chosen in a greedy manner to select the optimal models. Selection of the models was done in a method similar to feature selection carried out for machine learning models (insert citation about Forward Selection). An ensemble of CNN models was built up model by model in an iterative process. In each round models were selected for their ability to select a low RMSD conformation as the first pose. In the first round of selection, all of the CNN models were tested for their individual ability to predict low RMSD poses on both The Crossdock2020 and PDBbind dataset. The next round of selection required testing of all combinations with the model selected in the first step. Model selection continued, exploring all possible combinations 
 
 \subsection{Settings Exploration}
 Define Settings here:
