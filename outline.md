@@ -68,13 +68,21 @@
 
 # Methods:
     1. Data
-         1. Redocking
-            - PDBbind2019
-         2. Crossdocking
-            - 
-	Background of Gnina workings
-    Gnina/Smina comparison
-    Selecting the optimal model (selection of new default ensemble)
-    Exploration of Settings (Selecting Default Settings)
-        Defined Pocket (Exhaustiveness, CNN Rotations, Min RMSD Filter, Num MC Saved, Number of Modes)
-        Whole Protein (Exhaustiveness, Number of Modes)
+         1. Redocking (PDBbind2019 refined)
+         2. Crossdocking (Carlos Crossdock Dataset )
+         3. Filtering
+             - readable by rdkit and ProDy
+             - extract ligand from protein
+             - remove heteroatoms (metals, other crystalized small molecules) 
+             - remove water
+	2. Background of Gnina workings
+        1. Smina is a fork of Vina, Gnina is a fork of Smina
+        2. 
+    3. Gnina/Smina comparison
+    4. Selecting the optimal model (selection of new default ensemble)
+        - Greedy selection process
+        - Select model with maximal performance and minimal memory taken
+        - Iterative process
+    5. Exploration of Settings (Selecting Default Settings)
+         - Defined Pocket (Exhaustiveness, CNN Rotations, Min RMSD Filter, Num MC Saved, Number of Modes)
+         - Whole Protein (Exhaustiveness, Number of Modes)
