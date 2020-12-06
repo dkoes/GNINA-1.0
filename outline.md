@@ -68,21 +68,67 @@
 
 # Methods:
     1. Data
-         1. Redocking (PDBbind2019 refined)
-         2. Crossdocking (Carlos Crossdock Dataset )
-         3. Filtering
-             - readable by rdkit and ProDy
-             - extract ligand from protein
-             - remove heteroatoms (metals, other crystalized small molecules) 
-             - remove water
+        1. Redocking (PDBbind2019 refined)
+        2. Crossdocking (Carlos Crossdock Dataset )
+        3. Filtering
+            - readable by rdkit and ProDy
+            - extract ligand from protein
+            - remove heteroatoms (metals, other crystalized small molecules) 
+            - remove water
+        4. Subsampling (Crossdocking)
 	2. Background of Gnina workings
         1. Smina is a fork of Vina, Gnina is a fork of Smina
         2. 
     3. Gnina/Smina comparison
+        1. Gnina without cnn for scoring is same as smina
+        2. Floating point precision (GPU)
     4. Selecting the optimal model (selection of new default ensemble)
-        - Greedy selection process
-        - Select model with maximal performance and minimal memory taken
+        - Greedy selection process (Forward Algorithm)
+        - Aim of selection
+            - Maximal Performance
+            - Fit on 4 GB of RAM
         - Iterative process
-    5. Exploration of Settings (Selecting Default Settings)
-         - Defined Pocket (Exhaustiveness, CNN Rotations, Min RMSD Filter, Num MC Saved, Number of Modes)
-         - Whole Protein (Exhaustiveness, Number of Modes)
+    5. Optimal Running method (Refine vs Rescore)
+        1. What does refinement do?
+        2. What does rescoring do?
+        3. CNN empirical weight
+    6. Exploration of Settings (Selecting Default Settings)
+        1. Defined Pocket
+            - Exhaustiveness 
+            - CNN Rotations 
+            - Min RMSD Filter 
+            - Num MC Saved 
+            - Number of Modes
+         2. Whole Protein
+             - Exhaustiveness
+# Results
+    1. Gnina and Smina are the same
+        - Figures in Supplement (bc they ugly)
+        - Slight performance boost with floating point precision
+    2. Default Model selection
+        - Compare performance to single models/Vina
+        - Compare performance to ensemble models/Vina
+        - Pareto Optimal Curve
+    3. Refinement vs. Rescoring
+        - Compare results Fig
+        - Pareto Optimal Curve
+    4. Settings Exploration
+        1. Defined Pocket
+            - Important parameters:
+                - Exhaustiveness
+                - Autobox Add
+                - Number of Modes
+                - Number Monte Carlo Saved
+            - Optimal settings
+        2. Whole Protein
+            - Important parameters:
+                - Exhaustiveness
+            - Optimal Settings:
+    5. Performance of Gnina:
+        - Timesplit results:
+            - PDBbind2019 refined with no PDBbind2017 general
+                - Training set for what?
+            - PDBbind2019 refined with no PDBbind2017 general AND no CD2020
+                - Training set for CD and Dense
+        - CNNscore
+            - Threshold provide better results
