@@ -76,6 +76,7 @@
             - remove heteroatoms (metals, other crystalized small molecules) 
             - remove water
         4. Subsampling (Crossdocking)
+        5. Benchmarking Data (PDBbind Core)
 	2. Background of Gnina workings
         1. Smina is a fork of Vina, Gnina is a fork of Smina
         2. 
