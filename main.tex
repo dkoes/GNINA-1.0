@@ -108,7 +108,7 @@ Machine learning(ML) algorithms learn arbitrary relationships between observatio
 
 Deep Learning(DL) methods allow direct inference of features from inputs. These methods have demonstrated success in a variety of fields, such as computer vision and natural language processing\cite{krizhevsky2017imagenet,brown2020language}. In recent years, there has been significant progress with DL methods in the drug discovery field with many models emplying a convolutional framework. Convolutional Neural Networks(CNN) leverage convolutions to infer features directly from input tensors, usually images. CNNs have shown potential in virtual screening (AtomNet, DeepVS, \cite{Ragoza2017}) and binding affinity prediction (PotentialNet, $K_{DEEP}$, Pafnucy)\cite{wallach2015atomnet,jimenez2018k,pereira2016boosting,feinberg2018potentialnet,stepniewska2018development}. A number of methods have been proposed to capitalize on the power of DL scoring functions. MedusaNet uses a CNN within the docking pipeline to guide the sampling of the base sampling method\cite{jiang2020guiding}. The base docking method, Medusa, provides a variety of ligand poses that are translated to a 3D coordinate representation which the CNN evaluates for determination of whether to keep the pose. Nguyen et. al. \cite{nguyen2020mathdl} describe a generative adversarial network(GAN) for pose prediction. Their network utilizes an encoder with low-dimensional mathematical representations of the protein-ligand complex and a decoder utilizing convolutional layers to generate and rank ligand poses for the D3R grand challenge. Masuda et. al. \cite{masuda2020generating} use a receptor structure as the prior to their GAN to simultaneously sample and score novel molecular targets.
 
-\textit{Add more of an introduction, add extended discussion of related work with citations, preview what is to come}
+\textit{preview what is to come}
 
 \section{Methods}
 
@@ -134,6 +134,8 @@ Gnina is a fork of Smina that allows the utilization of CNN models as scoring fu
 
 \subsection{Optimal Model Selection}
 The scoring function is vital to the performance of the molecular docking pipeline. Due to the high computational cost of applying the CNN models to the conformations selected by the smina scoring function, we must select a subset of the available models that provides accurate dockings while limiting computational cost. The default CNN model ensemble was selected using the forward algorithm. The ensemble was built in an iterative process using the "rescoring" option for CNN scoring so as to minimize the computational time for each iteration. In each round of the selection, models were chosen for their ability to score and rank a low RMSD conformation as the first pose. In each round we evaluate all of the versions of each CNN model(i.e. Dense, Dense\_1, Dense\_2, Dense\_3,Dense\_4). In the first round of selection, all of the CNN models were tested for their individual ability to predict low RMSD poses on both The Crossdock2020 and PDBbind dataset. The next round of selection required testing of all two model combinations with the model selected in the first step. Model selection continued, exploring all possible combinations of the built-in CNN models. The selection process was concluded after five CNN models were selected.
+
+After the selection of the new default CNN model ensemble, we must evaluate the performance boost that this ensemble provides over any single CNN model or an ensemble of random initializations of the same CNN model type. We again compare the CNN model(s) performance on both the redocking and the crossdocking tasks. The CNN models are used in the "rescoring" option for the CNN scoring to output 10 ligand conformations. The RMSD to the known binding pose for each of the output conformations are computed with Open Babel's obrmsd function. If the pose is less than $2\,\AA$ then we consider the pose to be "good". The percentage of systems with a pose less than $2\,\AA$ is calculated for each dataset. We then compute the cumulative number of systems with a pose less than $2\,\AA$, so that at the second pose we are considering if either the first or second pose is less than $2\,\AA$ for a given system.
 
 \subsection{Optimal Running Method}
 Gnina allows the usage of the CNN models in various steps of the molecular docking process. The CNN scoring option allows the user to change how the CNN is used to evaluate a ligand pose. If the CNN is not used at all in the scoring process, "none" option, then the molecular docking pipeline is the same as Smina. The "rescoring" option is the lowest computational cost of the options that utilize the CNN models. The CNN models are used to score and resort the ligand conformations selected and refined by the non-CNN scoring function, usually the Vina scoring function. The next option in terms of computational cost is "refinement" which uses the CNN models for the refinement of the ligands after they have been selected by the monte carlo chains, which are still utilizing the non-CNN scoring function. In addition to refining the ligand conformations, the CNN models are used to score and resort the output poses, as the "rescore" option does. The "all" option uses the CNN models as the scoring function throughout the course of the molecular docking procedure. The CNN model is used for the selection process within the monte carlo chains, the refinement process after monte carlo selection, and the scoring and resorting of the poses before output. This option is very computationally intensive as the CNN must be constantly queried for the energy of a particular conformation during the monte carlo sampling procedure.
@@ -195,9 +197,138 @@ For this paper we are looking exclusively at pose prediction performance. How do
 Gnina was run without usage of CNN models in the molecular docking pipeline. Results for both redocking and crossdocking do not show a significant difference for the poses output from Gnina with no CNN and Smina (Supplement). A majority of the output poses are exactly the same, with slight differences seen for some output poses. The performance of Gnina with no CNN is slightly better than that of Smina using the same settings.
 
 \subsection{Optimal Model Selection}
+The model selection procedure selected five models whose combined performance on ranking low RMSD poses first performance was optimal. The table for the model selection process can be seen in (supplemental table). The selected five selected models are Dense\_4, General\_Default2018\_3, Dense\_3, Crossdock\_Default2018, and Redock\_Default2018\_2. The performance of the model ensemble is compared to the single model options in \ref{fig:resc_single}. We can see that the newly selected Default Ensemble significantly outperforms all of the single models on both the redocking task and the crossdocking task. All models are able to rank poses with low RMSD better than Vina. 
+
+\begin{figure}
+	\begin{subfigure}
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/rescore_single_models_line.png}
+		\caption{Redocking}
+		\label{fig:resc_single_rd}
+        \end{subfigure}    
+	\begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_single_models_line.png}
+		\caption{Crossdocking}
+		\label{fig:resc_single_cd}
+        \end{subfigure}    
+	\caption{Percentage of systems with RMSD to known binding pose less than $2\,\AA$ for each pose with results being cumulative}
+	\label{fig:resc_single}
+\end{figure}    
+
+When the Default Ensemble is compared to the ensembles of each of the CNN model types, the ensembles consisting of each random intialization of the given CNN model type, we see that the Default Ensemble is able to outperform all of the ensembles composed of one model type\ref{fig:resc_ens}. The diversity of models within the Default Ensembles allows better ranking of the poses due to the diversity of training data for each model type. The All Ensemble is the ensemble composed of all possible CNN models built-in to the Gnina software. The Default Ensemble is able to meet or exceed the performance of this large ensemble. The CNN models in the Default Ensemble are a subset of the models in the All Ensemble.
+
+\begin{figure}
+	\begin{subfigure}[b]{0.48\textwidth}
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/rescore_ensemble_models_line.png}
+		\caption{Redocking}
+		\label{fig:resc_ens_rd}
+        \end{subfigure}    
+	\begin{subfigure}[b]{0.48\textwidth} 
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_ensemble_models_line.png}
+		\caption{Crossdocking}
+		\label{fig:resc_ens_cd}
+        \end{subfigure}    
+	\caption{Percentage of systems with RMSD to known binding pose less than $2\,\AA$ for each pose with results being cumulative}
+	\label{fig:resc_ens}
+\end{figure}    
+
+\textit{Insert comparison of timings for various ensembles, pareto optimal curve}
+
 \subsection{Optimal Running Method}
+When selecting the optimal running method. We evaluate the performance of the Default Ensemble with the "rescore","refinement", and "all" options. However, the usage of the "all" option was unable to complete on the PDBbind Core set in a reasonable amount of time, so it was taken out of consideration. We are then left with comparing the "refinement" and "rescoring" options of the CNN scoring. We can see from \ref{fig:rescore_refine_comparison} that the Default Ensemble performs nearly equally with either option.
+
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/rescore_vs_refine_line.png} 
+		\caption{Redocking}
+		\label{fig:ref_vs_resc_rd}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_vs_refine_line.png} 
+		\caption{Crossdocking}
+		\label{fig:ref_vs_resc_cd}
+        \end{subfigure}    
+	\caption{}
+	\label{fig:rescore_refine_comparison}
+\end{figure}    
+
+However, from looking at the average time to perform molecular docking for one system \ref{fig:ref_vs_resc_time}. We can see that "refinement" takes significantly longer. Therefore, we select the "rescore" as the default option for the CNN scoring.
 
 \subsection{Settings Exploration}
+First we evaluate all of the settings for defined pockets. Autobox add increases the search space for the docking program to be larger than the rectangular prism defined by the autobox ligand input to Gnina by the given value on each side. In redocking, the expansion of the search space decreases performance as the docking box provided by autobox ligand is exactly where the ligand should be. Crossdocking is a different story as the new ligand might fit in a different area of the defined pocket. 
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/sweep_autobox_add_line.png}
+		\caption{Redocking}
+		\label{fig:autobox_add_rd}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_autobox_add_line.png}
+		\caption{Crossdocking}
+		\label{fig:autobox_add_cd}
+        \end{subfigure}    
+	\caption{}
+	\label{fig:autobox_add}
+\end{figure}    
+
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/sweep_exhaustiveness_line.png}
+		\caption{Redocking}
+		\label{fig:exhaustiveness_rd}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_exhaustiveness_line.png}
+		\caption{Crossdocking}
+		\label{fig:exhaustiveness_cd}
+        \end{subfigure}    
+	\caption{}
+	\label{fig:exhaustiveness}
+\end{figure}    
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/sweep_mcsaved_line.png}
+		\caption{Redocking}
+		\label{fig:mcsaved_rd}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_mcsaved_line.png}
+		\caption{Crossdocking}
+		\label{fig:mcsaved_cd}
+        \end{subfigure}    
+	\caption{}
+	\label{fig:mcsaved}
+\end{figure}    
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/sweep_num_modes_line.png}
+		\caption{Redocking}
+		\label{fig:num_modes_rd}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_num_modes_line.png}
+		\caption{Crossdocking}
+		\label{fig:num_modes_cd}
+        \end{subfigure}    
+	\caption{}
+	\label{fig:num_modes}
+\end{figure}    
+
+
+\subsection{Gnina Performance}
 
 \section{Discussion}
 
