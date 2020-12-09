@@ -146,6 +146,7 @@ Gnina has many settings that alter the molecular docking pipeline. A default val
 Evaluations for all of the settings are carried out on both the redocking and crossdocking datasets. Each setting is varied individually using the optimal CNN model ensemble determined above. The exhaustiveness was explored in powers of two, due to the parallel computations of the monte carlo chains, going from four to 16. Exhaustiveness was explored again for the whole protein docking procedure, from eight to 64. The CNN rotations were explored for the values: 0, 1, 5, 10, and 20 (where 0 denotes a random rotation of the ligand conformation and 1 denotes a specific rotation of the ligand conformation). Values of 0.5, 1.0, and 1.5 were used to test the setting of minimum RMSD filter. The number of monte carlo saved was tested on multiples of 20, ranging from 20 to 100. The number of modes was evaluated using 9 and 100. Each value produced a set of poses, RMSD was determined for each output pose using Open Babel, and the percentage of systems with a RMSD less than 2 $\AA$ was calculated for each dataset.
 
 \subsection{Gnina Performance Evaluation}
+The CNN models built-in to Gnina have seen crystal poses of docked ligands during their training. 
 
 \section{Results}
 \subsection{Smina Comparison}
@@ -157,62 +158,61 @@ Gnina was run without usage of CNN models in the molecular docking pipeline. Res
 		\centering
 		\includegraphics[width=\textwidth]{figures/redocking/rescore_single_models_line.png}
 		\caption{Redocking}
-		\label{fig:resc single rd}
+		\label{fig:RescoreSingleRedock}
         \end{subfigure}    
 	\begin{subfigure}[b]{0.48\textwidth}    
 		\centering
 		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_single_models_line.png}
 		\caption{Crossdocking}
-		\label{fig:resc single cd}
+		\label{fig:RescoreSingleCrossdock}
         \end{subfigure}    
 	\caption{Percentage of systems with RMSD to known binding pose less than $2\,\AA$ for each pose with results being cumulative}
-	\label{fig:rescsingle}
+	\label{fig:RescoreSingle}
 \end{figure}    
-The model selection procedure selected five models whose combined performance on ranking low RMSD poses first performance was optimal. The table for the model selection process can be seen in (supplemental table). The selected five selected models are Dense\_4, General\_Default2018\_3, Dense\_3, Crossdock\_Default2018, and Redock\_Default2018\_2. The performance of the model ensemble is compared to the single model options in \ref{fig:rescsingle}. We can see that the newly selected Default Ensemble significantly outperforms all of the single models on both the redocking task and the crossdocking task. All models are able to rank poses with low RMSD better than Vina. 
+The model selection procedure selected five models whose combined performance on ranking low RMSD poses first performance was optimal. The table for the model selection process can be seen in (supplemental table). The selected five selected models are Dense\_4, General\_Default2018\_3, Dense\_3, Crossdock\_Default2018, and Redock\_Default2018\_2. The performance of the model ensemble is compared to the single model options in Figure \ref{fig:RescoreSingle}. While nearly all models are able to rank poses with low RMSD higher than Vina, we can see that the newly selected Default Ensemble significantly outperforms all of the single models on both the redocking task and the crossdocking task.  
 
-
-When the Default Ensemble is compared to the ensembles of each of the CNN model types, the ensembles consisting of each random intialization of the given CNN model type, we see that the Default Ensemble is able to outperform all of the ensembles composed of one model type\ref{fig:resc ens}. The diversity of models within the Default Ensembles allows better ranking of the poses due to the diversity of training data for each model type. The All Ensemble is the ensemble composed of all possible CNN models built-in to the Gnina software. The Default Ensemble is able to meet or exceed the performance of this large ensemble. The CNN models in the Default Ensemble are a subset of the models in the All Ensemble.
+When the Default Ensemble is compared to the ensembles of each of the CNN model types, the ensembles consisting of each random intialization of the given CNN model type, we see that the Default Ensemble is able to outperform all of the ensembles composed of one model type (Figure \ref{fig:RescoreEnsemble}). The diversity of models within the Default Ensembles allows better ranking of the poses due to the diversity of training data for each model type. The All Ensemble is the ensemble composed of all possible CNN models built-in to the Gnina software. The Default Ensemble is able to meet or exceed the performance of this large ensemble. The CNN models in the Default Ensemble are a subset of the models in the All Ensemble.
 
 \begin{figure}
 	\begin{subfigure}[b]{0.48\textwidth}
 		\centering
 		\includegraphics[width=\textwidth]{figures/redocking/rescore_ensembles_line.png}
 		\caption{Redocking}
-		\label{fig:resc ens rd}
+		\label{fig:RescoreEnsembleRedock}
         \end{subfigure}    
 	\begin{subfigure}[b]{0.48\textwidth} 
 		\centering
 		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_ensembles_line.png}
 		\caption{Crossdocking}
-		\label{fig:resc ens cd}
+		\label{fig:RescoreEnsembleCrossdock}
         \end{subfigure}    
 	\caption{Percentage of systems with RMSD to known binding pose less than $2\,\AA$ for each pose with results being cumulative}
-	\label{fig:resc ens}
+	\label{fig:RescoreEnsemble}
 \end{figure}    
 
 \textit{Insert comparison of timings for various ensembles, pareto optimal curve}
 
 \subsection{Optimal Running Method}
-When selecting the optimal running method. We evaluate the performance of the Default Ensemble with the "rescore","refinement", and "all" options. However, the usage of the "all" option was unable to complete on the PDBbind Core set in a reasonable amount of time, so it was taken out of consideration. We are then left with comparing the "refinement" and "rescoring" options of the CNN scoring. We can see from \ref{fig:rescore refine comparison} that the Default Ensemble performs nearly equally with either option.
+When selecting the optimal running method. We evaluate the performance of the Default Ensemble with the ``rescore",``refinement", and ``all" options. However, the usage of the ``all" option was unable to complete on the PDBbind Core set in a reasonable amount of time, so it was taken out of consideration. We are then left with comparing the ``refinement" and ``rescoring" options of the CNN scoring. We can see from Figure \ref{fig:CompareRescoreRefine} that the Default Ensemble performs nearly equally with either option.
 
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
 		\includegraphics[width=\textwidth]{figures/redocking/rescore_vs_refine_line.png} 
 		\caption{Redocking}
-		\label{fig:ref vs resc rd}
+		\label{fig:CompareRescoreRefineRedock}
         \end{subfigure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
 		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_vs_refine_line.png} 
 		\caption{Crossdocking}
-		\label{fig:ref vs resc cd}
+		\label{fig:CompareRescoreRefineCrossdock}
         \end{subfigure}    
-	\caption{}
-	\label{fig:rescore refine comparison}
+	\caption{Comparing the Default CNN Ensemble for use in only rescoring of the poses output by the Monte Carlo chains or the refinement of the poses followed by a rescoring of the poses}
+	\label{fig:CompareRescoreRefine}
 \end{figure}    
 
-However, from looking at the average time to perform molecular docking for one system. We can see that "refinement" takes significantly longer. Therefore, we select the "rescore" as the default option for the CNN scoring.
+However, from looking at the average time to perform molecular docking for one system. We can see that ``refinement" takes significantly longer. Therefore, we select the ``rescore" as the default option for the CNN scoring.
 
 \subsection{Settings Exploration}
 \begin{figure}    
@@ -220,18 +220,18 @@ However, from looking at the average time to perform molecular docking for one s
 		\centering
 		\includegraphics[width=\textwidth]{figures/redocking/sweep_autobox_add_line.png}
 		\caption{Redocking}
-		\label{fig:autobox add rd}
+		\label{fig:AutoboxAddRedock}
         \end{subfigure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
 		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_autobox_add_line.png}
 		\caption{Crossdocking}
-		\label{fig:autobox add cd}
+		\label{fig:AutoboxAddCrossdock}
         \end{subfigure}    
-	\caption{}
-	\label{fig:autobox add}
+	\caption{Evaluating the affect on docking performance when the value of Autobox Add is changed (move to supplement)}
+	\label{fig:AutoboxAdd}
 \end{figure}    
-First we evaluate all of the settings for defined pockets. Autobox add increases the search space for the docking program to be larger than the rectangular prism defined by the autobox ligand input to Gnina by the given value on each side. In redocking, the expansion of the search space decreases performance as the docking box provided by autobox ligand is exactly where the ligand should be. Crossdocking is a different story as the new ligand might fit in a different area of the defined pocket.
+First we evaluate all of the settings for defined pockets. Autobox add increases the search space for the docking program to be larger than the rectangular prism defined by the autobox ligand input to Gnina by the given value on each side. In both redocking and crossdocking (Figure \ref{fig:AutoboxAdd}), the expansion of the search space decreases performance as the docking box provided by autobox ligand precisely defines where the ligand binds.
 
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
@@ -246,7 +246,7 @@ First we evaluate all of the settings for defined pockets. Autobox add increases
 		\caption{Crossdocking}
 		\label{fig:exhaustiveness cd}
         \end{subfigure}    
-	\caption{}
+	\caption{Evaluating the role of exhaustiveness in the performance of docking with the Default CNN Ensemble}
 	\label{fig:exhaustiveness}
 \end{figure}    
 
@@ -265,7 +265,7 @@ Changes in the exhaustiveness alter the amount of sampling that occurs. When the
 		\caption{Crossdocking}
 		\label{fig:mcsaved cd}
         \end{subfigure}    
-	\caption{}
+	\caption{Evaluation of the Number of Monte Carlo Saved in the performance of docking with the Default CNN Ensemble}
 	\label{fig:mcsaved}
 \end{figure}    
 
@@ -284,13 +284,131 @@ Increases in the number of monte carlo saved increases the chances of sampling a
 		\caption{Crossdocking}
 		\label{fig:num modes cd}
         \end{subfigure}    
-	\caption{}
+	\caption{Evaluating a much greater number of modes on the performance of docking with the Default CNN Ensemble}
 	\label{fig:num modes}
 \end{figure}    
 
-When looking at the first 10 poses, we see a marked increase in the performance of the docking routine with a large value for the number of modes. Since the molecular docking procedure is a sampling problem, with increased output conformations there is an increased liekelihood of finding the correct answer. We know that the CNNs rank the refined poses more accurately than the typical Vina scoring function, so if the docking procedure samples an accurate pose that Vina does not believe is high scoring the CNN will be able to rerank it to within the top 10.
+When looking at the first 10 poses, we see a marked increase in the performance of the docking routine with a large value for the number of modes. Since the molecular docking procedure is a sampling problem, with increased output conformations there is an increased likelihood of finding the correct answer. We know that the CNNs rank the refined poses more accurately than the typical Vina scoring function, so if the docking procedure samples an accurate pose that Vina does not believe is high scoring the CNN will be able to re-rank it to within the top 10 poses.
+
+Finally, we evaluate the performance of docking when using the whole protein as the defined binding pocket. The performance of the docking routine is expected to be reduced as the sampling space has been significantly increased.
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/whole_ptn_comparison_line.png}
+		\caption{Redocking}
+		\label{fig:WholeProteinRD}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/whole_ptn_comparison_line.png}
+		\caption{Crossdocking}
+		\label{fig:WholeProteinCD}
+        \end{subfigure}    
+	\caption{Whole Protein Docking when using the Vina scoring function and the Default CNN Ensemble for rescoring}
+	\label{fig:WholeProtein}
+\end{figure}    
+When using the whole protein for the sampling space, the sampling procedure tends to get stuck in other energy minima. Figure \ref{fig:WholeProtein} shows that the performance of both Vina and the Default CNN Ensemble are significantly reduced from when the binding pocket was explicitly defined. Though we expect that with a larger sampling space that increasing the amount of sampling will increase performance.
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+    		\centering
+    		\includegraphics[width=\textwidth]{figures/redocking/whole_ptn_sweep_exhaustiveness_line.png}
+    		\caption{Redocking}
+    		\label{fig:WholeProteinRD}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+    		\centering
+    		\includegraphics[width=\textwidth]{figures/crossdocking/whole_ptn_sweep_exhaustiveness_line.png}
+    		\caption{Crossdocking}
+    		\label{fig:WholeProteinCD}
+        \end{subfigure}    
+	\caption{Increasing the exhaustiveness when using the whole protein as the binding box}
+	\label{fig:WholeProtein}
+\end{figure}
+Docking with a higher exhaustiveness level provides a greater boost when the binding box is larger. We must again consider the impact of exhaustiveness on computational cost. Increasing exhaustiveness beyond 32 seems to have significant reductions in performance gains and significant increases in computational cost. 
 
 \subsection{Gnina Performance}
+We have evaluated all of the Gnina models on subsets of the data that were not seen by any of the CNN models during training to ensure that the CNN models are able to generalize to unseen protein-ligand systems. We also show the Vina results for the same subset of protein-ligand systems. First we evaluate on the systems within the PDBbind2019 refined set and not within the PDBbind2017 general set.
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+    		\centering
+    		\includegraphics[width=\textwidth]{figures/redocking/single_models_no2017_line.png}
+    		\caption{Redocking Single Models}
+    		\label{fig:No2017SingleRD}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+    		\centering
+    		\includegraphics[width=\textwidth]{figures/redocking/ensemble_models_no2017_line.png}
+    		\caption{Redocking Ensembles}
+    		\label{fig:No2017EnsRD}
+        \end{subfigure}    
+	\caption{CNN Models evaluated on the subset of systems not present in the PDBbind2017 general set}
+	\label{fig:No2017}
+\end{figure}
+There is no overlap of the Crossdocking dataset with the PDBbind2017 general dataset, so crossdocking performance is unaffected by this filtering. On the redocking task, there is a drop in the performance of most of the CNN models. The performance of all of the single models and ensembles drops on this split of the data, but the models are still able to better rank the poses than the Vina scoring function. When examining the cumulative results for all of the output poses, we can see the Vina scoring function doing worse on this split of the data while the CNN models stay largely the same compared to the entire dataset.
+
+Next we evaluate on an even smaller subset of the data. This split removes any systems which were in either the PDBbind2017 general set or the Crossdock2020 dataset, fully removing any of the protein-ligand systems which might have been in the training sets of the CNN models. The CNN models see a performance decrease when looking at the top pose in comparison to the full datasets. When we consider the cumulative results for all of the output poses, the performance of the CNNs is unaffected by this subset of the data.
+
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/single_models_no2017_nocd2020_line.png}
+		\caption{Redocking Single Models}
+		\label{fig:No2017NoCD20SingleRD}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/single_models_no2017_nocd2020_line.png}
+		\caption{Crossdocking Single Models}
+		\label{fig:No2017NoCD20SingleCD}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/ensemble_models_no2017_nocd2020_line.png}
+		\caption{Redocking Ensembles}
+		\label{fig:No2017NoCD20EnsRD}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/ensemble_models_no2017_nocd2020_line.png}
+		\caption{Crossdocking Ensembles}
+		\label{fig:No2017NoCD20EnsRD}
+        \end{subfigure}
+	\caption{CNN Models evaluated on the subset of systems not present in either the PDBbind2017 general set or the Crossdock2020 dataset}
+	\label{fig:No2017NoCD20}
+\end{figure}  
+
+Finally, we examine the importance of the output CNNscore. There are few poses given a score higher than 0.9 by any of the CNNs.
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/thresh_cnnscore_single_models.png}
+		\caption{Redocking Single Models}
+		\label{fig:ThreshSingleRD}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/thresh_cnnscore_single_models.png}
+		\caption{Crossdocking Single Models}
+		\label{fig:ThreshSingleCD}
+        \end{subfigure}
+        \hfill
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/thresh_cnnscore_ensembles.png}
+		\caption{Redocking Ensembles}
+		\label{fig:ThreshEnsRD}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/thresh_cnnscore_ensembles.png}
+		\caption{Crossdocking Ensembles}
+		\label{fig:ThreshEnsRD}
+        \end{subfigure}
+	\caption{Filtering the top pose by its CNNscore}
+	\label{fig:ScoreThresh}
+\end{figure} 
+We show in Figure \ref{fig:ScoreThresh} that poses with high scores are more likely to be low RMSD to the known binding pose. In the case where the true binding conformation is unknown, it is therefore best to select a pose with a high CNNscore.
 
 \section{Discussion}
 
