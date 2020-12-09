@@ -98,9 +98,6 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \section{Introduction}
 
-
-Deep learning scoring functions demonstrate state-of-the-art performance at scoring protein-ligand complexes for affinity prediction, pose selection, and virtual screening\cite{Ragoza2017}.  However, pose scoring is a distinctly different task than molecular docking, where instead of being presented with pre-generated poses, the scoring function guides what poses are generated during sampling.  Here we describe for the first time the application of a grid-based convolutional neural network protein-ligand scoring function evaluated in the context of a full molecular docking workflow.
-
 Molecular docking is a computational procedure in which the non-covalent bonding of macromolecules is predicted, most often a protein and a ligand. The goal of this prediction is the binding affinity and conformation of the small molecule in its minimal energy state. Docking is composed of two main steps, sampling and scoring. Sampling refers to an extensive search of the conformational space of the docking molecule. Proper sampling requires thorough coverage of the conformational landscape of both the ligand and the protein. The flexibility of the ligand and the protein determine the conformations that can be accessed, expanding the search space when flexibility of either molecule is increased. The other vital piece of a molecular docking software is the scoring function. Every pose that is sampled by the algorithm must be evaluated for its fitness in comparison to other conformations. The scoring function determines the conformations that are retained from the sampling of the search space and ranks the retained poses in order of their likelihood of being correct. The final output is a set of ranked poses of the docked molecule that are then given a binding affinity for the larger macromolecule. Determination of the correct binding pose of the small molecule allows us to properly determine the binding affinity of the molecule and affords the opportunity to utilize the pose for lead optimization of the small molecule. Correct evaluation of binding affinity is critical for downstream tasks such as virtual screening or for determining if a compound is important for more experimental analysis. Molecular docking must provide a pose and a binding affinity quickly for its use in the drug discovery pipeline. Sampling the entire conformational space of a molecule is not a quick task, therefore, we must compromise on the speed and accuracy of the docking to provide poses that are close to native while not requiring the full search of the conformational space. The compromise requires our docking software to focus on the accuracy and ranking power of the scoring function to pull out the best conformations early on in sampling.
 
 Scoring functions provide a mapping from the conformational space of the two molecules to the real number line so that poses may be ranked. Typically, scoring functions are put into two categories; empirical and knowledge based. Knowledge based scoring functions leverage the statistics from a set of structural binding data. A number of properties are computed from structures of protein-ligand complexes, such as atom-atom pairwise contacts. The calculated frequencies can be used in a method such as Potential Mean Force, which creates a potential based on the boltzmann distribution of the properties, to calculate the score of a pose. Knowledge based scoring functions tend to generalize well and calculations of scores are quick at test time. However, they require a large database of known structures, largeley ignore the effect of solvents, and can be difficult to intepret when trying to understand a score. Empirical scoring functions build on knowledge based functions by combining the knowledge from known structures with force field terms. The force field terms include non-covalently bonded terms like ..., these are often weighted with tuned hyperparameters. A large proportion of docking software use empirical scoring functions, including ... \cite{}. Unlike knowledge based scoring functions, empirical scoring functions allow simple interpretation of what is contributing to the score. They are less prone to overfitting than scoring functions only including force-field terms, but the combination of terms creates a difficulty for determining where errors come from. Both of these categories of scoring functions are limited to features extracted from structural information and assume there is a linear relationship between the features and the binding affinity. The scoring function utilized in Autodock Vina (called `Vina') is an empirical scoring function explicitly tuned to structural data\cite{trott2010autodock}. The scoring function is a weighted sum of functions scoring the interactions of atoms based on their distance. The functions include gaussian terms, repulsion, hydrophobic, hydrogen bonding, and the number of rotatable bonds. The weights of the terms beind denoted by a non-linear fit to structural data. A mathematically tractable scoring function is essential as the sampling strategy employed, Iterated Local Search global optimizer, utilizes the gradients of each term within the scoring function to update the ligand conformation, thereby ensuring that the local minimum is reached. The success of Vina, an empirical scoring function with a non-linear fit to the data, we must look for alternative methods that are able to model non-linear relationships and extract features directly from structural information without explicit featurization.
@@ -144,54 +141,11 @@ Gnina allows the usage of the CNN models in various steps of the molecular docki
 The default usage of the CNNs within the Gnina docking pipeline demands high accuracy while limiting computational and time cost. Therefore, each of the CNN scoring options must be evaluated both for performance and the time taken to perform. Performance of the docking procedure can be calculated on both the redocking and crossdocking datasets by determining the percentage of systems that have an RMSD less than 2 $\AA$ for each dataset. To this end, gnina is used with one of the CNN scoring options with the CNN ensemble selected above to compute 10 ligand poses for each protein ligand system. A RMSD is calculated from the known crystal pose, or known binding pose for crossdocking, using the Open Babel obrmsd function. We can then asses the number of systems that have an RMSD less than 2 $\AA$ from the known binding pose. Properly benchmarking the time for the various CNN scoring options on both the redocking and crossdocking datasets would take a significant amount of time, so we utilize the PDBbind Core Set to determine the time cost for each CNN scoring option. The docking time is calculated per system using the hyperfine benchmarking tool\cite{}, performing a minimum of 5 runs and calculating the average. The average docking time is then computed over the whole PDBbind Core set, to provide the average time for one docking run on an average protein-ligand system.
 
 \subsection{Default Settings}
-Gnina has many settings that alter the molecular docking pipeline. A default value must be found for each of these settings to ensure the user minimal tuning to their particular problem. In exploring the various values of the settings we must find the optimal value for both the redocking and the crossdocking datasets. Additionally, we must also consider that the user may not know the exact location of the binding pocket on the receptor and will likely have to use the entire protein as the autobox for the docking pipeline. Therefore, our setting exploration must consider the case in which the specific binding pocket is known and the case in which the whole protein is used to define a binding box. Some settings directly impact the sampling procedure, such as exhaustiveness, number of modes, number of monte carlo saved, and minimum RMSD filter. These settings control, to some extent, the extensiveness of the search during the monte carlo sampling procedure. As previously stated, the exhaustiveness determines the number of monte carlo chains run during the sampling procedure. The number of modes determines the number of ligand poses output by gnina at the completion of the docking prodedure. This is separate from the number of monte carlo saved, which defines the number of  ligand poses saved for each monte carlo chain. The number of ligand poses retained after all of the monte carlo chains are completed is determined by either the number of modes or the number of monte carlo saved, whichever is larger. After all of the monte carlo chains have run and the runs are being combined, the minimum RMSD filter removes poses with a relative RMSD less than the value set for the filter so that the poses returned by the docking procedure are all different from one another. When using the CNN for scoring or refinement, another important setting is how many different rotations of the ligand conformation the CNN is able to see. The CNN models are ideally rotationally invariant as there are random roations of examples during training, the ability to see multiple rotations of the same conformation may make the CNN able to correctly calculate the score and energy.
+Gnina has many settings that alter the molecular docking pipeline. A default value must be found for each of these settings to ensure the user minimal tuning to their particular problem. In exploring the various values of the settings we must find the optimal value for both the redocking and the crossdocking datasets. Additionally, we must also consider that the user may not know the exact location of the binding pocket on the receptor and will likely have to use the entire protein as the autobox for the docking pipeline. Therefore, our setting exploration must consider the case in which the specific binding pocket is known and the case in which the whole protein is used to define a binding box. Some settings directly impact the sampling procedure, such as exhaustiveness, number of modes, number of monte carlo saved, and minimum RMSD filter. These settings control, to some extent, the extensiveness of the search during the monte carlo sampling procedure. As previously stated, the exhaustiveness determines the number of monte carlo chains run during the sampling procedure. Autobox add increases the size of the search space that the monte carlo chains are sampling, the box defined by the input autobox ligand is increased in size on all 6 sides by the value of autobox add. The number of modes determines the number of ligand poses output by gnina at the completion of the docking prodedure. This is separate from the number of monte carlo saved, which defines the number of  ligand poses saved for each monte carlo chain. The number of ligand poses retained after all of the monte carlo chains are completed is determined by either the number of modes or the number of monte carlo saved, whichever is larger. After all of the monte carlo chains have run and the runs are being combined, the minimum RMSD filter removes poses with a relative RMSD less than the value set for the filter so that the poses returned by the docking procedure are all different from one another. When using the CNN for scoring or refinement, another important setting is how many different rotations of the ligand conformation the CNN is able to see. The CNN models are ideally rotationally invariant as there are random roations of examples during training, the ability to see multiple rotations of the same conformation may make the CNN able to correctly calculate the score and energy.
 
 Evaluations for all of the settings are carried out on both the redocking and crossdocking datasets. Each setting is varied individually using the optimal CNN model ensemble determined above. The exhaustiveness was explored in powers of two, due to the parallel computations of the monte carlo chains, going from four to 16. Exhaustiveness was explored again for the whole protein docking procedure, from eight to 64. The CNN rotations were explored for the values: 0, 1, 5, 10, and 20 (where 0 denotes a random rotation of the ligand conformation and 1 denotes a specific rotation of the ligand conformation). Values of 0.5, 1.0, and 1.5 were used to test the setting of minimum RMSD filter. The number of monte carlo saved was tested on multiples of 20, ranging from 20 to 100. The number of modes was evaluated using 9 and 100. Each value produced a set of poses, RMSD was determined for each output pose using Open Babel, and the percentage of systems with a RMSD less than 2 $\AA$ was calculated for each dataset.
 
-\subsection{Evaluations}
-These are the tasks we are going to evaluate GNINA on.  Note there is no training in this paper so there will be overlap with the training set.  This is somewhat justified by the fact that we are generating all new poses, but we will need to (at a minimum) construct time-split subsets of all the datasets.  We need to follow the same system preparation steps.
-
-\begin{itemize}
-    \item Redocking - latest PDBbind (2019?), define binding site with autobox\_ligand on crystal ligand
-    \item Crossdocking - \url{https://onlinelibrary.wiley.com/doi/full/10.1002/pro.3784}, define binding site with autobox\_ligand on crystal ligand
-    \item Whole protein docking - define binding site with autobox\_ligand on receptor structure.  Ideally we do this for both redocking and crossdocking.
-    \item With/without additional hetatms.  In no case will we evaluate with water, but evaluate including ions and cofactors and see what he result is.
-    \item Flexible docking - I don't think we will have the full story here (training a flex-specific model probably deserves its own paper, gnina 1.1), but we might be able to assess existing models and make best-practices recommendations (which might be to avoid CNN scoring in this case for now)
-\end{itemize}
-
-\subsubsection{Parameterizations}
-Part of the goal of this paper is to determine the best default parameters for each task (changing the built-in defaults as needed).  This is particularly important for CNN related options.  I'm thinking we can get away with doing a grid search across this space using a reduced dataset (PDBbind Core) and only exploring a few interesting variation on the larger datasets.
-
-\begin{itemize}
-    \item How to use cnn model 
-    \begin{itemize}
-        \item rescoring only
-        \item refinement only
-    \end{itemize}
-    \item cnn\_rotation - presumably will make result more robust - but how many?
-    \item which model? built-in models (first model, full ensemble), ensemble of all models (\texttt{--cnn\_ensemble})?
-  \item exhaustiveness
-  \item number of poses  --num\_mc\_saved
-  \item min\_rmsd\_filter
-  \item smina vs. gnina - the main difference is gnina using single precision floating point to enable GPU computation, we need to assess what impact this has
-\end{itemize}
-
-\subsubsection{Evaluation}
-For this paper we are looking exclusively at pose prediction performance. How do we determine which approach is better?  RMSD is the go-to metric, but there are other ones out there (e.g. conserved contacts).  We should use at least one additional such metric.  But we also have to consider what we do with RMSD.  
-
-\begin{itemize}
-    \item Top1 - how often a low RMSD pose is top ranked
-    \item Mean1 - average rmsd of top ranked pose
-    \item TopN/MeanN - extend analysis beyond first pose
-    \item sampling performance (max N) - when scoring is guiding sampling, we are going to get different poses samples
-    \item \textbf{model confidence} - for CNN models we should assess how well the model can rank its confidence in its prediction
-    \begin{itemize}
-        \item look at the score value itself - does a higher score mean the result is more likely to be correct
-        \item ensemble methods - how does variance in predictions (either from rotation sampling or different models) map to quality of prediction
-    \end{itemize}
-    \item per-target effects - there is target bias in the data sets, need to explore ways to normalize and report on this
-\end{itemize}
-
+\subsection{Gnina Performance Evaluation}
 
 \section{Results}
 \subsection{Smina Comparison}
@@ -261,7 +215,6 @@ When selecting the optimal running method. We evaluate the performance of the De
 However, from looking at the average time to perform molecular docking for one system. We can see that "refinement" takes significantly longer. Therefore, we select the "rescore" as the default option for the CNN scoring.
 
 \subsection{Settings Exploration}
-First we evaluate all of the settings for defined pockets. Autobox add increases the search space for the docking program to be larger than the rectangular prism defined by the autobox ligand input to Gnina by the given value on each side. In redocking, the expansion of the search space decreases performance as the docking box provided by autobox ligand is exactly where the ligand should be. Crossdocking is a different story as the new ligand might fit in a different area of the defined pocket. 
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
@@ -278,6 +231,7 @@ First we evaluate all of the settings for defined pockets. Autobox add increases
 	\caption{}
 	\label{fig:autobox add}
 \end{figure}    
+First we evaluate all of the settings for defined pockets. Autobox add increases the search space for the docking program to be larger than the rectangular prism defined by the autobox ligand input to Gnina by the given value on each side. In redocking, the expansion of the search space decreases performance as the docking box provided by autobox ligand is exactly where the ligand should be. Crossdocking is a different story as the new ligand might fit in a different area of the defined pocket.
 
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
@@ -295,6 +249,9 @@ First we evaluate all of the settings for defined pockets. Autobox add increases
 	\caption{}
 	\label{fig:exhaustiveness}
 \end{figure}    
+
+Changes in the exhaustiveness alter the amount of sampling that occurs. When the exhaustiveness is increased, we see an increase in the performance of the docking. This is as expected, more monte carlo chains randomly mutating the ligand conformation provides the docking procedure with more opportunities to randomly sample the correct answer. However, we this increase in performance seems to reach limited gains after the value of 8. An exhaustiveness of 16 provides some performance boost, but this boost is accompanied by a doubling of the compuational time. The monte carlo chains are evaluated in a parallel manner, but this is limited by the number of cores available to Gnina. So if the exhaustiveness is greater than the cpus provided to Gnina, the number of simultaneously running monte carlo chains is equal to the number of cpus. Therefore, in typical usage of Gnina, an exhaustiveness level of 8 is sufficient for adequate performance levels while minimizing the computational load.
+
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
@@ -311,6 +268,9 @@ First we evaluate all of the settings for defined pockets. Autobox add increases
 	\caption{}
 	\label{fig:mcsaved}
 \end{figure}    
+
+Increases in the number of monte carlo saved increases the chances of sampling accurate docking poses. However, increases in the number of monte carlo saved will increase computational time, due to more poses needed to be sampled from each monte carlo chain and refinement required for a greater number of ligand conformations. As the number of monte carlo saved gets closer to 100, we see that the performance boost is reduced. Therefore, we select a value of 50 for the number of monte carlo saved to minimize the computational overhead while still increasing the performance of the docking routine.  
+
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
@@ -328,6 +288,7 @@ First we evaluate all of the settings for defined pockets. Autobox add increases
 	\label{fig:num modes}
 \end{figure}    
 
+When looking at the first 10 poses, we see a marked increase in the performance of the docking routine with a large value for the number of modes. Since the molecular docking procedure is a sampling problem, with increased output conformations there is an increased liekelihood of finding the correct answer. We know that the CNNs rank the refined poses more accurately than the typical Vina scoring function, so if the docking procedure samples an accurate pose that Vina does not believe is high scoring the CNN will be able to rerank it to within the top 10.
 
 \subsection{Gnina Performance}
 
