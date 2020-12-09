@@ -13,6 +13,7 @@
 %% servers.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \usepackage[version=3]{mhchem} % Formula subscripts using \ce{}
+\usepackage{graphicx}
 \usepackage{subcaption}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -197,37 +198,37 @@ For this paper we are looking exclusively at pose prediction performance. How do
 Gnina was run without usage of CNN models in the molecular docking pipeline. Results for both redocking and crossdocking do not show a significant difference for the poses output from Gnina with no CNN and Smina (Supplement). A majority of the output poses are exactly the same, with slight differences seen for some output poses. The performance of Gnina with no CNN is slightly better than that of Smina using the same settings.
 
 \subsection{Optimal Model Selection}
-The model selection procedure selected five models whose combined performance on ranking low RMSD poses first performance was optimal. The table for the model selection process can be seen in (supplemental table). The selected five selected models are Dense\_4, General\_Default2018\_3, Dense\_3, Crossdock\_Default2018, and Redock\_Default2018\_2. The performance of the model ensemble is compared to the single model options in \ref{fig:resc single}. We can see that the newly selected Default Ensemble significantly outperforms all of the single models on both the redocking task and the crossdocking task. All models are able to rank poses with low RMSD better than Vina. 
-
 \begin{figure}
-	\begin{subfigure}
+	\begin{subfigure}[b]{0.48\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/rescore\_single\_models\_line.png}
+		\includegraphics[width=\textwidth]{figures/redocking/rescore_single_models_line.png}
 		\caption{Redocking}
 		\label{fig:resc single rd}
         \end{subfigure}    
 	\begin{subfigure}[b]{0.48\textwidth}    
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/rescore\_single\_models\_line.png}
+		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_single_models_line.png}
 		\caption{Crossdocking}
 		\label{fig:resc single cd}
         \end{subfigure}    
 	\caption{Percentage of systems with RMSD to known binding pose less than $2\,\AA$ for each pose with results being cumulative}
-	\label{fig:resc single}
+	\label{fig:rescsingle}
 \end{figure}    
+The model selection procedure selected five models whose combined performance on ranking low RMSD poses first performance was optimal. The table for the model selection process can be seen in (supplemental table). The selected five selected models are Dense\_4, General\_Default2018\_3, Dense\_3, Crossdock\_Default2018, and Redock\_Default2018\_2. The performance of the model ensemble is compared to the single model options in \ref{fig:rescsingle}. We can see that the newly selected Default Ensemble significantly outperforms all of the single models on both the redocking task and the crossdocking task. All models are able to rank poses with low RMSD better than Vina. 
+
 
 When the Default Ensemble is compared to the ensembles of each of the CNN model types, the ensembles consisting of each random intialization of the given CNN model type, we see that the Default Ensemble is able to outperform all of the ensembles composed of one model type\ref{fig:resc ens}. The diversity of models within the Default Ensembles allows better ranking of the poses due to the diversity of training data for each model type. The All Ensemble is the ensemble composed of all possible CNN models built-in to the Gnina software. The Default Ensemble is able to meet or exceed the performance of this large ensemble. The CNN models in the Default Ensemble are a subset of the models in the All Ensemble.
 
 \begin{figure}
 	\begin{subfigure}[b]{0.48\textwidth}
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/rescore\_ensemble\_models\_line.png}
+		\includegraphics[width=\textwidth]{figures/redocking/rescore_ensembles_line.png}
 		\caption{Redocking}
 		\label{fig:resc ens rd}
         \end{subfigure}    
 	\begin{subfigure}[b]{0.48\textwidth} 
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/rescore\_ensemble\_models\_line.png}
+		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_ensembles_line.png}
 		\caption{Crossdocking}
 		\label{fig:resc ens cd}
         \end{subfigure}    
@@ -243,13 +244,13 @@ When selecting the optimal running method. We evaluate the performance of the De
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/rescore\_vs\_refine\_line.png} 
+		\includegraphics[width=\textwidth]{figures/redocking/rescore_vs_refine_line.png} 
 		\caption{Redocking}
 		\label{fig:ref vs resc rd}
         \end{subfigure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/rescore\_vs\_refine\_line.png} 
+		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_vs_refine_line.png} 
 		\caption{Crossdocking}
 		\label{fig:ref vs resc cd}
         \end{subfigure}    
@@ -264,13 +265,13 @@ First we evaluate all of the settings for defined pockets. Autobox add increases
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/sweep\_autobox\_add\_line.png}
+		\includegraphics[width=\textwidth]{figures/redocking/sweep_autobox_add_line.png}
 		\caption{Redocking}
 		\label{fig:autobox add rd}
         \end{subfigure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/sweep\_autobox\_add\_line.png}
+		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_autobox_add_line.png}
 		\caption{Crossdocking}
 		\label{fig:autobox add cd}
         \end{subfigure}    
@@ -281,13 +282,13 @@ First we evaluate all of the settings for defined pockets. Autobox add increases
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/sweep\_exhaustiveness\_line.png}
+		\includegraphics[width=\textwidth]{figures/redocking/sweep_exhaustiveness_line.png}
 		\caption{Redocking}
 		\label{fig:exhaustiveness rd}
         \end{subfigure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/sweep\_exhaustiveness\_line.png}
+		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_exhaustiveness_line.png}
 		\caption{Crossdocking}
 		\label{fig:exhaustiveness cd}
         \end{subfigure}    
@@ -297,13 +298,13 @@ First we evaluate all of the settings for defined pockets. Autobox add increases
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/sweep\_mcsaved\_line.png}
+		\includegraphics[width=\textwidth]{figures/redocking/sweep_mcsaved_line.png}
 		\caption{Redocking}
 		\label{fig:mcsaved rd}
         \end{subfigure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/sweep\_mcsaved\_line.png}
+		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_mcsaved_line.png}
 		\caption{Crossdocking}
 		\label{fig:mcsaved cd}
         \end{subfigure}    
@@ -313,13 +314,13 @@ First we evaluate all of the settings for defined pockets. Autobox add increases
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/sweep\_num\_modes\_line.png}
+		\includegraphics[width=\textwidth]{figures/redocking/sweep_num_modes_line.png}
 		\caption{Redocking}
 		\label{fig:num modes rd}
         \end{subfigure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/sweep\_num\_modes\_line.png}
+		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_num_modes_line.png}
 		\caption{Crossdocking}
 		\label{fig:num modes cd}
         \end{subfigure}    
