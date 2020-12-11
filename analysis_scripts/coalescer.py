@@ -8,7 +8,7 @@ import argparse, glob, re
 
 parser=argparse.ArgumentParser(description='Merge OBRMS output files into 1 file')
 parser.add_argument('-s','--suffix',type=str, required=True, help='Suffix of files to stick together. Assumes filenames are *<SUFFIX><VALUE>.rmsds')
-parser.add_argument('-v','--values',type=str, default=[""],nargs='+',help='Values to be searched combined with suffix. Defaults to empty string. Accepts any number of arguments.')
+parser.add_argument('-v','--values',type=str, default="",nargs='+',help='Values to be searched combined with suffix. Defaults to empty string. Accepts any number of arguments.')
 parser.add_argument('-r','--dataroot',type=str,required=True, help='Root of directories to search')
 parser.add_argument('-o','--outfilename',type=str,required=True, help='Name of output file')
 parser.add_argument('-d','--dirlist',type=str,required=True, help='File containing directory names to work on.')
