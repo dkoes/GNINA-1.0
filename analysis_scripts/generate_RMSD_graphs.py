@@ -148,7 +148,7 @@ parser.add_argument('--line_graph', default=False, action='store_true', help='Pl
 parser.add_argument('--bar_graph', default=False, action='store_true', help='Plot a bar graph of the information')
 parser.add_argument('--key', '-k', default=['rec', 'tag'], nargs='+', help='Column names to group the csv by.(default: %(default)s')
 parser.add_argument('--delimiter', '-d', default=',', help='Delimiter that the files use (default=%(default)s)')
-parser.add_argument('--usecols', default=[0, 2, 7], nargs='+', help='Columns of the data files that should be used')
+parser.add_argument('--usecols', default=[0, 2, 7], nargs='+', type=int, help='Columns of the data files that should be used')
 parser.add_argument('--col_names', default=['tag', 'rmsd', 'rec'], nargs='+', help='Names of the columns in the dataframe')
 parser.add_argument('--header', default=True, action='store_false', help='Use if the data does not have a header')
 parser.add_argument('--num_unique', '-U', default=4260, type=int, help='number of unique rec-ligand pairs that should be in each file')
