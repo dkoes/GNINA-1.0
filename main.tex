@@ -15,6 +15,11 @@
 \usepackage[version=3]{mhchem} % Formula subscripts using \ce{}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{array}
+\usepackage{url}
+\usepackage{xr-hyper}
+\usepackage{hyperref}
+\usepackage{multirow}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% If issues arise when submitting your manuscript, you may want to
@@ -29,6 +34,20 @@
 %% when typesetting).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand*\mycommand[1]{\texttt{\emph{#1}}}
+\makeatletter
+\newcommand*{\addFileDependency}[1]{% argument=file name and extension
+  \typeout{(#1)}
+  \@addtofilelist{#1}
+  \IfFileExists{#1}{}{\typeout{No file #1.}}
+}
+\newcommand*{\myexternaldocument}[1]{%
+    \externaldocument{#1}%
+    \addFileDependency{#1.tex}%
+    \addFileDependency{#1.aux}%
+}
+\makeatother
+\myexternaldocument{supplement}
+
 
 \author{Andrew McNutt}
 \author{Paul Francoeur}
@@ -252,22 +271,7 @@ However, from looking at the average time to perform molecular docking for one s
 \end{figure}    
 
 \subsection{Settings Exploration}
-\begin{figure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
-		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/sweep_autobox_add_line.pdf}
-		\caption{Redocking}
-		\label{fig:AutoboxAddRedock}
-        \end{subfigure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
-		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_autobox_add_line.pdf}
-		\caption{Crossdocking}
-		\label{fig:AutoboxAddCrossdock}
-        \end{subfigure}    
-	\caption{Evaluating the affect on docking performance when the value of Autobox Add is changed (move to supplement)}
-	\label{fig:AutoboxAdd}
-\end{figure}    
+
 First we evaluate all of the settings for defined pockets. Autobox add increases the search space for the docking program to be larger than the rectangular prism defined by the autobox ligand input to \textsc{Gnina} by the given value on each side. In both redocking and crossdocking (Figure \ref{fig:AutoboxAdd}), the expansion of the search space decreases performance as the docking box provided by autobox ligand precisely defines where the ligand binds.
 
 \begin{figure}    
@@ -440,7 +444,7 @@ authors would like to thank \ldots''.
 %% suppinfo environment.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{suppinfo}
-
+  
 
 
 \end{suppinfo}
