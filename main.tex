@@ -170,7 +170,7 @@ The CNN models output both a CNNscore and a CNNaffinity for each of the conforma
 		\caption{Crossdocking}
 		\label{fig:RescoreSingleCrossdock}
         \end{subfigure}    
-	\caption{Percentage of systems with RMSD to known binding pose less than $2\,$\AA for each pose with results being cumulative}
+	\caption{Docking using the single CNN models and the newly selected Default Ensemble for rescoring the output poses. The binding pocket is defined by the known binding pose.}
 	\label{fig:RescoreSingle}
 \end{figure}    
 The model selection procedure selected five models whose combined performance on ranking low RMSD poses first performance was optimal. The table for the model selection process can be seen in (supplemental table). The selected five selected models are Dense\_4, General\_Default2018\_3, Dense\_3, Crossdock\_Default2018, and Redock\_Default2018\_2. The performance of the model ensemble is compared to the single model options in Figure \ref{fig:RescoreSingle}. While nearly all models are able to rank poses with low RMSD higher than Vina, we can see that the newly selected Default Ensemble significantly outperforms all of the single models on both the redocking task and the crossdocking task.  
@@ -190,7 +190,7 @@ When the Default Ensemble is compared to the ensembles of each of the CNN model 
 		\caption{Crossdocking}
 		\label{fig:RescoreEnsembleCrossdock}
         \end{subfigure}    
-	\caption{Percentage of systems with RMSD to known binding pose less than $2\,$\AA for each pose with results being cumulative}
+	\caption{Docking using the ensemble of each type of CNN model, the full ensemble of CNN models, and the newly selected Default Ensemble for rescoring the output poses. The binding pocket is defined by the known binding pose.}
 	\label{fig:RescoreEnsemble}
 \end{figure}    
 
@@ -232,7 +232,7 @@ When selecting the optimal running method. We evaluate the performance of the De
 	\label{fig:CompareRescoreRefine}
 \end{figure}    
 
-However, from looking at the average time to perform molecular docking for one system (Figure \ref{fig:OptimalRescore}). We can see that ``refinement'' takes an order of magnitude longer for computation of all of the refinement for the ligand poses. Therefore, we select the ``rescore'' as the default option for the CNN scoring.
+However, from looking at the average time to perform molecular docking for one system we see that ``refinement'' takes 10 times longer than ``rescoring''. Time for performing the ``rescoring'' on an average system (Figure \ref{fig:OptimalRescore}) is similar to the time to perform docking with the Vina scoring function for an average protein-ligand system in the core set. Therefore, we select ``rescore'' as the default option for the CNN scoring due to its performance and timing.
 
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}
