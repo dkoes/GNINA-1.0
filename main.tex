@@ -15,6 +15,11 @@
 \usepackage[version=3]{mhchem} % Formula subscripts using \ce{}
 \usepackage{graphicx}
 \usepackage{subcaption}
+\usepackage{array}
+\usepackage{url}
+\usepackage{xr-hyper}
+\usepackage{hyperref}
+\usepackage{multirow}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% If issues arise when submitting your manuscript, you may want to
@@ -29,6 +34,20 @@
 %% when typesetting).
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \newcommand*\mycommand[1]{\texttt{\emph{#1}}}
+\makeatletter
+\newcommand*{\addFileDependency}[1]{% argument=file name and extension
+  \typeout{(#1)}
+  \@addtofilelist{#1}
+  \IfFileExists{#1}{}{\typeout{No file #1.}}
+}
+\newcommand*{\myexternaldocument}[1]{%
+    \externaldocument{#1}%
+    \addFileDependency{#1.tex}%
+    \addFileDependency{#1.aux}%
+}
+\makeatother
+\myexternaldocument{supplement}
+
 
 \author{Andrew McNutt}
 \author{Paul Francoeur}
@@ -170,7 +189,7 @@ The CNN models output both a CNNscore and a CNNaffinity for each of the conforma
 		\caption{Crossdocking}
 		\label{fig:RescoreSingleCrossdock}
         \end{subfigure}    
-	\caption{Percentage of systems with RMSD to known binding pose less than $2\,$\AA for each pose with results being cumulative}
+	\caption{Docking using the single CNN models and the newly selected Default Ensemble for rescoring the output poses. The binding pocket is defined by the known binding pose.}
 	\label{fig:RescoreSingle}
 \end{figure}    
 The model selection procedure selected five models whose combined performance on ranking low RMSD poses first performance was optimal. The table for the model selection process can be seen in (supplemental table). The selected five selected models are Dense\_4, General\_Default2018\_3, Dense\_3, Crossdock\_Default2018, and Redock\_Default2018\_2. The performance of the model ensemble is compared to the single model options in Figure \ref{fig:RescoreSingle}. While nearly all models are able to rank poses with low RMSD higher than Vina, we can see that the newly selected Default Ensemble significantly outperforms all of the single models on both the redocking task and the crossdocking task.  
@@ -190,7 +209,7 @@ When the Default Ensemble is compared to the ensembles of each of the CNN model 
 		\caption{Crossdocking}
 		\label{fig:RescoreEnsembleCrossdock}
         \end{subfigure}    
-	\caption{Percentage of systems with RMSD to known binding pose less than $2\,$\AA for each pose with results being cumulative}
+	\caption{Docking using the ensemble of each type of CNN model, the full ensemble of CNN models, and the newly selected Default Ensemble for rescoring the output poses. The binding pocket is defined by the known binding pose.}
 	\label{fig:RescoreEnsemble}
 \end{figure}    
 
@@ -232,7 +251,7 @@ When selecting the optimal running method. We evaluate the performance of the De
 	\label{fig:CompareRescoreRefine}
 \end{figure}    
 
-However, from looking at the average time to perform molecular docking for one system (Figure \ref{fig:OptimalRescore}). We can see that ``refinement'' takes an order of magnitude longer for computation of all of the refinement for the ligand poses. Therefore, we select the ``rescore'' as the default option for the CNN scoring.
+However, from looking at the average time to perform molecular docking for one system we see that ``refinement'' takes 10 times longer than ``rescoring''. Time for performing the ``rescoring'' on an average system (Figure \ref{fig:OptimalRescore}) is similar to the time to perform docking with the Vina scoring function for an average protein-ligand system in the core set. Therefore, we select ``rescore'' as the default option for the CNN scoring due to its performance and timing.
 
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}
@@ -252,22 +271,7 @@ However, from looking at the average time to perform molecular docking for one s
 \end{figure}    
 
 \subsection{Settings Exploration}
-\begin{figure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
-		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/sweep_autobox_add_line.pdf}
-		\caption{Redocking}
-		\label{fig:AutoboxAddRedock}
-        \end{subfigure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
-		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_autobox_add_line.pdf}
-		\caption{Crossdocking}
-		\label{fig:AutoboxAddCrossdock}
-        \end{subfigure}    
-	\caption{Evaluating the affect on docking performance when the value of Autobox Add is changed (move to supplement)}
-	\label{fig:AutoboxAdd}
-\end{figure}    
+
 First we evaluate all of the settings for defined pockets. Autobox add increases the search space for the docking program to be larger than the rectangular prism defined by the autobox ligand input to \textsc{Gnina} by the given value on each side. In both redocking and crossdocking (Figure \ref{fig:AutoboxAdd}), the expansion of the search space decreases performance as the docking box provided by autobox ligand precisely defines where the ligand binds.
 
 \begin{figure}    
@@ -440,7 +444,7 @@ authors would like to thank \ldots''.
 %% suppinfo environment.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{suppinfo}
-
+  
 
 
 \end{suppinfo}
