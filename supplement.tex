@@ -1,5 +1,6 @@
 \documentclass[journal=jcisd8,manuscript=article]{achemso}
 \usepackage{graphicx}
+\usepackage{subcaption}
 \usepackage[table]{xcolor}
 \usepackage{verbatim}
 \usepackage[subrefformat=parens]{subcaption}
@@ -30,9 +31,50 @@
 \begin{document}
 \begin{figure}
     \centering
-    \includegraphics{}
-    \caption{Caption}
-    \label{fig:my_label}
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/firstpose.png}
+        \caption{First Pose}
+        \label{fig:SminaCompareOne}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/secondpose.png}
+        \caption{Second Pose}
+        \label{fig:SminaCompareTwo}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.32\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/thirdpose.png}
+        \caption{Third Pose}
+        \label{fig:SminaComparePose}
+    \end{subfigure}
+    \caption{Comparison of the RMSD(\AA) of the top 3 poses output by \textsc{Gnina} with no CNN in the docking pipeline and \textsc{Smina}. Both docking software were run with the same arguments.}
+    \label{fig:SminaComparePose}
+\end{figure}
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/minpose.png}
+        \caption{First Pose}
+        \label{fig:SminaCompareMin}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/maxpose.png}
+        \caption{Second Pose}
+        \label{fig:SminaCompareMax}
+    \end{subfigure}
+    \caption{Comparison of the minimum and maximum RMSD(\AA) poses output by Gnina with no CNN in the docking pipeline and Smina. Both docking software were run with the same arguments.}
+    \label{fig:SminaCompareExtrema}
+\end{figure}
+
+\begin{figure}
+    \centering
+    \includegraphics{figures/gnina_smina_firstpose.png}
+    \caption{Comparison of the first pose output by both Smina and Gnina with no CNN in the docking pipeline. Both software use the same arguments.}
+    \label{fig:SminaComparePercent}
 \end{figure}
 
 \begin{table}[]
