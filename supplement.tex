@@ -1,5 +1,7 @@
 \documentclass[journal=jcisd8,manuscript=article]{achemso}
 \usepackage{graphicx}
+\usepackage{xr-hyper}
+\usepackage{hyperref}
 \usepackage{subcaption}
 \usepackage[table]{xcolor}
 \usepackage{verbatim}
@@ -57,37 +59,30 @@
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/minpose.png}
-        \caption{First Pose}
+        \caption{Minimum RMSD(\AA) Pose}
         \label{fig:SminaCompareMin}
     \end{subfigure}
     \begin{subfigure}[b]{0.48\textwidth}
         \centering
         \includegraphics[width=\textwidth]{figures/maxpose.png}
-        \caption{Second Pose}
+        \caption{Maximum RMSD(\AA) Pose}
         \label{fig:SminaCompareMax}
     \end{subfigure}
     \caption{Comparison of the minimum and maximum RMSD(\AA) poses output by Gnina with no CNN in the docking pipeline and Smina. Both docking software were run with the same arguments.}
     \label{fig:SminaCompareExtrema}
 \end{figure}
 
-\begin{figure}
-    \centering
-    \includegraphics{figures/gnina_smina_firstpose.png}
-    \caption{Comparison of the first pose output by both Smina and Gnina with no CNN in the docking pipeline. Both software use the same arguments.}
-    \label{fig:SminaComparePercent}
-\end{figure}
-
 \begin{table}[]
     \centering
     \begin{tabular}{|c|c|c|c|c|c|}
-       \hline Iteration \# &\begin{tabular}{c}Model\\ Selected\end{tabular}&\begin{tabular}{c}Redocking\\ Performance\end{tabular}&\begin{tabular}{c}Redocking\\Ranking\end{tabular}&\begin{tabular}{c} Crossdocking\\Performance\end{tabular}&\begin{tabular}{c}Crossdocking\\Ranking\end{tabular}\\ \hline
+       \hline\begin{tabular}{{@{}c@{}}}Iteration\\\#\end{tabular}&\begin{tabular}{{@{}c@{}}}Model\\ Selected\end{tabular}&\begin{tabular}{{@{}c@{}}}Redocking\\ Performance\end{tabular}&\begin{tabular}{{@{}c@{}}}Redocking\\Ranking\end{tabular}&\begin{tabular}{{@{}c@{}}} Crossdocking\\Performance\end{tabular}&\begin{tabular}{{@{}c@{}}}Crossdocking\\Ranking\end{tabular}\\ \hline
         0 & Crossdock Dense 4 & 37.8 & 5 & 67.7 & 1 \\ \hline
         1 & General Default2018 3 & 70.4 & 6 & 39.8 & 2 \\ \hline
         2 & Crossdock Dense 3 & 71.2 & 7 & 40.4 & 2 \\ \hline
         3 & Crossdock Default2018 0 & 71.7 & 7 & 40.6 & 2 \\ \hline
         4 & Redock Default2018 2 & 72.2 & 1 & 40.1 & ? \\ \hline
     \end{tabular}
-    \caption{Optimal Model Selection}
+    \caption{Optimal Model Ensemble Selection. Performance given by percent of systems with RMSD less than $2\,\mathrm{\AA}$ from the top pose to the known binding pose.}
     \label{tab:OptimalModelSelection}
 \end{table}
 
@@ -104,7 +99,40 @@
 		\caption{Crossdocking}
 		\label{fig:AutoboxAddCrossdock}
         \end{subfigure}    
-	\caption{Evaluating the affect on docking performance when the value of Autobox Add is changed (move to supplement)}
+	\caption{Evaluating the effect on docking performance when the value of Autobox Add is changed while using the Default Ensemble for Rescoring on both the redocking and crossdocking datasets.}
 	\label{fig:AutoboxAdd}
+\end{figure}  
+
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/sweep_cnnrot_line.pdf}
+		\caption{Redocking}
+		\label{fig:CNNRotRedock}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_cnnrot_line.pdf}
+		\caption{Crossdocking}
+		\label{fig:CNNRotCrossdock}
+        \end{subfigure}    
+	\caption{Evaluating the effect on docking performance when the value of CNN rotations is changed while using the Default Ensemble for Rescoring on both the redocking and crossdocking datasets. When CNN rotations is set to 0 the CNN sees a randomly rotated grid of the ligand conformation.}
+	\label{fig:CNNRot}
+\end{figure}  
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/sweep_rmsdf_line.pdf}
+		\caption{Redocking}
+		\label{fig:RMSDFilterRedock}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_rmsdf_line.pdf}
+		\caption{Crossdocking}
+		\label{fig:RMSDFilterCrossdock}
+        \end{subfigure}    
+	\caption{Evaluating the effect on docking performance when the value of minimum RMSD filter is changed while using the Default Ensemble for Rescoring on both the redocking and crossdocking datasets.}
+	\label{fig:RMSDFilter}
 \end{figure}  
 \end{document}
