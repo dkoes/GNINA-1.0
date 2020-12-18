@@ -86,6 +86,27 @@
     \label{tab:OptimalModelSelection}
 \end{table}
 
+\begin{table}    
+        \centering
+        \begin{tabular}{|c|c|}
+                \hline Model Name & Average Docking Time (s) \\ \hline
+                Default Ensemble & 194.38\\ \hline
+                Crossdock Default2018 & 31.70\\ \hline
+                Crossdock Default2018 Ensemble & 59.37\\ \hline
+                Crossdock Dense & 76.71\\ \hline
+                Crossdock Dense Ensemble & 449.45\\ \hline
+                General Default2018 & 31.71\\ \hline
+                General Default2018 Ensemble & 58.71\\ \hline
+                Redock Default2018 & 31.82\\ \hline
+                Redock Default2018 Ensemble & 59.00\\ \hline
+                Default2017 & 32.70\\ \hline
+                All Ensemble & 561.36\\ \hline
+                Vina & 24.87\\ \hline
+        \end{tabular}    
+        \caption{Average time to dock one protein-ligand system from the PDBbind core set v.2016 when no GPU is used for docking. Computations performed on 4 CPUs.}
+        \label{tab:OptimalRescoreNoGPU}
+\end{table}    
+
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
