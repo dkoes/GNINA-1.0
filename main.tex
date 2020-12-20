@@ -382,16 +382,26 @@ Finally, we evaluate the performance of docking when using the whole protein as 
 \end{figure}
 
 \subsection{CNN Scoring Performance}
-We have evaluated all of the \textsc{Gnina} models on subsets of the data that were not seen by any of the CNN models during training to ensure that the CNN models are able to generalize to unseen protein-ligand systems. We also show the Vina results for the same subset of protein-ligand systems. First we evaluate on the systems within the PDBbind refined set v.2019 and not within the PDBbind general set v.2017.
+We have evaluated all of the \textsc{Gnina} models on subsets of the data that were not seen by any of the CNN models during training to ensure that the CNN models are able to generalize to unseen protein-ligand systems. We also show the Vina results for the same subset of protein-ligand systems. First we evaluate on the systems within the PDBbind refined set v.2019 and not within the PDBbind general set v.2017. This removes all of the protein-ligand pairs in the training sets for the General\_Default2018 and Default2017 CNN models.
 \begin{figure}    
-	\centering
-	\includegraphics[width=\textwidth]{figures/redocking/ensemble_models_no2017_line.pdf}
-	\caption{Redocking evaluated on the subset of systems not present in the PDBbind general set v.2017. Ensemble models used with the default arguments defined above.}
+	\begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/ensemble_models_no2017_line.pdf}
+		\caption{Redocking Ensembles}
+		\label{fig:No2017NoCD20EnsRD}
+    \end{subfigure}    
+    \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/ensemble_models_no2017_line.pdf}
+		\caption{Crossdocking Ensembles}
+                \label{fig:No2017NoCD20EnsCD}
+    \end{subfigure}
+	\caption{CNN model ensembles evaluated on the subset of systems not present in the PDBbind general set v.2017. Ensemble models used with the default arguments defined above.}
 	\label{fig:No2017}
 \end{figure}
-There is no overlap of the Crossdocking dataset with the PDBbind general set v.2017, so crossdocking performance is unaffected by this filtering. On the redocking task, there is a drop in the performance of most of the CNN models. The performance of all of the single models and ensembles drops on this split of the data, but the models are still able to better rank the poses than the Vina scoring function. When examining the cumulative results for all of the output poses, we can see the Vina scoring function doing worse on this split of the data while the CNN models stay largely the same compared to the entire dataset.
+The performance of each of the ensembles drops on this split of the data, but the models are still able to more accurately rank the poses than the Vina scoring function. The top pose performance for the Default Ensemble drops from 72\% to 67\% and 41\% to 39\% for redocking and crossdocking, respectively. While the top pose performance for Vina scoring drops from 58\% to 56\% and 29\% to 27\% for redocking and crossdocking, respectively. The top pose performance decrease of the General\_Default2018 Ensemble is similar to that of both the Default Ensemble and Vina scoring: 66\% to 62\% and 38\% to 36\% for redocking and crossdocking, respectively.
 
-Next we evaluate on an even smaller subset of the data. This split removes any systems which were in either the PDBbind general set v.2017 or the Crossdock2020 dataset, fully removing any of the protein-ligand systems which might have been in the training sets of the CNN models. The CNN models see a performance decrease when looking at the top pose in comparison to the full datasets. When we consider the cumulative results for all of the output poses, the performance of the CNNs is unaffected by this subset of the data.
+Next we evaluate on a split removes any systems which were in either the PDBbind general set v.2017 or the Crossdock2020 dataset; this fully removes any of the protein-ligand systems which were in the training sets of any of the CNN models. The CNN models see another docking performance decrease when looking at the top pose in comparison to the full datasets, (Figure~\ref{fig:No2017NoCD20}). When we consider the cumulative results for all of the output poses, the performance of the CNNs is unaffected by this subset of the data.
 
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
@@ -406,7 +416,7 @@ Next we evaluate on an even smaller subset of the data. This split removes any s
 		\caption{Crossdocking Ensembles}
                 \label{fig:No2017NoCD20EnsCD}
         \end{subfigure}
-	\caption{CNN Models evaluated on the subset of systems not present in either the PDBbind general set v.2017 or the Crossdock2020 dataset}
+	\caption{CNN model ensembles evaluated on the subset of systems not present in either the PDBbind general set v.2017 or the Crossdock2020 dataset. Ensemble models used with the default arguments defined above.}
 	\label{fig:No2017NoCD20}
 \end{figure}  
 
