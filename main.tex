@@ -212,8 +212,8 @@ Evaluations for all of the settings are carried out on both the redocking and cr
     \label{tab:SettingsExplWP}
 \end{table}
 
-\subsection{\textsc{Gnina} Performance Evaluation}
-All of the CNN models were trained on some subset of our evaluation data. Generalization can be evaluated by determining the performance of the CNN scoring functions on the subset of the datasets that were not seen in training. This evaluation is carried out by removing any PDB identifier contained within the training data of the CNN models. All of the CNN models have been trained on different sets, so fully testing generality requires the removal of all of the IDs in the training set from both the redocking and crossdocking datasets. First we filter the redocking and crossdocking datasets to remove the PDBIDs within the PDBbind general set v.2017, resulting in 638 and 8,153 protein-ligand pairs for the redocking and crossdocking sets, respectively. Then we remove the PDBIDs within either the PDBbind general set v.2017 or the CrossDock2020 dataset\cite{francoeur2020three}, leaving 441 and 857 protein-ligand pairs for the redocking and crossdocking sets, respectively. 
+\subsection{CNN Scoring Performance}
+All of the CNN models were trained on some subset of our evaluation data. Generalization can be evaluated by determining the performance of the CNN scoring functions on the subset of the datasets that were not seen in training. This evaluation is carried out by removing any PDB identifier contained within the training data of the CNN models. All of the CNN models have been trained on different sets, so fully testing generality requires the removal of all of the IDs in the training set from both the redocking and crossdocking datasets. First we filter the redocking and crossdocking datasets to remove the PDBIDs within the PDBbind general set v.2017, resulting in 638 and 1,766 protein-ligand pairs for the redocking and crossdocking sets, respectively. Then we remove the PDBIDs within either the PDBbind general set v.2017 or the CrossDock2020 dataset\cite{francoeur2020three}, leaving 441 and 192 protein-ligand pairs for the redocking and crossdocking sets, respectively. 
 
 The CNN models output both a CNNscore and a CNNaffinity for each of the conformations output by \textsc{Gnina}. The CNNscore is a value between 0 and 1 that is used to rank the poses of the ligand, where a score of 1 denotes a perfect ligand pose. We would like to investigate if there is a correlation between high scores and low RMSD to the crystal pose. For ease of analysis, we only consider the top ranked pose. Using the top ranked pose for each complex, we investigate how filtering the poses by their CNNscore can affect the percentage of poses in which the RMSD to the crystal pose is less than 2 \AA.
 
@@ -297,7 +297,7 @@ When the Default Ensemble is compared to the ensembles of each of the individual
 	\label{fig:CompareRescoreRefine}
 \end{figure}    
 
-However, from looking at the average time to perform molecular docking for one system we see that ``refinement'' takes 10 times longer than ``rescoring''. Time for performing the ``rescoring'' on an average system is similar to the time to perform docking with the Vina scoring function for an average protein-ligand system in the core set. Therefore, we select ``rescore'' as the default option for the CNN scoring due to its performance and timing.
+However, from looking at the average time to perform molecular docking for one system we see that ``refinement'' takes an order of magnitude longer than ``rescoring'' (Figure~\ref{fig:RefineTiming}). Time for performing the ``rescoring'' on an average system is similar to the time to perform docking with the Vina scoring function for an average protein-ligand system in the core set. Therefore, we select ``rescore'' as the default option for the CNN scoring due to its performance and timing.
 
 \subsection{Settings Exploration}
 
@@ -322,7 +322,7 @@ First we evaluate the size of the targetted binding site (box). The \texttt{auto
 
 Changes in the exhaustiveness alter the amount of sampling that occurs. When the exhaustiveness is increased, we see an increase in the performance of docking. This is as expected as more Monte Carlo chains randomly mutating the ligand conformation provides the docking procedure with more opportunities to randomly sample the correct answer. However, this increase in performance seems to reach limited gains after a value of 8. An exhaustiveness of 16 provides some performance boost, but this boost may be accompanied by a doubling of the computational time. The Monte Carlo chains are evaluated in parallel, but parallelism is limited by the number of cores available to \textsc{Gnina}. So if the exhaustiveness is greater than the CPUs provided to \textsc{Gnina}, the number of simultaneously running Monte Carlo chains is equal to the number of CPUs. Therefore, in typical usage of \textsc{Gnina}, an exhaustiveness level of 8 is sufficient for adequate performance levels while minimizing the computational load when targetting a specific binding site. 
 
-Changes to the CNN rotations do not significantly change the scoring of the Default Ensemble (Figure \ref{fig:CNNRot}). The CNN Ensemble is able to determine the correct score for the ligand pose regardless of the rotation of the ligand and protein complex. Altering the value of the minimum RMSD filter does not change the results of the docking (Figure \ref{fig:RMSDFilter}).  Filtering out poses with similar conformations increases the diversity of poses that the CNN ensemble ranks. However, the CNN ensemble is able to accurately rank the poses it sees, pushing low RMSD poses to high ranks.
+Changes to the CNN rotations do not significantly change the scoring of the Default Ensemble (Figure \ref{fig:CNNRot}). The CNN Ensemble is able to determine the correct score for the ligand pose regardless of the rotation of the ligand and protein complex. Altering the value of the minimum RMSD filter does not change the results of the docking (Figure \ref{fig:RMSDFilter}).  Filtering out poses with similar conformations increases the diversity of poses that the CNN ensemble ranks. However, the CNN ensemble is able to accurately rank the poses it sees, providing high scores to poses with low RMSD to the known binding pose.
 
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
@@ -341,7 +341,7 @@ Changes to the CNN rotations do not significantly change the scoring of the Defa
 	\label{fig:mcsaved}
 \end{figure}    
 
-Increasing the \texttt{num\_mc\_saved} parameter increases the chances of sampling accurate docking poses. However, this will also increase computational time, due to more poses requiring refinement. As the number of Monte Carlo saved gets closer to 100, we see that the performance boost is reduced. Therefore, we select a value of 50 for the number of Monte Carlo saved to minimize the computational overhead while still increasing the performance of the docking routine.  
+Increasing the \texttt{num\_mc\_saved} parameter increases the chances of sampling accurate docking poses. Since the molecular docking procedure is a sampling problem, with increased output conformations from each Monte Carlo chain there is an increased likelihood of finding the correct answer. However, this will also increase computational time, due to more poses requiring refinement and final scoring by the CNN model(s). As the number of Monte Carlo saved gets closer to 100, we see that the docking performance boost is reduced. Therefore, we select a value of 50 for the number of Monte Carlo saved to minimize the computational overhead while still increasing the performance of the docking routine. The \texttt{num\_mc\_saved} and \texttt{num\_modes} affect one another; the number of poses saved from each Monte Carlo chain is the maximum of the two values. When looking at the first 9 poses, we see a marked increase in the performance of docking with a substantially greater value for the number of output poses (\texttt{num\_modes}). This is due to \texttt{num\_modes} forcing each Monte Carlo chain to output a number of poses greater than \texttt{num\_mc\_saved}. Increasing the default value of \texttt{num\_modes} will again increase computational overhead, so the default value is set to 9. 
 
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
@@ -358,13 +358,11 @@ Increasing the \texttt{num\_mc\_saved} parameter increases the chances of sampli
         \end{subfigure}    
 	\caption{Evaluating a much greater number of modes on the performance of docking with the Default CNN Ensemble}
 	\label{fig:num modes}
-\end{figure}    
-
-When looking at the first 10 poses, we see a marked increase in the performance of docking with a large value for the number of output poses (\texttt{num\_modes}). Since the molecular docking procedure is a sampling problem, with increased output conformations there is an increased likelihood of finding the correct answer. We know that the CNNs rank the refined poses more accurately than the typical Vina scoring function, so if the docking procedure samples an accurate pose that Vina does not believe is high scoring the CNN will be able to re-rank it to within the top 10 poses.
+\end{figure}
 
 \subsection{Whole Protein Docking}
 
-Finally, we evaluate the performance of docking when using the whole protein as the defined `binding site.' The performance of docking is expected to be reduced as the sampling space has been significantly increased. When using the whole protein for the sampling space, the sampling procedure tends to get stuck at locations distant from the actual binding site. It is difficult to move away from high scoring locations and due to high energy boundaries. Figure \ref{fig:WholeProtein} shows the performance of both Vina and the Default CNN Ensemble are reduced from when the binding pocket was explicitly defined. With whole protein docking we see greater increases in performance with increased sampling (\texttt{exhaustiveness}). This boost in performance is larger than when the binding pocket is defined explicitly and, as shown in Figure~\ref{fig:WholeProteinExh}, does not exhibit the same diminishing returns.
+Finally, we evaluate the performance of docking when using the whole protein as the defined `binding site.' The performance of docking is expected to be reduced as the sampling space has been significantly increased. When using the whole protein for the sampling space, the sampling procedure tends to get stuck at locations distant from the actual binding site. It is difficult to move away from high scoring locations due to high energy boundaries. Figure~\ref{fig:WholeProteinExh} shows the performance of both Vina and the Default CNN Ensemble are reduced from when the binding pocket was explicitly defined. With whole protein docking we see greater increases in performance with increased sampling (\texttt{exhaustiveness}). This boost in performance is larger than when the binding pocket is defined explicitly and, as shown in Figure~\ref{fig:WholeProteinExh}, does not exhibit the same diminishing returns. For this reason, when performing whole protein docking, we recommend setting the value of exhaustiveness as high as possible given the timing constraints of the problem at hand.
 
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
@@ -382,9 +380,8 @@ Finally, we evaluate the performance of docking when using the whole protein as 
 	\caption{Increasing the exhaustiveness when using the whole protein as the binding box}
         \label{fig:WholeProteinExh}
 \end{figure}
-Docking with a higher exhaustiveness level provides a greater boost when the binding box is larger. We must again consider the impact of exhaustiveness on computational cost. Increasing exhaustiveness beyond 32 seems to have significant reductions in performance gains and significant increases in computational cost. 
 
-\subsection{\textsc{Gnina} Performance}
+\subsection{CNN Scoring Performance}
 We have evaluated all of the \textsc{Gnina} models on subsets of the data that were not seen by any of the CNN models during training to ensure that the CNN models are able to generalize to unseen protein-ligand systems. We also show the Vina results for the same subset of protein-ligand systems. First we evaluate on the systems within the PDBbind refined set v.2019 and not within the PDBbind general set v.2017.
 \begin{figure}    
 	\centering
