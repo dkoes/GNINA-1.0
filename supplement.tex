@@ -80,9 +80,9 @@
         1 & General Default2018 3 & 70.4 & 6 & 39.8 & 2 \\ \hline
         2 & Crossdock Dense 3 & 71.2 & 7 & 40.4 & 2 \\ \hline
         3 & Crossdock Default2018 0 & 71.7 & 7 & 40.6 & 2 \\ \hline
-        4 & Redock Default2018 2 & 72.2 & 1 & 40.1 & ? \\ \hline
+        4 & Redock Default2018 2 & 72.2 & 1 & 40.1 & 13 \\ \hline
     \end{tabular}
-    \caption{Optimal Model Ensemble Selection. Performance given by percent of systems with RMSD less than $2\,\mathrm{\AA}$ from the top pose to the known binding pose.}
+    \caption{Optimal Model Ensemble Selection. Performance given by percent of systems with RMSD less than 2 \AA~from the top pose to the known binding pose.}
     \label{tab:OptimalModelSelection}
 \end{table}
 
@@ -106,6 +106,23 @@
         \caption{Average time to dock one protein-ligand system from the PDBbind core set v.2016 when no GPU is used for docking. ``rescore'' option selected when a CNN is used. Computations performed on 4 CPUs.}
         \label{tab:OptimalRescoreNoGPU}
 \end{table}    
+
+\begin{figure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/redocking/refine_sweep_cnn_empirical_weight_line.pdf}
+		\caption{Redocking}
+		\label{fig:CNNEmpWeight}
+        \end{subfigure}    
+        \begin{subfigure}[b]{0.48\textwidth}    
+		\centering
+		\includegraphics[width=\textwidth]{figures/crossdocking/refine_sweep_cnn_empirical_weight_line.pdf}
+		\caption{Crossdocking}
+		\label{fig:CNNEmpWeight}
+        \end{subfigure}    
+	\caption{Evaluating different values of \texttt{cnn\_emp\_weight} on docking performance. Using ``refinement'' option for \texttt{cnn\_scoring}. Both \texttt{mix\_emp\_energy} and \texttt{mix\_emp\_force} are used. Default Ensemble used for the CNN.}
+	\label{fig:CNNEmpWeight}
+\end{figure} 
 
 \begin{figure}
     \centering
