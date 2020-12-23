@@ -137,6 +137,13 @@ In this work, we describe and comprehensively evaluate version 1.0 of the \texts
 
 The docking pipeline of \textsc{Gnina} is described in detail, providing background for the derivation of default usage. A default CNN ensemble is selected for optimizing the docking performance and run-time of the docking pipeline. This ensemble is then used to investigate the different CNN scoring options available to the user, followed by a thorough investigation of the docking arguments. Finally, we examine the settings for both generalizability and scoring power.
 
+\begin{figure*}[tb]
+    \centering
+    \includegraphics[width=\linewidth]{figures/gnina}
+    \caption{The \textsc{Gnina} sampling and scoring algorithm shown with relevant \texttt{commandline parameters} and the scope of CNN scoring.}
+    \label{fig:workflow}
+\end{figure*}
+
 \subsection{Molecular Docking Pipeline}
 \textsc{\textsc{Gnina}} is a fork of \textsc{Smina}\cite{koes2013lessons} which is a fork of Vina\cite{trott2010autodock}. The docking pipeline of \textsc{\textsc{Gnina}} utilizes the enhanced support for scoring enabled in \textsc{Smina} to allow the use of CNNs as scoring functions. In typical usage, \textsc{\textsc{Gnina}} is provided with a receptor structure, a ligand structure, and a specification for a binding site on the receptor(\texttt{autobox\_ligand}).
 \begin{lstlisting}[title=Example Gnina Usage,label=code:Usage,language=bash]
