@@ -18,7 +18,7 @@
 \affiliation[University of Pittsburgh]
 {Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA}
 \author{Rocco Meli}
-\affiliation[Oxford]{Oxford}
+\affiliation[University of Oxford]{Department of Biochemistry, University of Oxford, Oxford, United Kingdom}
 \author{Matthew Ragoza}
 \author{Jocelyn Sunseri}
 \author{David Ryan Koes}
@@ -31,23 +31,23 @@
 \renewcommand{\thefigure}{S\arabic{figure}}
 \begin{document}
 
-% \begin{figure}
-%     \centering
-%     \begin{subfigure}[b]{0.48\textwidth}
-%         \centering
-%         \includegraphics{}
-%         \caption{Caption}
-%         \label{fig:DownsampleSmPP}
-%     \end{subfigure}
-%     \begin{subfigure}[b]{0.48\textwidth}
-%         \centering
-%         \includegraphics{}
-%         \caption{Caption}
-%         \label{fig:DownsampleGnPP}
-%     \end{subfigure}
-%     \caption{Analyzing the effect on docking performance when downsampling the cross-docking dataset to include a fraction of the protein-ligand pairs per pocket.}
-%     \label{fig:Downsample}
-% \end{figure}
+\begin{figure}
+    \centering
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/other/downsample_smina_perpocket.pdf}
+        \caption{\textsc{Smina}}
+        \label{fig:DownsampleSmPP}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.48\textwidth}
+        \centering
+        \includegraphics[width=\textwidth]{figures/other/downsample_gnina_perpocket.pdf}
+        \caption{\textsc{Gnina}}
+        \label{fig:DownsampleGnPP}
+    \end{subfigure}
+    \caption{Analyzing the effect on docking performance when downsampling the cross-docking dataset to include a fraction of the protein-ligand pairs per pocket.}
+    \label{fig:Downsample}
+\end{figure}
 
 \begin{figure}
     \centering
@@ -145,7 +145,7 @@
 \begin{figure}
     \centering
     \includegraphics{figures/other/refine_timing_comparison.pdf}
-    \caption{Average time to perform one docking run when using the Default Ensemble for Rescoring or Refinement in comparison to only using the Vina scoring function. Computations performed on 1 RTX 2080 Ti and 4 CPUs.}
+    \caption{Average time to perform one docking run when using the Default Ensemble for Rescoring or Refinement in comparison to only using the Vina scoring function. Computations performed on 1 NVIDIA GeForce RTX 2080 Ti and 4 CPUs.}
     \label{fig:RefineTiming}
 \end{figure}
 
