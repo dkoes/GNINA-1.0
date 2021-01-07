@@ -6,6 +6,7 @@
 \usepackage{verbatim}
 \usepackage[subrefformat=parens]{subcaption}
 \usepackage[version=3]{mhchem} % Formula subscripts using \ce{}
+\usepackage{booktabs}
 
 \author{Andrew McNutt}
 \author{Paul Francoeur}
@@ -181,7 +182,8 @@
         \end{subfigure}    
 	\caption{Evaluating the effect on docking performance when the value of CNN rotations is changed while using the Default Ensemble for Rescoring on both the redocking and crossdocking datasets. When CNN rotations is set to 0 the CNN sees a randomly rotated grid of the ligand conformation.}
 	\label{fig:CNNRot}
-\end{figure}  
+\end{figure}
+
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
@@ -198,4 +200,66 @@
 	\caption{Evaluating the effect on docking performance when the value of minimum RMSD filter is changed while using the Default Ensemble for Rescoring on both the redocking and crossdocking datasets.}
 	\label{fig:RMSDFilter}
 \end{figure}  
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{c c c l}
+\toprule
+Pocket & Receptor & Ligand & Reason \\
+\midrule
+MK01 & 4GSB & 5LCJ & No flexible residues \\
+SRC & 3UQG & 5J5S & No flexible residues \\
+JAK2 & 4F08 & 4E4M & No flexible residues \\
+SRC & 3UQG & 3DQX & No flexible residues \\
+MK01 & 4GSB & 5NHV & No flexible residues \\
+IGF1R & 5FXR & 2ZM3 & No flexible residues \\
+MK10 & 1UKI & 3ELJ & No flexible residues \\
+IGF1R & 5FXR & 3NW7 & No flexible residues \\
+MK10 & 1UKI & 2G01 & No flexible residues \\
+ALDR & 1ABN & 1ADS & No flexible residues \\
+ACES & 1JJB & 1ACJ & No flexible residues \\
+MK10 & 4HYS & 4L7F & No flexible residues \\
+MK01 & 4GSB & 4ZZM & No flexible residues \\
+HIVPR & 1PRO & 1HWR & No flexible residues \\
+IGF1R & 5FXR & 3NW6 & No flexible residues \\
+IGF1R & 5FXR & 3LVP & No flexible residues \\
+ACES & 1JJB & 1ZGB & No flexible residues \\
+SRC & 3UQG & 5D10 & No flexible residues \\
+JAK2 & 4F08 & 5CF6 & No flexible residues \\
+ALDR & 1ABN & 2HV5 & No flexible residues \\
+MK10 & 1UKI & 3RTP & No flexible residues \\
+JAK2 & 4F08 & 4D0W & No flexible residues \\
+CDK2 & 3QQJ & 3IG7 & No flexible residues \\
+IGF1R & 5FXR & 1JQH & No flexible residues \\
+MK01 & 4GSB & 4FV2 & No flexible residues \\
+IGF1R & 5FXR & 2OJ9 & No flexible residues \\
+ACES & 1JJB & 2CMF & No flexible residues \\
+KIF11 & 4BXN & 1X88 & Broken spurious bond \\
+KIF11 & 4BXN & 2IEH & Broken spurious bond \\
+KIF11 & 4BXN & 2X7D & Broken spurious bond \\
+KIF11 & 4BXN & 3K3B & Broken spurious bond \\
+CP2C9 & 1R9O & 5W0C & Added spurious bond \\
+FA10 & 1IQE & 2RA0 & Broken disulfide bond \\
+FA10 & 1IQE & 3KQB & Broken disulfide bond \\
+FA10 & 2XBV	& 2FZZ & Broken disulfide bond \\
+FA10 & 2XBV	& 2Y82 & Broken disulfide bond \\
+\bottomrule
+    \end{tabular}
+    \caption{Pocket, ligand and receptor identifiers for the systems excluded from the analysis of flexible docking, together with the reason for exclusion. 27 systems are discarded since no flexible residues were identified. 5 systems were discarded because bonding information was different between input and output files, 4 systems were discarded because of broken disulfide bonds.}
+    \label{tab:flexfail}
+\end{table}
+
+\begin{figure}    
+	\centering
+	\includegraphics[width=0.75\textwidth]{figures/crossdocking-flex/rmsd_dists_all.pdf}
+	\caption{RMSD distributions for the top pose in the cross-docking dataset. Ligand RMSDs are reported for both ridid and flexible docking, together with the distribution of the side chains (REC) RMSDs for flexible docking.}
+	\label{fig:flexRMSDalldist}
+\end{figure}  
+
+\begin{figure}
+    \centering
+    \includegraphics{}
+    \caption{Caption}
+    \label{fig:my_label}
+\end{figure}
 \end{document}
