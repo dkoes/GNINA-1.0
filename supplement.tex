@@ -221,31 +221,30 @@
 \toprule
 Pocket & Receptor & Ligand & Reason \\
 \midrule
-SRC & 3UQG & 5J5S & No flexible residues \\
-ACES & 1JJB & 1ZGB & No flexible residues \\
-IGF1R & 5FXR & 2OJ9 & No flexible residues \\
-IGF1R & 5FXR & 3NW6 & No flexible residues \\
-JAK2 & 4F08 & 4D0W & No flexible residues \\
-HIVPR & 1PRO & 1HWR & No flexible residues \\
-SRC & 3UQG & 3DQX & No flexible residues \\
-MK10 & 4HYS & 4L7F & No flexible residues \\
-IGF1R & 5FXR & 1JQH & No flexible residues \\
 IGF1R & 5FXR & 3NW7 & No flexible residues \\
-JAK2 & 4F08 & 4E4M & No flexible residues \\
-JAK2 & 4F08 & 5CF6 & No flexible residues \\
-ACES & 1JJB & 1ACJ & No flexible residues \\
-MK01 & 4GSB & 4FV2 & No flexible residues \\
+IGF1R & 5FXR & 3NW6 & No flexible residues \\
+MK10 & 4HYS & 4L7F & No flexible residues \\
+MK01 & 4GSB & 5NHV & No flexible residues \\
 MK10 & 1UKI & 2G01 & No flexible residues \\
-MK01 & 4GSB & 5LCJ & No flexible residues \\
-ACES & 1JJB & 2CMF & No flexible residues \\
+SRC & 3UQG & 5D10 & No flexible residues \\
+JAK2 & 4F08 & 4D0W & No flexible residues \\
+IGF1R & 5FXR & 1JQH & No flexible residues \\
+MK10 & 1UKI & 3RTP & No flexible residues \\
+IGF1R & 5FXR & 2OJ9 & No flexible residues \\
+ACES & 1JJB & 1ACJ & No flexible residues \\
+CDK2 & 3QQJ & 3IG7 & No flexible residues \\
+JAK2 & 4F08 & 4E4M & No flexible residues \\
+ACES & 1JJB & 1ZGB & No flexible residues \\
+MK10 & 1UKI & 3ELJ & No flexible residues \\
+MK01 & 4GSB & 4FV2 & No flexible residues \\
 MK01 & 4GSB & 4ZZM & No flexible residues \\
 IGF1R & 5FXR & 2ZM3 & No flexible residues \\
+MK01 & 4GSB & 5LCJ & No flexible residues \\
+SRC & 3UQG & 5J5S & No flexible residues \\
+JAK2 & 4F08 & 5CF6 & No flexible residues \\
 IGF1R & 5FXR & 3LVP & No flexible residues \\
-MK10 & 1UKI & 3ELJ & No flexible residues \\
-SRC & 3UQG & 5D10 & No flexible residues \\
-MK10 & 1UKI & 3RTP & No flexible residues \\
-MK01 & 4GSB & 5NHV & No flexible residues \\
-CDK2 & 3QQJ & 3IG7 & No flexible residues \\
+SRC & 3UQG & 3DQX & No flexible residues \\
+ACES & 1JJB & 2CMF & No flexible residues \\
 
 KIF11 & 4BXN & 1X88 & Broken spurious bond \\
 KIF11 & 4BXN & 2IEH & Broken spurious bond \\
@@ -258,14 +257,14 @@ FA10 & 2XBV	& 2FZZ & Broken disulfide bond \\
 FA10 & 2XBV	& 2Y82 & Broken disulfide bond \\
 \bottomrule
     \end{tabular}
-    \caption{Pocket, ligand and receptor identifiers for the systems excluded from the analysis of flexible docking, together with the reason for exclusion. 25 systems are discarded since no flexible residues were identified. 5 systems were discarded because bonding information was different between input and output files, 4 systems were discarded because of broken disulfide bonds.}
+    \caption{Pocket, ligand and receptor identifiers for the systems excluded from the analysis of flexible docking, together with the reason for exclusion. 24 systems are discarded since no flexible residues were identified. 5 systems were discarded because bonding information was different between input and output files, 4 systems were discarded because of broken disulfide bonds.}
     \label{tab:flexfail}
 \end{table}
 
 \begin{figure}    
 	\centering
-	\includegraphics[width=0.75\textwidth]{figures/crossdocking-flex/rmsd_dists_all.pdf}
-	\caption{RMSD distributions for the top pose in the cross-docking dataset. Ligand RMSDs are reported for both ridid and flexible docking, together with the distribution of the side chains (REC) RMSDs for flexible docking.}
+	\includegraphics[width=0.75\textwidth]{figures/crossdocking-flex/e8-rmsd_dists-LIG.pdf}
+	\caption{Ligand RMSD distributions for the top pose in the cross-docking dataset, for bot flexible and rigid docking.}
 	\label{fig:flexRMSDalldist}
 \end{figure}  
 
