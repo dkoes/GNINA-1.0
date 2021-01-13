@@ -46,7 +46,7 @@
         \caption{\textsc{Gnina}}
         \label{fig:DownsampleGnPP}
     \end{subfigure}
-    \caption{Analyzing the effect on docking performance when downsampling the cross-docking dataset to include a fraction of the protein-ligand pairs per pocket.}
+    \caption{Analyzing the effect on docking performance when downsampling the cross-docking dataset to include a fraction of the protein-ligand pairs per pocket. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}.}
     \label{fig:Downsample}
 \end{figure}
 
@@ -68,9 +68,9 @@
         \centering
         \includegraphics[width=\textwidth]{figures/other/thirdpose.png}
         \caption{Third Pose}
-        \label{fig:SminaComparePose}
+        \label{fig:SminaCompareThird}
     \end{subfigure}
-    \caption{Comparison of the RMSD(\AA) of the top 3 poses output by \textsc{Gnina} with no CNN in the docking pipeline and \textsc{Smina}. Both docking software were run with the same arguments.}
+    \caption{Comparison of the RMSD(\AA) of the top 3 poses output by \textsc{Gnina} with no CNN in the docking pipeline and \textsc{Smina}. Both docking software were run with the same arguments. Gnina was run with \texttt{autobox\_extend.} turned off.}
     \label{fig:SminaComparePose}
 \end{figure}
 \begin{figure}
@@ -87,7 +87,7 @@
         \caption{Maximum RMSD(\AA) Pose}
         \label{fig:SminaCompareMax}
     \end{subfigure}
-    \caption{Comparison of the minimum and maximum RMSD(\AA) poses output by Gnina with no CNN in the docking pipeline and Smina. Both docking software were run with the same arguments.}
+    \caption{Comparison of the minimum and maximum RMSD(\AA) poses output by Gnina with no CNN in the docking pipeline and Smina. Both docking software were run with the same arguments. Gnina was run with \texttt{autobox\_extend.} turned off.}
     \label{fig:SminaCompareExtrema}
 \end{figure}
 
@@ -138,13 +138,13 @@
 		\centering
 		\includegraphics[width=\textwidth]{figures/redocking/refine_sweep_cnn_empirical_weight_line.pdf}
 		\caption{Redocking}
-		\label{fig:CNNEmpWeight}
+		\label{fig:CNNEmpWeightRD}
         \end{subfigure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
 		\includegraphics[width=\textwidth]{figures/crossdocking/refine_sweep_cnn_empirical_weight_line.pdf}
 		\caption{Crossdocking}
-		\label{fig:CNNEmpWeight}
+		\label{fig:CNNEmpWeightCD}
         \end{subfigure}    
 	\caption{Evaluating different values of \texttt{cnn\_emp\_weight} on docking performance. Using ``refinement'' option for \texttt{cnn\_scoring}. Both \texttt{mix\_emp\_energy} and \texttt{mix\_emp\_force} are used. Default Ensemble used for the CNN.}
 	\label{fig:CNNEmpWeight}
@@ -212,7 +212,7 @@
     \centering
     \includegraphics[height=0.9\textheight]{figures/crossdocking/whole_ptn_top1_per_pocket.pdf}
     \caption{Cross-docking results using the whole protein as the defined binding pocket. Evaluating Top1 per pocket.}
-    \label{fig:Thresh_PerPock}
+    \label{fig:WholeProtein_PerPock}
 \end{figure}
 
 \begin{table}[]
