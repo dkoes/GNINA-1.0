@@ -6,6 +6,7 @@
 \usepackage{verbatim}
 \usepackage[subrefformat=parens]{subcaption}
 \usepackage[version=3]{mhchem} % Formula subscripts using \ce{}
+\usepackage{booktabs}
 
 \author{Andrew McNutt}
 \author{Paul Francoeur}
@@ -45,7 +46,7 @@
         \caption{\textsc{Gnina}}
         \label{fig:DownsampleGnPP}
     \end{subfigure}
-    \caption{Analyzing the effect on docking performance when downsampling the cross-docking dataset to include a fraction of the protein-ligand pairs per pocket.}
+    \caption{Analyzing the effect on docking performance when downsampling the cross-docking dataset to include a fraction of the protein-ligand pairs per pocket. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}.}
     \label{fig:Downsample}
 \end{figure}
 
@@ -67,9 +68,9 @@
         \centering
         \includegraphics[width=\textwidth]{figures/other/thirdpose.png}
         \caption{Third Pose}
-        \label{fig:SminaComparePose}
+        \label{fig:SminaCompareThird}
     \end{subfigure}
-    \caption{Comparison of the RMSD(\AA) of the top 3 poses output by \textsc{Gnina} with no CNN in the docking pipeline and \textsc{Smina}. Both docking software were run with the same arguments.}
+    \caption{Comparison of the RMSD(\AA) of the top 3 poses output by \textsc{Gnina} with no CNN in the docking pipeline and \textsc{Smina}. Both docking software were run with the same arguments. Gnina was run with \texttt{autobox\_extend.} turned off.}
     \label{fig:SminaComparePose}
 \end{figure}
 \begin{figure}
@@ -86,7 +87,7 @@
         \caption{Maximum RMSD(\AA) Pose}
         \label{fig:SminaCompareMax}
     \end{subfigure}
-    \caption{Comparison of the minimum and maximum RMSD(\AA) poses output by Gnina with no CNN in the docking pipeline and Smina. Both docking software were run with the same arguments.}
+    \caption{Comparison of the minimum and maximum RMSD(\AA) poses output by Gnina with no CNN in the docking pipeline and Smina. Both docking software were run with the same arguments. Gnina was run with \texttt{autobox\_extend.} turned off.}
     \label{fig:SminaCompareExtrema}
 \end{figure}
 
@@ -100,9 +101,16 @@
         3 & Crossdock Default2018 0 & 71.7 & 7 & 40.6 & 2 \\ \hline
         4 & Redock Default2018 2 & 72.2 & 1 & 40.1 & 13 \\ \hline
     \end{tabular}
-    \caption{Optimal Model Ensemble Selection. Performance given by percent of systems with RMSD less than 2 \AA~from the top pose to the known binding pose.}
+    \caption{Optimal Model Ensemble Selection. Performance given by percent of systems with RMSD less than 2{\AA} from the top pose to the known binding pose.}
     \label{tab:OptimalModelSelection}
 \end{table}
+
+\begin{figure}
+    \centering
+    \includegraphics[height=0.9\textheight]{figures/crossdocking/top1_per_pocket.pdf}
+    \caption{Cross-docking results using a defined binding pocket. Evaluating the Top1 per pocket.}
+    \label{fig:Top1_PerPock}
+\end{figure}
 
 \begin{table}    
         \centering
@@ -130,13 +138,13 @@
 		\centering
 		\includegraphics[width=\textwidth]{figures/redocking/refine_sweep_cnn_empirical_weight_line.pdf}
 		\caption{Redocking}
-		\label{fig:CNNEmpWeight}
+		\label{fig:CNNEmpWeightRD}
         \end{subfigure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
 		\includegraphics[width=\textwidth]{figures/crossdocking/refine_sweep_cnn_empirical_weight_line.pdf}
 		\caption{Crossdocking}
-		\label{fig:CNNEmpWeight}
+		\label{fig:CNNEmpWeightCD}
         \end{subfigure}    
 	\caption{Evaluating different values of \texttt{cnn\_emp\_weight} on docking performance. Using ``refinement'' option for \texttt{cnn\_scoring}. Both \texttt{mix\_emp\_energy} and \texttt{mix\_emp\_force} are used. Default Ensemble used for the CNN.}
 	\label{fig:CNNEmpWeight}
@@ -145,7 +153,7 @@
 \begin{figure}
     \centering
     \includegraphics{figures/other/refine_timing_comparison.pdf}
-    \caption{Average time to perform one docking run when using the Default Ensemble for Rescoring or Refinement in comparison to only using the Vina scoring function. Computations performed on 1 NVIDIA GeForce RTX 2080 Ti and 4 CPUs.}
+    \caption{Average time to perform one docking run when using the Default Ensemble for Rescoring or Refinement in comparison to only using the Vina scoring function.}
     \label{fig:RefineTiming}
 \end{figure}
 
@@ -181,7 +189,8 @@
         \end{subfigure}    
 	\caption{Evaluating the effect on docking performance when the value of CNN rotations is changed while using the Default Ensemble for Rescoring on both the redocking and crossdocking datasets. When CNN rotations is set to 0 the CNN sees a randomly rotated grid of the ligand conformation.}
 	\label{fig:CNNRot}
-\end{figure}  
+\end{figure}
+
 \begin{figure}    
         \begin{subfigure}[b]{0.48\textwidth}    
 		\centering
@@ -198,4 +207,72 @@
 	\caption{Evaluating the effect on docking performance when the value of minimum RMSD filter is changed while using the Default Ensemble for Rescoring on both the redocking and crossdocking datasets.}
 	\label{fig:RMSDFilter}
 \end{figure}  
+
+\begin{figure}
+    \centering
+    \includegraphics[height=0.9\textheight]{figures/crossdocking/whole_ptn_top1_per_pocket.pdf}
+    \caption{Cross-docking results using the whole protein as the defined binding pocket. Evaluating Top1 per pocket.}
+    \label{fig:WholeProtein_PerPock}
+\end{figure}
+
+\begin{table}[]
+    \centering
+    \begin{tabular}{c c c l}
+\toprule
+Pocket & Receptor & Ligand & Reason \\
+\midrule
+IGF1R & 5FXR & 3NW7 & No flexible residues \\
+IGF1R & 5FXR & 3NW6 & No flexible residues \\
+MK10 & 4HYS & 4L7F & No flexible residues \\
+MK01 & 4GSB & 5NHV & No flexible residues \\
+MK10 & 1UKI & 2G01 & No flexible residues \\
+SRC & 3UQG & 5D10 & No flexible residues \\
+JAK2 & 4F08 & 4D0W & No flexible residues \\
+IGF1R & 5FXR & 1JQH & No flexible residues \\
+MK10 & 1UKI & 3RTP & No flexible residues \\
+IGF1R & 5FXR & 2OJ9 & No flexible residues \\
+ACES & 1JJB & 1ACJ & No flexible residues \\
+CDK2 & 3QQJ & 3IG7 & No flexible residues \\
+JAK2 & 4F08 & 4E4M & No flexible residues \\
+ACES & 1JJB & 1ZGB & No flexible residues \\
+MK10 & 1UKI & 3ELJ & No flexible residues \\
+MK01 & 4GSB & 4FV2 & No flexible residues \\
+MK01 & 4GSB & 4ZZM & No flexible residues \\
+IGF1R & 5FXR & 2ZM3 & No flexible residues \\
+MK01 & 4GSB & 5LCJ & No flexible residues \\
+SRC & 3UQG & 5J5S & No flexible residues \\
+JAK2 & 4F08 & 5CF6 & No flexible residues \\
+IGF1R & 5FXR & 3LVP & No flexible residues \\
+SRC & 3UQG & 3DQX & No flexible residues \\
+ACES & 1JJB & 2CMF & No flexible residues \\
+
+KIF11 & 4BXN & 1X88 & Broken spurious bond \\
+KIF11 & 4BXN & 2IEH & Broken spurious bond \\
+KIF11 & 4BXN & 2X7D & Broken spurious bond \\
+KIF11 & 4BXN & 3K3B & Broken spurious bond \\
+CP2C9 & 1R9O & 5W0C & Added spurious bond \\
+FA10 & 1IQE & 2RA0 & Broken disulfide bond \\
+FA10 & 1IQE & 3KQB & Broken disulfide bond \\
+FA10 & 2XBV	& 2FZZ & Broken disulfide bond \\
+FA10 & 2XBV	& 2Y82 & Broken disulfide bond \\
+\bottomrule
+    \end{tabular}
+    \caption{Pocket, ligand and receptor identifiers for the systems excluded from the analysis of flexible docking, together with the reason for exclusion. 24 systems are discarded since no flexible residues were identified. 5 systems were discarded because bonding information was different between input and output files, 4 systems were discarded because of broken disulfide bonds.}
+    \label{tab:flexfail}
+\end{table}
+
+\begin{figure}    
+	\centering
+	\includegraphics[width=0.75\textwidth]{figures/crossdocking-flex/e8-rmsd_dists-LIG.pdf}
+	\caption{Ligand RMSD distributions for the top pose in the cross-docking dataset, for bot flexible and rigid docking.}
+	\label{fig:flexRMSDalldist}
+\end{figure}  
+
+\begin{figure}
+    \centering
+    \includegraphics[height=0.9\textheight]{figures/crossdocking/thresh_top1_per_pocket.pdf}
+    \caption{Cross-docking results when evaluating Top1 per pocket. A pose is retained if the CNN outputs a score greater than the value indicated on the x-axis. Grey cells indicate that no poses are left in the pocket.}
+    \label{fig:Thresh_PerPock}
+\end{figure}
+
 \end{document}
