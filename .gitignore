@@ -14,3 +14,9 @@ supplement.pdf
 *.synctex.gz
 acs-main.bib
 acs-supplement.bib
+
+# editors
+.vscode
+
+# macOS
+.DS_Store
