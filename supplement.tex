@@ -70,7 +70,7 @@
         \caption{Third Pose}
         \label{fig:SminaCompareThird}
     \end{subfigure}
-    \caption{Comparison of the RMSD(\AA) of the top 3 poses output by \textsc{Gnina} with no CNN in the docking pipeline and \textsc{Smina}. Both docking software were run with the same arguments. Gnina was run with \texttt{autobox\_extend.} turned off.}
+    \caption{Comparison of the RMSD(\AA) of the top 3 poses output by \textsc{Gnina} with no CNN in the docking pipeline and \textsc{Smina}. Both docking software were run with the same arguments. Gnina was run with \texttt{autobox\_extend} turned off.}
     \label{fig:SminaComparePose}
 \end{figure}
 \begin{figure}
@@ -87,49 +87,49 @@
         \caption{Maximum RMSD(\AA) Pose}
         \label{fig:SminaCompareMax}
     \end{subfigure}
-    \caption{Comparison of the minimum and maximum RMSD(\AA) poses output by Gnina with no CNN in the docking pipeline and Smina. Both docking software were run with the same arguments. Gnina was run with \texttt{autobox\_extend.} turned off.}
+    \caption{Comparison of the minimum and maximum RMSD(\AA) poses output by Gnina with no CNN in the docking pipeline and Smina. Both docking software were run with the same arguments. Gnina was run with \texttt{autobox\_extend} turned off.}
     \label{fig:SminaCompareExtrema}
 \end{figure}
 
 \begin{table}[]
     \centering
     \begin{tabular}{|c|c|c|c|c|c|}
-       \hline\begin{tabular}{{@{}c@{}}}Iteration\\\#\end{tabular}&\begin{tabular}{{@{}c@{}}}Model\\ Selected\end{tabular}&\begin{tabular}{{@{}c@{}}}Redocking\\ Performance\end{tabular}&\begin{tabular}{{@{}c@{}}}Redocking\\Ranking\end{tabular}&\begin{tabular}{{@{}c@{}}} Crossdocking\\Performance\end{tabular}&\begin{tabular}{{@{}c@{}}}Crossdocking\\Ranking\end{tabular}\\ \hline
-        0 & Crossdock Dense 4 & 67.7 & 5 & 37.8 & 1 \\ \hline
-        1 & General Default2018 3 & 70.4 & 6 & 39.8 & 2 \\ \hline
-        2 & Crossdock Dense 3 & 71.2 & 7 & 40.4 & 2 \\ \hline
-        3 & Crossdock Default2018 0 & 71.7 & 7 & 40.6 & 2 \\ \hline
-        4 & Redock Default2018 2 & 72.2 & 1 & 40.1 & 13 \\ \hline
+       \hline\begin{tabular}{{@{}c@{}}}Iteration\\\#\end{tabular}&\begin{tabular}{{@{}c@{}}}Model\\ Selected\end{tabular}&\begin{tabular}{{@{}c@{}}}Redocking\\ Top1(\%)\end{tabular}&\begin{tabular}{{@{}c@{}}}Redocking\\Ranking\end{tabular}&\begin{tabular}{{@{}c@{}}} Crossdocking\\Top1(\%)\end{tabular}&\begin{tabular}{{@{}c@{}}}Crossdocking\\Ranking\end{tabular}\\ \hline
+        0 & \texttt{dense} & 67.7 & 5 & 37.8 & 1 \\ \hline
+        1 & \texttt{general\_default\_3} & 70.4 & 6 & 39.8 & 2 \\ \hline
+        2 & \texttt{dense\_3} & 71.2 & 7 & 40.4 & 2 \\ \hline
+        3 & \texttt{crossdock\_default2018} 0 & 71.7 & 7 & 40.6 & 2 \\ \hline
+        4 & \texttt{redock\_default2018} & 72.2 & 1 & 40.1 & 13 \\ \hline
     \end{tabular}
-    \caption{Optimal Model Ensemble Selection. Performance given by percent of systems with RMSD less than 2{\AA} from the top pose to the known binding pose.}
+    \caption{Optimal Model Ensemble Selection. Performance given by Top1, the percent of systems with RMSD less than 2{\AA} from the top pose to the known binding pose.}
     \label{tab:OptimalModelSelection}
 \end{table}
 
 \begin{figure}
     \centering
     \includegraphics[height=0.9\textheight]{figures/crossdocking/top1_per_pocket.pdf}
-    \caption{Cross-docking results using a defined binding pocket. Evaluating the Top1 per pocket.}
+    \caption{Cross-docking results using a defined binding pocket. Evaluating the Top1(\%) per pocket. Top1 is the percentage of top ranked targets with a RMSD less than 2{\AA}.}
     \label{fig:Top1_PerPock}
 \end{figure}
 
 \begin{table}    
         \centering
-        \begin{tabular}{|c|c|}
-                \hline Model Name & Average Docking Time (s) \\ \hline
-                Default Ensemble & 194.38\\ \hline
-                Crossdock Default2018 & 31.70\\ \hline
-                Crossdock Default2018 Ensemble & 59.37\\ \hline
-                Crossdock Dense & 76.71\\ \hline
-                Crossdock Dense Ensemble & 449.45\\ \hline
-                General Default2018 & 31.71\\ \hline
-                General Default2018 Ensemble & 58.71\\ \hline
-                Redock Default2018 & 31.82\\ \hline
-                Redock Default2018 Ensemble & 59.00\\ \hline
-                Default2017 & 32.70\\ \hline
-                All Ensemble & 561.36\\ \hline
-                Vina & 24.87\\ \hline
+        \begin{tabular}{|c|c|c|}
+                \hline Model Name &\begin{tabular}{{@{}c@{}}}CPU only\\ Average Docking Time (s)\end{tabular}&\begin{tabular}{{@{}c@{}}}GPU accelerated\\ Average Docking Time (s)\end{tabular}\\ \hline
+                Default Ensemble & 194.38 & 26.94\\ \hline
+                \texttt{crossdock\_default2018} & 31.70 & 26.04\\ \hline
+                \texttt{crossdock\_default2018\_ensemble} & 59.37 & 26.45\\ \hline
+                \texttt{dense} & 76.71 & 26.35\\ \hline
+                \texttt{dense\_ensemble} & 449.45 & 27.63\\ \hline
+                \texttt{general\_default2018} & 31.71 & 26.11\\ \hline
+                \texttt{general\_default2018\_ensemble} & 58.71 & 26.38\\ \hline
+                \texttt{redock\_default2018} & 31.82 & 26.10\\ \hline
+                \texttt{redock\_default2018\_ensemble} & 59.00 & 26.38\\ \hline
+                \texttt{default2017} & 32.70 & 26.00\\ \hline
+                All Ensemble & 561.36 & 29.08\\ \hline
+                Vina & 24.87 & 24.83\\ \hline
         \end{tabular}    
-        \caption{Average time to dock one protein-ligand system from the PDBbind core set v.2016 when no GPU is used for docking. ``rescore'' option selected when a CNN is used. Computations performed on 4 CPUs.}
+        \caption{Average time to dock one protein-ligand system from the filtered PDBbind core set v.2016. Comparing runtime when GPU is used to when no GPU is used for docking. ``rescore'' option selected when a CNN is used.}
         \label{tab:OptimalRescoreNoGPU}
 \end{table}    
 
@@ -146,14 +146,14 @@
 		\caption{Crossdocking}
 		\label{fig:CNNEmpWeightCD}
         \end{subfigure}    
-	\caption{Evaluating different values of \texttt{cnn\_emp\_weight} on docking performance. Using ``refinement'' option for \texttt{cnn\_scoring}. Both \texttt{mix\_emp\_energy} and \texttt{mix\_emp\_force} are used. Default Ensemble used for the CNN.}
+	\caption{Evaluating different values of \texttt{cnn\_emp\_weight} on docking performance when using the Default Ensemble. Using ``refinement'' option for \texttt{cnn\_scoring}. Both \texttt{mix\_emp\_energy} and \texttt{mix\_emp\_force} are used.}
 	\label{fig:CNNEmpWeight}
 \end{figure} 
 
 \begin{figure}
     \centering
     \includegraphics{figures/other/refine_timing_comparison.pdf}
-    \caption{Average time to perform one docking run when using the Default Ensemble for Rescoring or Refinement in comparison to only using the Vina scoring function.}
+    \caption{Time to perform one docking run when using the Default Ensemble for ``rescore'' or ``refine'' in comparison to only using the Vina scoring function.}
     \label{fig:RefineTiming}
 \end{figure}
 
@@ -170,7 +170,7 @@
 		\caption{Crossdocking}
 		\label{fig:AutoboxAddCrossdock}
         \end{subfigure}    
-	\caption{Evaluating the effect on docking performance when the value of Autobox Add is changed while using the Default Ensemble for Rescoring on both the redocking and crossdocking datasets.}
+	\caption{Evaluating the effect on docking performance when the value of \texttt{autobox\_add} is changed while using the Default Ensemble for rescoring. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}}
 	\label{fig:AutoboxAdd}
 \end{figure}  
 
@@ -187,7 +187,7 @@
 		\caption{Crossdocking}
 		\label{fig:CNNRotCrossdock}
         \end{subfigure}    
-	\caption{Evaluating the effect on docking performance when the value of CNN rotations is changed while using the Default Ensemble for Rescoring on both the redocking and crossdocking datasets. When CNN rotations is set to 0 the CNN sees a randomly rotated grid of the ligand conformation.}
+	\caption{Evaluating the effect on docking performance when the value of \texttt{cnn\_rotation} is changed while using the Default Ensemble for rescoring. When CNN rotations is set to 0 the CNN sees a randomly rotated grid of the ligand conformation. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}}
 	\label{fig:CNNRot}
 \end{figure}
 
@@ -204,14 +204,14 @@
 		\caption{Crossdocking}
 		\label{fig:RMSDFilterCrossdock}
         \end{subfigure}    
-	\caption{Evaluating the effect on docking performance when the value of minimum RMSD filter is changed while using the Default Ensemble for Rescoring on both the redocking and crossdocking datasets.}
+	\caption{Evaluating the effect on docking performance when the value of \texttt{min\_rmsd\_filter} is changed while using the Default Ensemble for rescoring on both the redocking and crossdocking datasets. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}}
 	\label{fig:RMSDFilter}
 \end{figure}  
 
 \begin{figure}
     \centering
     \includegraphics[height=0.9\textheight]{figures/crossdocking/whole_ptn_top1_per_pocket.pdf}
-    \caption{Cross-docking results using the whole protein as the defined binding pocket. Evaluating Top1 per pocket.}
+    \caption{Cross-docking results using the whole protein as the defined binding pocket. Evaluating Top1(\%) per pocket. Top1 is the percentage of top ranked targets with a RMSD less than 2{\AA}.}
     \label{fig:WholeProtein_PerPock}
 \end{figure}
 
@@ -271,7 +271,7 @@ FA10 & 2XBV	& 2Y82 & Broken disulfide bond \\
 \begin{figure}
     \centering
     \includegraphics[height=0.9\textheight]{figures/crossdocking/thresh_top1_per_pocket.pdf}
-    \caption{Cross-docking results when evaluating Top1 per pocket. A pose is retained if the CNN outputs a score greater than the value indicated on the x-axis. Grey cells indicate that no poses are left in the pocket.}
+    \caption{Thresholding the cross-docking results by CNNscore and evaluating Top1(\%) per pocket. A pose is retained if the CNN outputs a score greater than the value indicated on the x-axis. Grey cells indicate that no poses are left in the pocket. Top1 is the percentage of top ranked targets with a RMSD less than 2{\AA}.}
     \label{fig:Thresh_PerPock}
 \end{figure}
 
