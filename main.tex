@@ -3,8 +3,8 @@
 %% The document class accepts keyval options, which should include
 %% the target journal and optionally the manuscript type. 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\documentclass[journal=jcisd8,manuscript=article]{achemso}
-
+%\documentclass[journal=jcisd8,manuscript=article]{achemso}
+\documentclass[linenumbers,doublespacing]{bmcart}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Place any additional packages needed here.  Only include packages
 %% which are essential, to avoid problems later. Do NOT use any
@@ -15,13 +15,15 @@
 \usepackage[version=3]{mhchem} % Formula subscripts using \ce{}
 \usepackage{textcomp}
 \usepackage{graphicx}
-\usepackage{subcaption}
+%\usepackage{subcaption}
+\usepackage[caption=false]{subfig}
 \usepackage{array}
 \usepackage{url}
 \usepackage{xr-hyper}
 \usepackage{hyperref}
 \usepackage{multirow}
 \usepackage{listings}
+
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% If issues arise when submitting your manuscript, you may want to
@@ -58,24 +60,24 @@ frame=single
 \myexternaldocument{supplement}
 
 
-\author{Andrew McNutt}
-\author{Paul Francoeur}
-\affiliation[University of Pittsburgh]
-{Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA}
-\author{Rishal Aggarwal}
-\affiliation[International Institute of Information Technology Hyderabad]
-{Center for Computational Natural Sciences and Bioinformatics, International Institute of Information Technology, Hyderabad 500 032, India}
-\author{Tomohide Masuda}
-\affiliation[University of Pittsburgh]
-{Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA}
-\author{Rocco Meli}
-\affiliation[University of Oxford]{Department of Biochemistry, University of Oxford, Oxford, United Kingdom}
-\author{Matthew Ragoza}
-\author{Jocelyn Sunseri}
-\author{David Ryan Koes}
-\email{dkoes@pitt.edu}
-\affiliation[University of Pittsburgh]
-{Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA}
+% \author{Andrew McNutt}
+% \author{Paul Francoeur}
+% \affiliation[University of Pittsburgh]
+% {Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA}
+% \author{Rishal Aggarwal}
+% \affiliation[International Institute of Information Technology Hyderabad]
+% {Center for Computational Natural Sciences and Bioinformatics, International Institute of Information Technology, Hyderabad 500 032, India}
+% \author{Tomohide Masuda}
+% \affiliation[University of Pittsburgh]
+% {Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA}
+% \author{Rocco Meli}
+% \affiliation[University of Oxford]{Department of Biochemistry, University of Oxford, Oxford, United Kingdom}
+% \author{Matthew Ragoza}
+% \author{Jocelyn Sunseri}
+% \author{David Ryan Koes}
+% \email{dkoes@pitt.edu}
+% \affiliation[University of Pittsburgh]
+% {Department of Computational and Systems Biology, University of Pittsburgh, Pittsburgh, PA}
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -83,42 +85,89 @@ frame=single
 %% a running title from the author: this should be supplied as an
 %% optional argument to \title.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\title[GNINA 1.0]
-  {{\normalfont\scshape GNINA} 1.0: Molecular docking with deep learning}
+% \title[GNINA 1.0]
+%   {{\normalfont\scshape GNINA} 1.0: Molecular docking with deep learning}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Some journals require a list of abbreviations or keywords to be
 %% supplied. These should be set up here, and will be printed after
 %% the title and author information, if needed.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\keywords{molecular docking, deep learning, structure-based drug design}
+%\keywords{molecular docking, deep learning, structure-based drug design}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% The manuscript does not need to include \maketitle, which is
 %% executed automatically.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \begin{document}
+% for BMC
+\begin{frontmatter}
+\begin{fmbox}
+\dochead{Research}
+% Title for BMC
+\title{{\normalfont\scshape GNINA} 1.0: Molecular docking with deep learning}
 
+% authors for BMC
+\author[addressref={CSBdept}]{\inits{ATM}\fnm{Andrew T.} \snm{McNutt}}
+\author[addressref={CSBdept}]{\inits{PF}\fnm{Paul} \snm{Francoeur}}
+\author[addressref={IIITH}]{\inits{RH} \fnm{Rishal} \snm{Aggarwal}}
+\author[addressref={CSBdept}]{\inits{TM} \fnm{Tomohide} \snm{Masuda}}
+\author[addressref={Ox}]{\inits{RM} \fnm{Rocco} \snm{Meli}}
+\author[addressref={CSBdept}]{Matthew Ragoza}
+\author[addressref={CSBdept}]{Jocelyn Sunseri}
+\author[
+    addressref={CSBdept},
+    email={dkoes@pitt.edu}
+]{\inits{DRK} \fnm{David Ryan} \snm{Koes}}
+
+% addresses for BMC
+\address[id=CSBdept]{%                           % unique id
+  \orgname{Department of Computational and Systems Biology, University of Pittsburgh}, % university, etc
+  \city{Pittsburgh},                              % city
+  \cny{PA}                                    % country
+}
+\address[id=IIITH]{
+    \orgname{Center for Computational Natural Sciences and Bioinformatics, International Institute of Information Technology},
+    \city{Hyderabad},  
+    \postcode{500 032}, 
+    \cny{India}
+}
+\address[id=Ox]{
+    \orgname{Department of Biochemistry, University of Oxford},
+    \city{Oxford},
+    \cny{United Kingdom}
+}
+
+\end{fmbox}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% The "tocentry" environment can be used to create an entry for the
 %% graphical table of contents. It is given here as some journals
 %% require that it is printed as part of the abstract page. It will
 %% be automatically moved as appropriate.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{tocentry} \centering
-\includegraphics[width=\linewidth]{figures/gnina}
-	73\% Top1 Redocking, 37\% Cross-docking
-\end{tocentry}
+%\begin{tocentry} \centering
+%\includegraphics[width=\linewidth]{figures/gnina}
+%	73\% Top1 Redocking, 37\% Cross-docking
+%\end{tocentry}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% The abstract environment will automatically gobble the contents
 %% if an abstract is not used by the target journal.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{abstract}
+%\begin{abstract}
+\begin{abstractbox}
 Molecular docking computationally predicts the conformation of a small molecule when binding to a receptor. Scoring functions are a vital piece of any molecular docking pipeline as they determine the fitness of sampled poses. Here we describe and evaluate the 1.0 release of the \textsc{Gnina} docking software, which utilizes an ensemble of convolutional neural networks (CNNs) as a scoring function. We also explore an array of parameter values for \textsc{Gnina} 1.0 to optimize docking performance and computational cost. Docking performance, as evaluated by the percentage of targets where the top pose is better than 2{\AA} root mean square deviation (Top1), is compared to AutoDock Vina scoring when utilizing explicitly defined binding pockets or whole protein docking. \textsc{Gnina}, utilizing a CNN scoring function to rescore the output poses, outperforms AutoDock Vina scoring on redocking and cross-docking tasks when the binding pocket is defined (Top1 increases from 58\% to 73\% and from 27\% to 37\%, respectively) and when the whole protein defines the binding pocket (Top1 increases from 31\% to 38\% and from 12\% to 16\%, respectively). The derived ensemble of CNNs generalizes to unseen proteins and ligands and produces scores that correlate well with the root mean square deviation to the known binding pose. We provide the 1.0 version of \textsc{Gnina} under and open source license for use as a molecular docking tool at \url{https://github.com/gnina/gnina}.
-\end{abstract}
+%\end{abstract}
 
+\begin{keyword}
+\kwd{molecular docking}
+\kwd{deep learning}
+\kwd{structure-based drug design}
+\end{keyword}
 
+\end{abstractbox}
+
+\end{frontmatter}
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Start the main part of the manuscript here.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -130,11 +179,11 @@ Determination of the correct binding pose of a small molecule is a prerequisite 
 
 Scoring functions provide a mapping from the conformational space of the ligand and receptor to the set of real numbers so that poses may be ranked. Typically, scoring functions are grouped into three categories; knowledge based, physics based, and empirical \cite{kitchen2004docking}. Knowledge based scoring functions leverage the statistics from a set of structural binding data. A number of geometric properties are computed from structures of protein-ligand complexes, such as atom-atom pairwise contacts. The calculated frequencies can be used in a method such as potential of mean force (PMF), which creates a potential based on the Boltzmann distribution of the properties, to calculate the score of a pose\cite{muegge1999general,muegge2000knowledge}. Knowledge based scoring functions can be biased by features present in their training sets though calculations of scores are quick at test time\cite{kitchen2004docking}. They require a large database of known structures and can be difficult to interpret when trying to understand a score\cite{brooijmans2003molecular}. Physics based scoring functions, often referred to as force fields, utilize physically derived energetics of interactions to compute scores. The final score is a summation of energy terms such as Coulombic and Van der Waals forces\cite{huang2006molecular}. Accuracy of physics based scoring functions are limited by their complexity and the assumptions we place on the fundamental forces dictating interactions between molecules, though understanding of these forces is continually increasing\cite{liu2015classification}. 
 
-Empirical scoring functions address the limitations of physics based scoring functions by using a combination of manually selected energy terms. Rather than giving each energy term identical weighting, the weights of each term are determined via a fit to experimental data. A large proportion of docking software use empirical scoring functions, including X-Score, AutoDock Vina, and ChemScore\cite{wang2002further,trott2010autodock,eldridge1997empirical}. Unlike knowledge based scoring functions, empirical and physics based scoring functions may be easily interpreted to determine the contributing factors of a given score since each energy term can be individually queried. Fitting empirical scoring function requires a plethora of experimental structural data and prevents the combination of terms from separately trained scoring functions. The three categories of scoring functions are limited to features extracted from structural information and often assume there is a linear relationship between the features and the binding affinity. AutoDock Vina (called ``Vina'') utilizes an empirical scoring function explicitly tuned to structural data\cite{trott2010autodock}. The Vina scoring function is a weighted sum of atomic interactions.  Steric, hydrophobic, and hydrogen bonding interactions are calculated and are adjusted by the number of rotatable bonds to account for entropic penalties. The weights of the terms were computed via a non-linear fit to structural data. \citet{nguyen2019autodock} show that Vina can more accurately predict the binding pose than its predecessor, AutoDock 4\cite{morris1998automated}. Vina demonstrates the power of modelling non-linear relationships with its increased docking performance. Therefore, we search for alternative scoring functions that are able to model non-linear relationships between inputs.
+Empirical scoring functions address the limitations of physics based scoring functions by using a combination of manually selected energy terms. Rather than giving each energy term identical weighting, the weights of each term are determined via a fit to experimental data. A large proportion of docking software use empirical scoring functions, including X-Score, AutoDock Vina, and ChemScore\cite{wang2002further,trott2010autodock,eldridge1997empirical}. Unlike knowledge based scoring functions, empirical and physics based scoring functions may be easily interpreted to determine the contributing factors of a given score since each energy term can be individually queried. Fitting empirical scoring function requires a plethora of experimental structural data and prevents the combination of terms from separately trained scoring functions. The three categories of scoring functions are limited to features extracted from structural information and often assume there is a linear relationship between the features and the binding affinity. AutoDock Vina (called ``Vina'') utilizes an empirical scoring function explicitly tuned to structural data\cite{trott2010autodock}. The Vina scoring function is a weighted sum of atomic interactions.  Steric, hydrophobic, and hydrogen bonding interactions are calculated and are adjusted by the number of rotatable bonds to account for entropic penalties. The weights of the terms were computed via a non-linear fit to structural data. Nguyen et al.\cite{nguyen2019autodock} show that Vina can more accurately predict the binding pose than its predecessor, AutoDock 4\cite{morris1998automated}. Vina demonstrates the power of modelling non-linear relationships with its increased docking performance. Therefore, we search for alternative scoring functions that are able to model non-linear relationships between inputs.
 
 Machine learning (ML) represents another growing class of scoring functions\cite{liu2015classification}. ML algorithms learn arbitrary relationships between observations and outputs while classical scoring functions assume a specific functional form\cite{ain2015machine}. There has been considerable progress in other biomedical fields with the utilization of ML models\cite{zitnik2019machine}. However, machine learning algorithms require a large amount of data to properly generalize to unseen information. The last 20 years has seen a noteworthy increase in the quantity of available protein structures\cite{berman2000protein}. A plethora of databases annotate structural data with experimental binding affinity data, including PDBbind and BindingDB\cite{wang2004pdbbind,liu2017forging,gilson2016bindingdb}. This information has been utilized to leverage machine learning algorithms as scoring functions. A number of traditional ML approaches have been used as scoring functions, including random forests (RF-Score\cite{ballester2010machine} and SFCScore\cite{zilian2013sfcscore}), support vector machines (SVR-Score\cite{ballester2012machine}, ID-Score\cite{li2013idscore}, SVR-EP\cite{li2011svr}), artificial neural networks (NNscore\cite{durrant2010nnscore} and BsN-Score\cite{ashtawy2015bsn}), and gradient boosted decision trees (BT-dock\cite{btdock} and ESPH T-Bind\cite{cang2018integration}). These ML methods have been able to match or exceed existing traditional scoring functions. ML methods allow a more robust fit to training data, but are limited to features manually extracted from structural data.
 
-Deep learning (DL) methods allow direct inference of features from inputs. They learn a representation of the inputs via layers of simple, non-linear models which transform the representation to higher abstractions to learn complex functions\cite{lecun2015deep}.  DL methods have demonstrated success in a variety of fields, such as computer vision and natural language processing\cite{krizhevsky2017imagenet,brown2020language}. In recent years, there has been significant progress with DL methods in the drug discovery field with many models employing a convolutional framework. Convolutional neural networks (CNN) leverage convolutions to infer features directly from input tensors, usually images. CNNs have shown potential in virtual screening (AtomNet\cite{wallach2015atomnet}, DeepVS\cite{pereira2016boosting}, Ragoza et al.\cite{Ragoza2017}) and binding affinity prediction (PotentialNet\cite{feinberg2018potentialnet}, $K_{DEEP}$\cite{jimenez2018k}, Pafnucy\cite{stepniewska2018development}). A number of methods have been proposed to capitalize on the power of DL scoring functions. MedusaNet uses a CNN within the docking pipeline to guide the sampling of the base docking method\cite{jiang2020guiding}. The base docking method, Medusa, provides a variety of ligand poses. The CNN evaluates the 3D coordinate representation of the poses to determine if a pose should be retained. Nguyen et al. \cite{nguyen2020mathdl} describe a generative adversarial network (GAN) for pose prediction. Their network utilizes an encoder with low-dimensional mathematical representations of the protein-ligand complex and a decoder utilizing convolutional layers to generate and rank ligand poses for the D3R grand challenge. \citet{masuda2020generating} use a receptor structure as the prior to their GAN to sample novel ligands appropriate to the identified binding site.
+Deep learning (DL) methods allow direct inference of features from inputs. They learn a representation of the inputs via layers of simple, non-linear models which transform the representation to higher abstractions to learn complex functions\cite{lecun2015deep}.  DL methods have demonstrated success in a variety of fields, such as computer vision and natural language processing\cite{krizhevsky2017imagenet,brown2020language}. In recent years, there has been significant progress with DL methods in the drug discovery field with many models employing a convolutional framework. Convolutional neural networks (CNN) leverage convolutions to infer features directly from input tensors, usually images. CNNs have shown potential in virtual screening (AtomNet\cite{wallach2015atomnet}, DeepVS\cite{pereira2016boosting}, Ragoza et al.\cite{Ragoza2017}) and binding affinity prediction (PotentialNet\cite{feinberg2018potentialnet}, $K_{DEEP}$\cite{jimenez2018k}, Pafnucy\cite{stepniewska2018development}). A number of methods have been proposed to capitalize on the power of DL scoring functions. MedusaNet uses a CNN within the docking pipeline to guide the sampling of the base docking method\cite{jiang2020guiding}. The base docking method, Medusa, provides a variety of ligand poses. The CNN evaluates the 3D coordinate representation of the poses to determine if a pose should be retained. Nguyen et al. \cite{nguyen2020mathdl} describe a generative adversarial network (GAN) for pose prediction. Their network utilizes an encoder with low-dimensional mathematical representations of the protein-ligand complex and a decoder utilizing convolutional layers to generate and rank ligand poses for the D3R grand challenge. Masuda et al.\cite{masuda2020generating} use a receptor structure as the prior to their GAN to sample novel ligands appropriate to the identified binding site.
 
 Previous work has largely evaluated deep learning protein-ligand scoring on already generated poses.
 In this work, we describe and comprehensively evaluate version 1.0 of the \textsc{Gnina} molecular docking software, a fork of \textsc{Smina}\cite{koes2013lessons} and AutoDock Vina\cite{trott2010autodock} that supports CNN scoring as an integral part of the docking workflow. \textsc{Gnina} is evaluated here for its ability to properly score and rank binding poses for protein-ligand complexes. We describe how the default settings which balance docking accuracy and runtime were determined, including the selection of a default ensemble of CNN models. Performance of \textsc{Gnina} is evaluated for the redocking, cross-docking, flexible docking, and whole protein docking tasks and is found to significantly outperform \textsc{Smina}/Vina in all cases.
@@ -145,7 +194,7 @@ In this work, we describe and comprehensively evaluate version 1.0 of the \texts
 
 The docking pipeline of \textsc{Gnina} (Figure~\ref{fig:workflow}) is described in detail, providing background for the derivation of default usage. A default CNN ensemble is selected for optimizing the docking performance and runtime of the docking pipeline. This ensemble is then used to investigate the different CNN scoring options available to the user, followed by a thorough investigation of the docking parameters. Finally, we examine both the generalizability and scoring power of \textsc{Gnina}.
 
-\begin{figure*}[htb]
+\begin{figure*}[tbh]
     \centering
     \includegraphics[width=\linewidth]{figures/gnina}
     \caption{The \textsc{Gnina} sampling and scoring algorithm shown with relevant \texttt{commandline parameters} and the scope of CNN scoring.}
@@ -155,10 +204,11 @@ The docking pipeline of \textsc{Gnina} (Figure~\ref{fig:workflow}) is described 
 \subsection{Molecular Docking Pipeline}
 \textsc{\textsc{Gnina}} is a fork of \textsc{Smina}\cite{koes2013lessons} which is a fork of Vina\cite{trott2010autodock}. The docking pipeline of \textsc{\textsc{Gnina}} utilizes the enhanced support for scoring enabled in \textsc{Smina} to allow the use of CNNs as scoring functions. In typical usage, \textsc{\textsc{Gnina}} is provided with a receptor structure, a ligand structure, and a specification for a binding site on the receptor.
 
-\begin{figure}
-    \begin{lstlisting}[title=Example Gnina Usage,label=code:Usage,language=bash,basicstyle=\tt]
+\begin{figure}[tbh]
+    \begin{lstlisting}[label=code:Usage,language=bash,basicstyle=\tt]
 gnina --receptor 1BCU_PROT.pdb --ligand 1BCU_LIG.sdf --out 1BCU_gnina_poses.sdf.gz --autobox_ligand 1BCU_LIG.sdf --autobox_add 4 --cnn crossdock_default2018 dense_3 --cnn_scoring rescore --exhaustiveness 8 --num_mc_saved 50 --cnn_rotation 0 --num_modes 9 --min_rmsd_filter 1
     \end{lstlisting}
+\caption{Example \textsc{Gnina} usage}
 \end{figure}
 
 
@@ -192,9 +242,9 @@ Flexible side chains are selected at the very beginning of the docking procedure
 \subsection{Data}
 There are two primary ways to evaluate molecular docking: redocking a cognate ligand to its receptor and docking a ligand to a non-cognate receptor (cross-docking). In order to best evaluate the performance of \textsc{Gnina} for molecular docking, we evaluate its performance on both of these tasks. Redocking the cognate ligand demonstrates the sampling and scoring power of the molecular docking pipeline, as the RMSD from the crystal pose can be measured to exactly determine the accuracy of the produced poses. Analysis of redocking requires a set of high quality structures in which the native binding pose of the ligand has been solved. For this purpose we utilize the PDBbind refined set v.2019\cite{liu2017forging}. The PDBbind database is a curated set of protein-ligand complexes containing both structural information and binding affinity. The PDBbind database is updated annually with new experimentally determined structures annotated with binding affinity data. The refined set is a subset of the entire PDBbind dataset that retains only the structures with resolution higher than 2.5{\AA}, high quality affinity measurements, and binary protein-ligand complexes. The 2019 release of the refined set contains 4,852 high quality crystal structures of native protein-ligand binding poses. 
 
-However, redocking is not the normal use case of a molecular docking pipeline. Docking will ordinarily be performed on proteins-ligand pairs that have no co-crystallized structure. Often a new ligand will be docked into a receptor whose co-crystallized ligand is a different molecule. \citet{wierbowski2020cross} recently published a dataset that provides a benchmark precisely for this task. This cross-docking dataset provides a meaningful method for the evaluation of the ligand RMSD from the known and predicted poses. A reference structure is selected for the protein, then the ``known" binding pose of a ligand is defined by the ligand's position when an alignment is performed between the reference structure and the ligand's co-crystal receptor structure. The dataset is composed of 94 unique protein binding pockets and 4,399 unique ligands, with an average of 46 ligands per target.
+However, redocking is not the normal use case of a molecular docking pipeline. Docking will ordinarily be performed on proteins-ligand pairs that have no co-crystallized structure. Often a new ligand will be docked into a receptor whose co-crystallized ligand is a different molecule. Wierbowski et al.\cite{wierbowski2020cross} recently published a dataset that provides a benchmark precisely for this task. This cross-docking dataset provides a meaningful method for the evaluation of the ligand RMSD from the known and predicted poses. A reference structure is selected for the protein, then the ``known" binding pose of a ligand is defined by the ligand's position when an alignment is performed between the reference structure and the ligand's co-crystal receptor structure. The dataset is composed of 94 unique protein binding pockets and 4,399 unique ligands, with an average of 46 ligands per target.
 
-Both of the datasets were filtered to ensure the protein-ligand structures can be parsed by \textsc{Gnina}. ProDy\cite{bakan2011prody} was used to separate the complexes into protein and ligand files while removing any water or other extra crystallized molecules. Our goal is the binding pose prediction of a small molecule at its target site, therefore we utilized RDKit\cite{rdkit} to filter both the redocking and cross-docking datasets to include only ligands with molecular masses greater than 150 Da and less than 1000 Da. Any ligand that was not able to be parsed with RDKit was also removed. In addition, we visually inspected the ligands of the cross-docking dataset with Pymol\cite{PyMOL} to ensure that each ligand for a given binding pocket overlapped. If a ligand was non-overlapping it was marked as problematic. Lastly, for the UROK pocket, 4ZKO was removed as the receptor did not align properly and the ligands from 4MNW and 4MNX were also marked as problematic due to their binding pose depending on a chain from the kinase being in a protein-protein complex rather than a holo structure as in the other members of the pocket. The final filtered datasets were composed of 4,260 and 820,280 protein-ligand pairs for the redocking (PDBbind\cite{liu2017forging}) and cross-docking (\citet{wierbowski2020cross}) datasets, respectively.
+Both of the datasets were filtered to ensure the protein-ligand structures can be parsed by \textsc{Gnina}. ProDy\cite{bakan2011prody} was used to separate the complexes into protein and ligand files while removing any water or other extra crystallized molecules. Our goal is the binding pose prediction of a small molecule at its target site, therefore we utilized RDKit\cite{rdkit} to filter both the redocking and cross-docking datasets to include only ligands with molecular masses greater than 150 Da and less than 1000 Da. Any ligand that was not able to be parsed with RDKit was also removed. In addition, we visually inspected the ligands of the cross-docking dataset with Pymol\cite{PyMOL} to ensure that each ligand for a given binding pocket overlapped. If a ligand was non-overlapping it was marked as problematic. Lastly, for the UROK pocket, 4ZKO was removed as the receptor did not align properly and the ligands from 4MNW and 4MNX were also marked as problematic due to their binding pose depending on a chain from the kinase being in a protein-protein complex rather than a holo structure as in the other members of the pocket. The final filtered datasets were composed of 4,260 and 820,280 protein-ligand pairs for the redocking (PDBbind\cite{liu2017forging}) and cross-docking (Wierbowski et al.\cite{wierbowski2020cross}) datasets, respectively.
 
 Due to the combinatorial size of the cross-docking dataset, more filtering was required to make computational time tractable. Each unique protein binding pocket can be used to group the protein-ligand complexes as all of the receptor structures in the group share a common pocket. These groupings allow the cross-docking dataset to be downsampled for each pocket. Each pocket was either kept in full, or reduced to a random sample of 100 receptor-ligand pairs, whichever was smaller. We then removed any of the ligands that were previously listed as problematic. The downsampling results in 7,970 protein-ligand pairs and 92 unique protein binding pockets in the cross-docking dataset, where in no case is a ligand paired to its cognate receptor. Notably, 2 pockets were removed (ALDR and CP3A4) due to all of the ligands either failing the filtering, or being marked as problematic. We evaluate the docking performance differences for various fractions of the total complexes per pocket for both \textsc{Gnina} and \textsc{Smina} to ensure the downsampling does not bias the performance of either software (Figure~\ref{fig:Downsample}). 
 %In order to make the evaluation of the runtime performance of docking more computationally tractable, we used a filtered version of the PDBbind core set v.2016\cite{su2018comparative} consisting of 263 complexes.
@@ -221,7 +271,7 @@ The default usage of the CNNs within the \textsc{Gnina} docking pipeline demands
 
 Evaluations for all of the parameters are carried out on both the redocking and cross-docking datasets. Each setting is varied individually using the default CNN ensemble determined above. The values explored for each parameter are defined in Table~\ref{tab:SettingsExplPocket} and Table~\ref{tab:SettingsExplWP}. Values were explored around the previously set defaults for each of the parameters. Each value produced a set of poses, which was used to calculate a TopN.
 
-\begin{table}[]
+\begin{table}[tbh]
     \centering
     \begin{tabular}{|c|p{.5\textwidth}|c|}
         \hline Argument & Description & Values Explored \\ \hline
@@ -236,7 +286,7 @@ Evaluations for all of the parameters are carried out on both the redocking and 
     \label{tab:SettingsExplPocket}
 \end{table}
 
-\begin{table}[]
+\begin{table}[tbh]
     \centering
     \begin{tabular}{|c|c|c|}
         \hline Argument & Description & Values Explored \\ \hline
@@ -256,19 +306,17 @@ The CNN models output both a CNNscore and a CNNaffinity for each of the conforma
 \textsc{Gnina} is a fork of \textsc{Smina} that allows the utilization of CNN models as scoring functions. Therefore, without the use of the CNN models \textsc{Gnina} should function exactly as \textsc{Smina} does. However, unlike \textsc{Smina}, \textsc{Gnina} does computation with single (32 bit) precision rather than double (64 bit) precision due to the need to shift calculations to the GPU for efficient CNN scoring. Therefore, we ensure that the use of single precision does not negatively affect the docking power of the pipeline. The effect of this precision change can be evaluated by running \textsc{Gnina} without using any CNN scoring and with \texttt{autobox\_extend} turned off, allowing us to compare to \textsc{Smina} docking results. We consider only redocking results as cross-docking results would require significantly more computation, and identification of differences due to precision can be done using only redocking results. Results for redocking do not show a significant difference for the output poses. A majority of the output poses are exactly the same, with slight differences seen for some output poses (Figure~\ref{fig:SminaComparePose} and~\ref{fig:SminaCompareExtrema}).
 
 \subsection{Default Model Selection}
-\begin{figure}
-	\begin{subfigure}[b]{0.48\textwidth}
+\begin{figure}[tbh]
+	\subfloat[Redocking]{
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/rescore_single_models_line.pdf}
-		\caption{Redocking}
+		\includegraphics[width=.47\textwidth]{figures/redocking/rescore_single_models_line.pdf}
 		\label{fig:RescoreSingleRedock}
-        \end{subfigure}    
-	\begin{subfigure}[b]{0.48\textwidth}    
+       }    
+	\subfloat[Cross-docking]{  
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_single_models_line.pdf}
-		\caption{Cross-docking}
+		\includegraphics[width=.47\textwidth]{figures/crossdocking/rescore_single_models_line.pdf}
 		\label{fig:RescoreSingleCrossdock}
-        \end{subfigure}    
+        }    
 	\caption{Docking using the single CNN models and the newly selected Default Ensemble for rescoring the output poses. The binding pocket is defined by the known binding ligand. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}.}
 	\label{fig:RescoreSingle}
 \end{figure}
@@ -281,37 +329,33 @@ When the Default Ensemble is compared to the ensembles of each of the individual
 
 When comparing Figure~\ref{fig:RescoreSingle} and Figure ~\ref{fig:RescoreEnsemble} we can see that the ensembles composed of the individual model types are able to outperform their single model counterparts. We therefore omit the single models for the remaining evaluations.
 
-\begin{figure}
-	\begin{subfigure}[b]{0.48\textwidth}
+\begin{figure}[tbh]
+	\subfloat[Redocking]{
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/rescore_ensembles_line.pdf}
-		\caption{Redocking}
+		\includegraphics[width=.47\textwidth]{figures/redocking/rescore_ensembles_line.pdf}
 		\label{fig:RescoreEnsembleRedock}
-        \end{subfigure}    
-	\begin{subfigure}[b]{0.48\textwidth} 
+        }    
+	\subfloat[Cross-docking]{
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_ensembles_line.pdf}
-		\caption{Cross-docking}
+		\includegraphics[width=.47\textwidth]{figures/crossdocking/rescore_ensembles_line.pdf}
 		\label{fig:RescoreEnsembleCrossdock}
-        \end{subfigure}    
+       }    
 	\caption{Docking using the ensemble of each type of CNN model, the full ensemble of CNN models, and the newly selected Default Ensemble for rescoring the output poses. The binding pocket is defined by the known binding ligand. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}.}
 	\label{fig:RescoreEnsemble}
 \end{figure}    
 
 
-\begin{figure}    
-        \begin{subfigure}[b]{0.48\textwidth}
+\begin{figure}[tbh]
+        \subfloat[Redocking]{
                 \centering
-                \includegraphics[width=\textwidth]{figures/redocking/gpu_models_line_rescore.pdf}
-                \caption{Redocking}
+                \includegraphics[width=.47\textwidth]{figures/redocking/gpu_models_line_rescore.pdf}
                 \label{fig:OptimalRescRD}
-        \end{subfigure}    
-        \begin{subfigure}[b]{0.48\textwidth}
+        }    
+        \subfloat[Cross-docking]{
                 \centering
-                \includegraphics[width=\textwidth]{figures/crossdocking/gpu_models_line_rescore.pdf}
-                \caption{Cross-docking}
+                \includegraphics[width=.47\textwidth]{figures/crossdocking/gpu_models_line_rescore.pdf}
                 \label{fig:OptimalRescCD}
-        \end{subfigure}    
+        }    
         \caption{Evaluation of the average time to dock one protein-ligand system from the PDBbind core set v.2016. Top1 is the percentage of top ranked targets with a RMSD less than 2{\AA}.}
         \label{fig:OptimalRescore}
 \end{figure}    
@@ -319,19 +363,17 @@ When comparing Figure~\ref{fig:RescoreSingle} and Figure ~\ref{fig:RescoreEnsemb
 \subsection{Default CNN Scoring Method}
  We evaluate the performance of the Default Ensemble with the ``rescore,'' and ``refinement'' options of \texttt{cnn\_scoring}. The usage of the ``all'' option was unable to complete on the PDBbind Core set in a reasonable amount of time, so it was not considered. The ``all'' option requires usage of the CNN scoring function for every mutation of the ligand within every Monte Carlo chain with each usage of the CNN scoring function having a high computational cost. This leaves us with the ``refinement'' and ``rescoring'' options of \texttt{cnn\_scoring}. Figure~\ref{fig:CompareRescoreRefine} shows the Default Ensemble performs nearly as well with either option. We can also see that using \texttt{cnn\_emp\_weight} with both \texttt{mix\_emp\_energy} and \texttt{mix\_emp\_force} does not significantly alter the docking performance when using the ``refinement'' option (Figure~\ref{fig:CNNEmpWeight}).
 
-\begin{figure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+\begin{figure}[tbh]
+        \subfloat[Redocking]{
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/rescore_vs_refine_line.pdf} 
-		\caption{Redocking}
+		\includegraphics[width=.47\textwidth]{figures/redocking/rescore_vs_refine_line.pdf} 
 		\label{fig:CompareRescoreRefineRedock}
-        \end{subfigure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+        }    
+        \subfloat[Cross-docking]{    
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/rescore_vs_refine_line.pdf} 
-		\caption{Cross-docking}
+		\includegraphics[width=.47\textwidth]{figures/crossdocking/rescore_vs_refine_line.pdf} 
 		\label{fig:CompareRescoreRefineCrossdock}
-        \end{subfigure}    
+        }    
 	\caption{Comparing the Default CNN Ensemble for use in only rescoring of the poses output by the Monte Carlo chains or the refinement of the poses followed by a rescoring of the poses. The ``refine'' option has nearly the same docking performance as the ``rescore'' option when cross-docking. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}.}
 	\label{fig:CompareRescoreRefine}
 \end{figure}    
@@ -340,57 +382,51 @@ However, from looking at the average time to perform molecular docking for one s
 
 \subsection{Parameter Exploration}
 
-\begin{figure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+\begin{figure}[tbh]  
+        \subfloat[Redocking]{  
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/sweep_exhaustiveness_line.pdf}
-		\caption{Redocking}
+		\includegraphics[width=.47\textwidth]{figures/redocking/sweep_exhaustiveness_line.pdf}
 		\label{fig:exhaustiveness rd}
-        \end{subfigure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+        }    
+        \subfloat[Cross-docking]{
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_exhaustiveness_line.pdf}
-		\caption{Cross-docking}
+		\includegraphics[width=.47\textwidth]{figures/crossdocking/sweep_exhaustiveness_line.pdf}
 		\label{fig:exhaustiveness cd}
-        \end{subfigure}    
+        }    
 	\caption{Evaluating the role of exhaustiveness in the performance of docking with the Default CNN Ensemble by analyzing TopN. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}.}
 	\label{fig:exhaustiveness}
 \end{figure}    
 
 Changes in the exhaustiveness alter the amount of sampling that occurs. When the exhaustiveness is increased, we see an increase in the performance of docking (Figure~\ref{fig:exhaustiveness}). This is as expected as more Monte Carlo chains randomly mutating the ligand conformation provides the docking procedure with more opportunities to randomly sample the correct pose. However, there are no significant performance gains after a value of 8. An exhaustiveness of 16 provides some performance boost, but this boost may be accompanied by a doubling of the computational time. The Monte Carlo chains are evaluated in parallel, but parallelism is limited by the number of cores available to \textsc{Gnina}. If the exhaustiveness is greater than the CPUs provided to \textsc{Gnina}, the number of simultaneously running Monte Carlo chains is equal to the number of CPUs. Therefore, in typical usage of \textsc{Gnina}, an exhaustiveness level of 8 is sufficient for adequate performance levels while minimizing the computational load when targeting a specific binding site. 
 
-\begin{figure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+\begin{figure}[tbh]
+        \subfloat[Redocking]{    
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/sweep_mcsaved_line.pdf}
-		\caption{Redocking}
+		\includegraphics[width=.47\textwidth]{figures/redocking/sweep_mcsaved_line.pdf}
 		\label{fig:mcsaved rd}
-        \end{subfigure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+        }    
+        \subfloat[Cross-docking]{ 
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_mcsaved_line.pdf}
-		\caption{Cross-docking}
+		\includegraphics[width=.47\textwidth]{figures/crossdocking/sweep_mcsaved_line.pdf}
 		\label{fig:mcsaved cd}
-        \end{subfigure}    
+        }    
 	\caption{Evaluation of the Number of Monte Carlo Saved in the performance of docking with the Default CNN Ensemble by analyzing TopN. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}.}
 	\label{fig:mcsaved}
 \end{figure}    
 
 Increasing the \texttt{num\_mc\_saved} parameter increases the chances of sampling accurate docking poses, as increasing the number of output conformations from each Monte Carlo chain increases the likelihood of finding the correct pose. However, this will also increase computational time due to the fact that more poses require refinement and final scoring. As \texttt{num\_mc\_saved} gets closer to 100, we see that the docking performance boost is reduced. Therefore, we select a new default value of 50 for \texttt{num\_mc\_saved} to minimize the computational overhead while still increasing the performance of the docking routine. The \texttt{num\_mc\_saved} and \texttt{num\_modes} affect one another; the number of poses saved from each Monte Carlo chain is the maximum of the two values. When looking at the first 9 poses, we see an increase in the docking performance with a substantially greater value for the number of output poses (\texttt{num\_modes}). This is due to \texttt{num\_modes} forcing each Monte Carlo chain to output a number of poses greater than \texttt{num\_mc\_saved}. Increasing the default value of \texttt{num\_modes} to a value higher than 50 (the default value for \texttt{num\_mc\_saved}) will again increase computational overhead, so the default value is set to 9. 
 
-\begin{figure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+\begin{figure}[tbh]
+        \subfloat[Redocking]{  
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/sweep_num_modes_line.pdf}
-		\caption{Redocking}
+		\includegraphics[width=.47\textwidth]{figures/redocking/sweep_num_modes_line.pdf}
 		\label{fig:num modes rd}
-        \end{subfigure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+        }    
+        \subfloat[Cross-docking]{
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/sweep_num_modes_line.pdf}
-		\caption{Cross-docking}
+		\includegraphics[width=.47\textwidth]{figures/crossdocking/sweep_num_modes_line.pdf}
 		\label{fig:num modes cd}
-        \end{subfigure}    
+        }    
 	\caption{Evaluating a much greater number of modes on the performance of docking with the Default CNN Ensemble by analyzing TopN. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}.}
 	\label{fig:num modes}
 \end{figure}
@@ -403,19 +439,17 @@ Changes to the CNN rotations do not significantly change the scoring of the Defa
 
 Next, we evaluate the performance of docking when using the whole protein as the defined binding site. Whole protein docking can be used for new protein targets when the true binding site is unknown. The performance of docking is expected to be reduced as the sampling space has been significantly increased. When using the whole protein for the sampling space, the ligand  tends to get stuck at local energy minima which are distant from the actual binding site. Most of the protein surface is not hospitable for ligand binding, so once a potential pocket is discovered, exploring more of the protein surface has a low probability during the Monte Carlo sampling procedure. Comparing Figure~\ref{fig:WholeProteinExh} to Figure~\ref{fig:exhaustiveness} shows that the docking performances of both Vina and the Default CNN Ensemble are reduced from when the binding pocket was explicitly defined. Redocking performance decreases from 73\% to 38\% at Top1 with exhaustiveness at 8 while cross-docking decreases from 37\% to 16\% at Top1 with exhaustiveness at 8 (cross-docking per pocket Top1 is shown in Figure~\ref{fig:WholeProtein_PerPock}). The larger potential docking space requires more sampling to find a ligand conformation with low RMSD to the known binding pose. As expected, with whole protein docking we see greater increases in performance with increased sampling (\texttt{exhaustiveness}). By again comparing Figure~\ref{fig:WholeProteinExh} with Figure~\ref{fig:exhaustiveness} we see that this boost in performance is larger than when the binding pocket is defined explicitly and does not exhibit the same diminishing returns. When increasing exhaustiveness from 8 to 16 in whole protein docking Top9 increases from 48\% to 58\% and 22\% to 29\% for redocking and cross-docking, respectively. If the binding pocket is explicitly defined, the same change in exhaustiveness only increases Top9 from 87\% to 88\% and 53\% to 55\% for redocking and cross-docking, respectively. For this reason, when performing whole protein docking, we recommend setting the value of exhaustiveness as high as possible given time constraints.
 
-\begin{figure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+\begin{figure}[tbh]   
+        \subfloat[Redocking]{    
     		\centering
-    		\includegraphics[width=\textwidth]{figures/redocking/whole_ptn_sweep_exhaustiveness_line.pdf}
-    		\caption{Redocking}
+    		\includegraphics[width=.47\textwidth]{figures/redocking/whole_ptn_sweep_exhaustiveness_line.pdf}
             \label{fig:WholeProteinExhRD}
-        \end{subfigure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+        }    
+        \subfloat[Cross-docking]{    
     		\centering
-    		\includegraphics[width=\textwidth]{figures/crossdocking/whole_ptn_sweep_exhaustiveness_line.pdf}
-    		\caption{Cross-docking}
+    		\includegraphics[width=.47\textwidth]{figures/crossdocking/whole_ptn_sweep_exhaustiveness_line.pdf}
             \label{fig:WholeProteinExhCD}
-        \end{subfigure}    
+       }    
 	\caption{Increasing the exhaustiveness when using the whole protein as the binding box. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}.}
         \label{fig:WholeProteinExh}
 \end{figure}
@@ -434,19 +468,17 @@ Figure~\ref{fig:flexRMSDdist} shows the difference in RMSDs for the ligand top p
 
 Figure~\ref{fig:flexRMSDavg} shows the average RMSD difference between rigid and flexible docking for different 1{\AA} intervals of target-cognate side chains RMSDs. For low target-cognate RMSDs, which correspond to a highly similar binding site and therefore a situation akin to redocking, rigid docking seems to be advantageous on average, as expected. In the other hand, for higher target-cognate side chains RMSDs, indicating a lower similarity between binding sites, the situation is less clear. Flexible docking seems to be equivalent or slightly more advantageous, on average, especially at higher target-cognate side chains RMSDs. However, as it can be inferred from Figure~\ref{fig:flexRMSDdist}, the number of systems with target-cognate side chains RMSD higher than 6{\AA} is low and therefore the apparent improvement in ligand RMSD for flexible docking is inconclusive.
 
-\begin{figure}    
-        \begin{subfigure}[b]{0.48\textwidth}
+\begin{figure}[tbh]  
+        \subfloat[]{
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking-flex/e8-rmsd-diff_vs_side-chain-rmsd.pdf}
-		\caption{}
+		\includegraphics[width=.47\textwidth]{figures/crossdocking-flex/e8-rmsd-diff_vs_side-chain-rmsd.pdf}
 		\label{fig:flexRMSDdist}
-        \end{subfigure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+        }    
+        \subfloat[]{    
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking-flex/e8-mean-diff-rmsd_vs_flex-rmsd-bin_hist.pdf}
-		\caption{}
+		\includegraphics[width=.47\textwidth]{figures/crossdocking-flex/e8-mean-diff-rmsd_vs_flex-rmsd-bin_hist.pdf}
 		\label{fig:flexRMSDavg}
-        \end{subfigure}    
+        }    
 	\caption{Comparison between rigid and flexible docking with the default \textsc{Gnina} parameters: (a) ligand RMSD differences between rigid and flexible docking versus target-cognate side chain RMSDs, (b) average ligand RMSD difference for different 1{\AA} intervals of target-cognate side chains RMSD.}
 	\label{fig:flexCD}
 \end{figure}
@@ -458,37 +490,33 @@ Given the much higher computational cost of flexible docking, the optimization o
 \subsection{CNN Scoring Performance}
 We evaluate all of the CNN models on a subset of the data that was not seen  during training to ensure that the CNN models are able to generalize to unseen protein-ligand systems. We also show the Vina results for the same subset of protein-ligand systems. The CNN models' docking performance decrease relative to the full sets when looking at the top pose, (comparing Figure~\ref{fig:No2017NoCD20} to Figure~\ref{fig:RescoreEnsemble}). Redocking Top1 performance drops from 73\% to 68\% on the Default Ensemble for the filtered set and the full set, respectively, while Vina remains at about 57\%. Cross-docking Top1 performance increases from 37\% to 42\% for the Default Ensemble and decreases from 27\% to 23\% when using the Vina scoring function. Overall, the Default Ensemble still shows a strong docking performance boost when used to rescore poses rather than using the Vina scoring function to score poses even on protein-ligand systems not seen during training.
 
-\begin{figure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+\begin{figure}[tbh]
+        \subfloat[Redocking Ensembles]{
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/ensemble_models_no2017_nocd2020_line.pdf}
-		\caption{Redocking Ensembles}
+		\includegraphics[width=.47\textwidth]{figures/redocking/ensemble_models_no2017_nocd2020_line.pdf}
 		\label{fig:No2017NoCD20EnsRD}
-        \end{subfigure}    
-        \begin{subfigure}[b]{0.48\textwidth}    
+        }    
+        \subfloat[Cross-docking Ensembles]{
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/ensemble_models_no2017_nocd2020_line.pdf}
-		\caption{Cross-docking Ensembles}
+		\includegraphics[width=.47\textwidth]{figures/crossdocking/ensemble_models_no2017_nocd2020_line.pdf}
                 \label{fig:No2017NoCD20EnsCD}
-        \end{subfigure}
+        }
 	\caption{CNN model ensembles evaluated on the subset of proteins and ligands not present in their training datasets. Ensemble models used with the default arguments defined above. TopN is the percentage of targets ranked above or at N with a RMSD less than 2{\AA}.}
 	\label{fig:No2017NoCD20}
 \end{figure}  
 
 Finally, we examine the importance of the output CNNscore as a measure of the confidence of the prediction. 
-\begin{figure}    
-        \begin{subfigure}[b]{\textwidth}    
+\begin{figure}[tbh]
+        \subfloat[Redocking Ensembles]{    
 		\centering
 		\includegraphics[width=\textwidth]{figures/redocking/thresh_cnnscore_ensembles.pdf}
-		\caption{Redocking Ensembles}
 		\label{fig:ThreshEnsRD}
-        \end{subfigure}    
-        \begin{subfigure}[b]{\textwidth}    
+        }    \\
+        \subfloat[Cross-docking Ensembles]{   
 		\centering
 		\includegraphics[width=\textwidth]{figures/crossdocking/thresh_cnnscore_ensembles.pdf}
-		\caption{Cross-docking Ensembles}
                 \label{fig:ThreshEnsCD}
-        \end{subfigure}
+        }
 	\caption{Thresholding the top pose by the score determined by the CNN. Top1 is the percentage of top ranked targets with a RMSD less than 2{\AA}.}
 	\label{fig:ScoreThresh}
 \end{figure} 
@@ -509,30 +537,63 @@ Finally, we evaluate the ability of the CNN ensembles to score ligand conformati
 
 The source code (\url{https://github.com/gnina/gnina}) and a pre-built docker container (\url{https://hub.docker.com/r/gnina/gnina}) for \textsc{Gnina} are available under a dual GPL2/{\allowbreak}Apache License.
 
+\section*{Availability and requirements}
+\textit{Project name:} Gnina \\
+\textit{Project home page:} \url{https://github.com/gnina/gnina} \\
+\textit{Operating systems:} Linux (Docker container available)\\
+\textit{Programming language}: C++, CUDA \\
+\textit{Other requirements:} CUDA, Open Babel 3 \\
+\textit{License:} GPL2/Apache License \\
+\textit{Any restrictions to use by non-academics:} None \\
 
-\begin{acknowledgement}
-The authors thank Monica Dayao, Rosalie Nolen, and Jonathan King for their comments during the preparation of the manuscript. RM thanks Philip Biggin for fruitful discussions and support. We also thank Zelda, Lily, and Eddie for moral canine support.
+%backmatter for BMC
+\begin{backmatter}
+
+% for BMC
+\bibliographystyle{bmc-mathphys}
+\bibliography{references}
+
+\section*{Declarations}
+\subsection*{Availability of data and materials}
+All data and scripts used in the creation of this manuscript are available at \url{https://github.com/dkoes/GNINA-1.0}.  Source code, scripts, and models are available via the project homepage, \url{https://github.com/gnina}. 
+
+\subsection*{Competing interests}
+The authors declare that they have no competing interests.
+
+\subsection*{Funding}
 This work is supported by R01GM108340 from the National Institute of General Medical Sciences and is supported in part by the University of Pittsburgh Center for Research Computing through the resources provided.
 
 RM is supported  by  funding  from  the  Biotechnology  and  Biological  Sciences  Research Council (BBSRC) National Productivity Investment Fund (NPIF) [BB/S50760X/1] and Evotec (UK) via the Interdisciplinary Biosciences DTP at the University of Oxford [BB/MO11224/1] and was supported by the Google Summer of Code 2019 program.
 
-\end{acknowledgement}
+\subsection*{Authors' contributions}
+ All authors contributed to the development and evaluation of the software. All authors assisted in the preparation of this manuscript. All authors read and approved the final manuscript.
+ 
+\subsection*{Acknowledgements}
+%\begin{acknowledgement}
+The authors thank Monica Dayao, Rosalie Nolen, and Jonathan King for their comments during the preparation of the manuscript. RM thanks Philip Biggin for fruitful discussions and support. We also thank Zelda, Lily, and Eddie for moral canine support.
+
+
+
+%\end{acknowledgement}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% The same is true for Supporting Information, which should use the
 %% suppinfo environment.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\begin{suppinfo}
+% \begin{suppinfo}
   
 
 
-\end{suppinfo}
+% \end{suppinfo}
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% The appropriate \bibliography command should be placed here.
 %% Notice that the class file automatically sets \bibliographystyle
 %% and also names the section correctly.
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
-\bibliography{references}
+
+% \bibliography{references}
+
+\end{backmatter}
 
 \end{document}
