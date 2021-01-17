@@ -188,24 +188,23 @@ Deep learning (DL) methods allow direct inference of features from inputs. They 
 Previous work has largely evaluated deep learning protein-ligand scoring on already generated poses.
 In this work, we describe and comprehensively evaluate version 1.0 of the \textsc{Gnina} molecular docking software, a fork of \textsc{Smina}\cite{koes2013lessons} and AutoDock Vina\cite{trott2010autodock} that supports CNN scoring as an integral part of the docking workflow. \textsc{Gnina} is evaluated here for its ability to properly score and rank binding poses for protein-ligand complexes. We describe how the default settings which balance docking accuracy and runtime were determined, including the selection of a default ensemble of CNN models. Performance of \textsc{Gnina} is evaluated for the redocking, cross-docking, flexible docking, and whole protein docking tasks and is found to significantly outperform \textsc{Smina}/Vina in all cases.
 
-
-
-\section{Methods}
-
-The docking pipeline of \textsc{Gnina} (Figure~\ref{fig:workflow}) is described in detail, providing background for the derivation of default usage. A default CNN ensemble is selected for optimizing the docking performance and runtime of the docking pipeline. This ensemble is then used to investigate the different CNN scoring options available to the user, followed by a thorough investigation of the docking parameters. Finally, we examine both the generalizability and scoring power of \textsc{Gnina}.
-
-\begin{figure*}[tbh]
+\begin{figure*}[tb]
     \centering
     \includegraphics[width=\linewidth]{figures/gnina}
     \caption{The \textsc{Gnina} sampling and scoring algorithm shown with relevant \texttt{commandline parameters} and the scope of CNN scoring.}
     \label{fig:workflow}
 \end{figure*}
 
+\section{Methods}
+
+The docking pipeline of \textsc{Gnina} (Figure~\ref{fig:workflow}) is described in detail, providing background for the derivation of default usage. A default CNN ensemble is selected for optimizing the docking performance and runtime of the docking pipeline. This ensemble is then used to investigate the different CNN scoring options available to the user, followed by a thorough investigation of the docking parameters. Finally, we examine both the generalizability and scoring power of \textsc{Gnina}.
+
+
 \subsection{Molecular Docking Pipeline}
 \textsc{\textsc{Gnina}} is a fork of \textsc{Smina}\cite{koes2013lessons} which is a fork of Vina\cite{trott2010autodock}. The docking pipeline of \textsc{\textsc{Gnina}} utilizes the enhanced support for scoring enabled in \textsc{Smina} to allow the use of CNNs as scoring functions. In typical usage, \textsc{\textsc{Gnina}} is provided with a receptor structure, a ligand structure, and a specification for a binding site on the receptor.
 
-\begin{figure}[tbh]
-    \begin{lstlisting}[label=code:Usage,language=bash,basicstyle=\tt]
+\begin{figure}[tb]
+    \begin{lstlisting}[frame=none,label=code:Usage,language=bash,basicstyle=\tt]
 gnina --receptor 1BCU_PROT.pdb --ligand 1BCU_LIG.sdf --out 1BCU_gnina_poses.sdf.gz --autobox_ligand 1BCU_LIG.sdf --autobox_add 4 --cnn crossdock_default2018 dense_3 --cnn_scoring rescore --exhaustiveness 8 --num_mc_saved 50 --cnn_rotation 0 --num_modes 9 --min_rmsd_filter 1
     \end{lstlisting}
 \caption{Example \textsc{Gnina} usage}
@@ -271,7 +270,7 @@ The default usage of the CNNs within the \textsc{Gnina} docking pipeline demands
 
 Evaluations for all of the parameters are carried out on both the redocking and cross-docking datasets. Each setting is varied individually using the default CNN ensemble determined above. The values explored for each parameter are defined in Table~\ref{tab:SettingsExplPocket} and Table~\ref{tab:SettingsExplWP}. Values were explored around the previously set defaults for each of the parameters. Each value produced a set of poses, which was used to calculate a TopN.
 
-\begin{table}[tbh]
+\begin{table}[tb]
     \centering
     \begin{tabular}{|c|p{.5\textwidth}|c|}
         \hline Argument & Description & Values Explored \\ \hline
@@ -286,7 +285,7 @@ Evaluations for all of the parameters are carried out on both the redocking and 
     \label{tab:SettingsExplPocket}
 \end{table}
 
-\begin{table}[tbh]
+\begin{table}[tb]
     \centering
     \begin{tabular}{|c|c|c|}
         \hline Argument & Description & Values Explored \\ \hline
@@ -306,7 +305,7 @@ The CNN models output both a CNNscore and a CNNaffinity for each of the conforma
 \textsc{Gnina} is a fork of \textsc{Smina} that allows the utilization of CNN models as scoring functions. Therefore, without the use of the CNN models \textsc{Gnina} should function exactly as \textsc{Smina} does. However, unlike \textsc{Smina}, \textsc{Gnina} does computation with single (32 bit) precision rather than double (64 bit) precision due to the need to shift calculations to the GPU for efficient CNN scoring. Therefore, we ensure that the use of single precision does not negatively affect the docking power of the pipeline. The effect of this precision change can be evaluated by running \textsc{Gnina} without using any CNN scoring and with \texttt{autobox\_extend} turned off, allowing us to compare to \textsc{Smina} docking results. We consider only redocking results as cross-docking results would require significantly more computation, and identification of differences due to precision can be done using only redocking results. Results for redocking do not show a significant difference for the output poses. A majority of the output poses are exactly the same, with slight differences seen for some output poses (Figure~\ref{fig:SminaComparePose} and~\ref{fig:SminaCompareExtrema}).
 
 \subsection{Default Model Selection}
-\begin{figure}[tbh]
+\begin{figure}[tb]
 	\subfloat[Redocking]{
 		\centering
 		\includegraphics[width=.47\textwidth]{figures/redocking/rescore_single_models_line.pdf}
@@ -329,7 +328,7 @@ When the Default Ensemble is compared to the ensembles of each of the individual
 
 When comparing Figure~\ref{fig:RescoreSingle} and Figure ~\ref{fig:RescoreEnsemble} we can see that the ensembles composed of the individual model types are able to outperform their single model counterparts. We therefore omit the single models for the remaining evaluations.
 
-\begin{figure}[tbh]
+\begin{figure}[tb]
 	\subfloat[Redocking]{
 		\centering
 		\includegraphics[width=.47\textwidth]{figures/redocking/rescore_ensembles_line.pdf}
@@ -345,7 +344,7 @@ When comparing Figure~\ref{fig:RescoreSingle} and Figure ~\ref{fig:RescoreEnsemb
 \end{figure}    
 
 
-\begin{figure}[tbh]
+\begin{figure}[tb]
         \subfloat[Redocking]{
                 \centering
                 \includegraphics[width=.47\textwidth]{figures/redocking/gpu_models_line_rescore.pdf}
@@ -363,7 +362,7 @@ When comparing Figure~\ref{fig:RescoreSingle} and Figure ~\ref{fig:RescoreEnsemb
 \subsection{Default CNN Scoring Method}
  We evaluate the performance of the Default Ensemble with the ``rescore,'' and ``refinement'' options of \texttt{cnn\_scoring}. The usage of the ``all'' option was unable to complete on the PDBbind Core set in a reasonable amount of time, so it was not considered. The ``all'' option requires usage of the CNN scoring function for every mutation of the ligand within every Monte Carlo chain with each usage of the CNN scoring function having a high computational cost. This leaves us with the ``refinement'' and ``rescoring'' options of \texttt{cnn\_scoring}. Figure~\ref{fig:CompareRescoreRefine} shows the Default Ensemble performs nearly as well with either option. We can also see that using \texttt{cnn\_emp\_weight} with both \texttt{mix\_emp\_energy} and \texttt{mix\_emp\_force} does not significantly alter the docking performance when using the ``refinement'' option (Figure~\ref{fig:CNNEmpWeight}).
 
-\begin{figure}[tbh]
+\begin{figure}[tb]
         \subfloat[Redocking]{
 		\centering
 		\includegraphics[width=.47\textwidth]{figures/redocking/rescore_vs_refine_line.pdf} 
@@ -382,7 +381,7 @@ However, from looking at the average time to perform molecular docking for one s
 
 \subsection{Parameter Exploration}
 
-\begin{figure}[tbh]  
+\begin{figure}[tb]  
         \subfloat[Redocking]{  
 		\centering
 		\includegraphics[width=.47\textwidth]{figures/redocking/sweep_exhaustiveness_line.pdf}
@@ -399,7 +398,7 @@ However, from looking at the average time to perform molecular docking for one s
 
 Changes in the exhaustiveness alter the amount of sampling that occurs. When the exhaustiveness is increased, we see an increase in the performance of docking (Figure~\ref{fig:exhaustiveness}). This is as expected as more Monte Carlo chains randomly mutating the ligand conformation provides the docking procedure with more opportunities to randomly sample the correct pose. However, there are no significant performance gains after a value of 8. An exhaustiveness of 16 provides some performance boost, but this boost may be accompanied by a doubling of the computational time. The Monte Carlo chains are evaluated in parallel, but parallelism is limited by the number of cores available to \textsc{Gnina}. If the exhaustiveness is greater than the CPUs provided to \textsc{Gnina}, the number of simultaneously running Monte Carlo chains is equal to the number of CPUs. Therefore, in typical usage of \textsc{Gnina}, an exhaustiveness level of 8 is sufficient for adequate performance levels while minimizing the computational load when targeting a specific binding site. 
 
-\begin{figure}[tbh]
+\begin{figure}[tb]
         \subfloat[Redocking]{    
 		\centering
 		\includegraphics[width=.47\textwidth]{figures/redocking/sweep_mcsaved_line.pdf}
@@ -416,7 +415,7 @@ Changes in the exhaustiveness alter the amount of sampling that occurs. When the
 
 Increasing the \texttt{num\_mc\_saved} parameter increases the chances of sampling accurate docking poses, as increasing the number of output conformations from each Monte Carlo chain increases the likelihood of finding the correct pose. However, this will also increase computational time due to the fact that more poses require refinement and final scoring. As \texttt{num\_mc\_saved} gets closer to 100, we see that the docking performance boost is reduced. Therefore, we select a new default value of 50 for \texttt{num\_mc\_saved} to minimize the computational overhead while still increasing the performance of the docking routine. The \texttt{num\_mc\_saved} and \texttt{num\_modes} affect one another; the number of poses saved from each Monte Carlo chain is the maximum of the two values. When looking at the first 9 poses, we see an increase in the docking performance with a substantially greater value for the number of output poses (\texttt{num\_modes}). This is due to \texttt{num\_modes} forcing each Monte Carlo chain to output a number of poses greater than \texttt{num\_mc\_saved}. Increasing the default value of \texttt{num\_modes} to a value higher than 50 (the default value for \texttt{num\_mc\_saved}) will again increase computational overhead, so the default value is set to 9. 
 
-\begin{figure}[tbh]
+\begin{figure}[tb]
         \subfloat[Redocking]{  
 		\centering
 		\includegraphics[width=.47\textwidth]{figures/redocking/sweep_num_modes_line.pdf}
@@ -439,7 +438,7 @@ Changes to the CNN rotations do not significantly change the scoring of the Defa
 
 Next, we evaluate the performance of docking when using the whole protein as the defined binding site. Whole protein docking can be used for new protein targets when the true binding site is unknown. The performance of docking is expected to be reduced as the sampling space has been significantly increased. When using the whole protein for the sampling space, the ligand  tends to get stuck at local energy minima which are distant from the actual binding site. Most of the protein surface is not hospitable for ligand binding, so once a potential pocket is discovered, exploring more of the protein surface has a low probability during the Monte Carlo sampling procedure. Comparing Figure~\ref{fig:WholeProteinExh} to Figure~\ref{fig:exhaustiveness} shows that the docking performances of both Vina and the Default CNN Ensemble are reduced from when the binding pocket was explicitly defined. Redocking performance decreases from 73\% to 38\% at Top1 with exhaustiveness at 8 while cross-docking decreases from 37\% to 16\% at Top1 with exhaustiveness at 8 (cross-docking per pocket Top1 is shown in Figure~\ref{fig:WholeProtein_PerPock}). The larger potential docking space requires more sampling to find a ligand conformation with low RMSD to the known binding pose. As expected, with whole protein docking we see greater increases in performance with increased sampling (\texttt{exhaustiveness}). By again comparing Figure~\ref{fig:WholeProteinExh} with Figure~\ref{fig:exhaustiveness} we see that this boost in performance is larger than when the binding pocket is defined explicitly and does not exhibit the same diminishing returns. When increasing exhaustiveness from 8 to 16 in whole protein docking Top9 increases from 48\% to 58\% and 22\% to 29\% for redocking and cross-docking, respectively. If the binding pocket is explicitly defined, the same change in exhaustiveness only increases Top9 from 87\% to 88\% and 53\% to 55\% for redocking and cross-docking, respectively. For this reason, when performing whole protein docking, we recommend setting the value of exhaustiveness as high as possible given time constraints.
 
-\begin{figure}[tbh]   
+\begin{figure}[tb]   
         \subfloat[Redocking]{    
     		\centering
     		\includegraphics[width=.47\textwidth]{figures/redocking/whole_ptn_sweep_exhaustiveness_line.pdf}
@@ -468,7 +467,7 @@ Figure~\ref{fig:flexRMSDdist} shows the difference in RMSDs for the ligand top p
 
 Figure~\ref{fig:flexRMSDavg} shows the average RMSD difference between rigid and flexible docking for different 1{\AA} intervals of target-cognate side chains RMSDs. For low target-cognate RMSDs, which correspond to a highly similar binding site and therefore a situation akin to redocking, rigid docking seems to be advantageous on average, as expected. In the other hand, for higher target-cognate side chains RMSDs, indicating a lower similarity between binding sites, the situation is less clear. Flexible docking seems to be equivalent or slightly more advantageous, on average, especially at higher target-cognate side chains RMSDs. However, as it can be inferred from Figure~\ref{fig:flexRMSDdist}, the number of systems with target-cognate side chains RMSD higher than 6{\AA} is low and therefore the apparent improvement in ligand RMSD for flexible docking is inconclusive.
 
-\begin{figure}[tbh]  
+\begin{figure}[tb]  
         \subfloat[]{
 		\centering
 		\includegraphics[width=.47\textwidth]{figures/crossdocking-flex/e8-rmsd-diff_vs_side-chain-rmsd.pdf}
@@ -490,7 +489,7 @@ Given the much higher computational cost of flexible docking, the optimization o
 \subsection{CNN Scoring Performance}
 We evaluate all of the CNN models on a subset of the data that was not seen  during training to ensure that the CNN models are able to generalize to unseen protein-ligand systems. We also show the Vina results for the same subset of protein-ligand systems. The CNN models' docking performance decrease relative to the full sets when looking at the top pose, (comparing Figure~\ref{fig:No2017NoCD20} to Figure~\ref{fig:RescoreEnsemble}). Redocking Top1 performance drops from 73\% to 68\% on the Default Ensemble for the filtered set and the full set, respectively, while Vina remains at about 57\%. Cross-docking Top1 performance increases from 37\% to 42\% for the Default Ensemble and decreases from 27\% to 23\% when using the Vina scoring function. Overall, the Default Ensemble still shows a strong docking performance boost when used to rescore poses rather than using the Vina scoring function to score poses even on protein-ligand systems not seen during training.
 
-\begin{figure}[tbh]
+\begin{figure}[tb]
         \subfloat[Redocking Ensembles]{
 		\centering
 		\includegraphics[width=.47\textwidth]{figures/redocking/ensemble_models_no2017_nocd2020_line.pdf}
@@ -506,15 +505,15 @@ We evaluate all of the CNN models on a subset of the data that was not seen  dur
 \end{figure}  
 
 Finally, we examine the importance of the output CNNscore as a measure of the confidence of the prediction. 
-\begin{figure}[tbh]
+\begin{figure}[tb]
         \subfloat[Redocking Ensembles]{    
 		\centering
-		\includegraphics[width=\textwidth]{figures/redocking/thresh_cnnscore_ensembles.pdf}
+		\includegraphics[width=.95\textwidth]{figures/redocking/thresh_cnnscore_ensembles.pdf}
 		\label{fig:ThreshEnsRD}
         }    \\
         \subfloat[Cross-docking Ensembles]{   
 		\centering
-		\includegraphics[width=\textwidth]{figures/crossdocking/thresh_cnnscore_ensembles.pdf}
+		\includegraphics[width=.95\textwidth]{figures/crossdocking/thresh_cnnscore_ensembles.pdf}
                 \label{fig:ThreshEnsCD}
         }
 	\caption{Thresholding the top pose by the score determined by the CNN. Top1 is the percentage of top ranked targets with a RMSD less than 2{\AA}.}
