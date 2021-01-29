@@ -19,7 +19,7 @@ Input:
         num_modes      -- number(s)
         autobox_add    -- number(s)
         num_mc_saved   -- number(s)
-
+        cnn_empirical_weight -- number(s)
         --gpu : this will turn on gpu acceleration for the command.
 
 The name of the output file for the gnina command will be the name of the outfile_prefix+"option"+.sdf
@@ -37,7 +37,7 @@ def make_out_name(cnns):  # make sure names of output sdf is consistent for sing
     out_strings = []
     for m in ensemble_models:
         search_string = f'(?<={m}_)(\d)'
-        matches = ''.join(re.findall(search_string, cnn_string))
+        matches = ''.join(sorted(re.findall(search_string, cnn_string)))
         first_ss = f'(?<={m})(\+|$)'
         if len(re.findall(first_ss, cnn_string)):
             matches = '0' + matches
@@ -51,7 +51,7 @@ def make_out_name(cnns):  # make sure names of output sdf is consistent for sing
 parser=argparse.ArgumentParser(description='Create a text file containing all the gnina commands you specify to run.')
 parser.add_argument('-i','--input',required=True,help='Space-delimited file containing: <Receptor file> <Ligand file> <autobox ligand file> <outfile prefix>.')
 parser.add_argument('-o','--output',default='gnina_cmds.txt',help='Name of the output file containing the commands to run. Defaults to "gnina_cmds.txt"')
-parser.add_argument('--cnn',default=['crossdock_default2018'],nargs='+',help="Specify built-in CNN model for gnina. Default is to use crossdock_default2018. If multiple models are specified, an ensemble will be evaluated.(ensembles can also be specified through the same notation as Gnina, i.e. '<model>_ensemble' to specify the ensemble of <model>")
+parser.add_argument('--cnn',nargs='+',help="Specify built-in CNN model for gnina. Defaults to unspecified cnn, which uses the default cnn model of gnina. If multiple models are specified, an ensemble will be evaluated.(ensembles can also be specified through the same notation as Gnina, i.e. '<model>_ensemble' to specify the ensemble of <model>")
 parser.add_argument('--cnn_scoring',default='rescore',help='Specify what method of CNN scoring. Must be [none, rescore,refinement,all]. Defaults to rescore')
 parser.add_argument('--exhaustiveness',default=None,nargs='+',help='exhaustiveness arguments for gnina. Accepts any number of arguments.')
 parser.add_argument('--min_rmsd_filter',default=None,nargs='+',help='Filters for min_rmsd_filter for gnina. Accepts any number of arguments.')
@@ -59,6 +59,7 @@ parser.add_argument('--cnn_rotation',default=None,nargs='+',help='Options for cn
 parser.add_argument('--num_modes',default=None,nargs='+',help='Options for num_modes for gnina. Accepts any number of arguments.')
 parser.add_argument('--autobox_add',default=None,nargs='+',help='Options for autobox_add for gnina. Accepts any number of arguments.')
 parser.add_argument('--num_mc_saved',default=None,nargs='+',help='Options for num_mc_saved for gnina. Accepts any number of arguments.')
+parser.add_argument('--cnn_empirical_weight',default=None, nargs='+',help='Option for merging CNN with empirical forces and energies during docking. Accepts any number of arguments.')
 parser.add_argument('--nogpu',action='store_true',help='Flag to turn OFF gpu acceleration for gnina.')
 parser.add_argument('--seed',default=420,type=int,help='Seed for Gnina (default: %(default)d)')
 args=parser.parse_args()
@@ -77,20 +78,21 @@ possible=[
 'general_default2018_4', 'redock_default2018', 'redock_default2018_1',
 'redock_default2018_2', 'redock_default2018_3', 'redock_default2018_4'
 ]
-if '_ensemble' in '_'.join(args.cnn):  # See if '_ensemble' in any of the arguments
-    new_args_cnn = set()  # Using set so don't have two of the same model in the ensemble
-    for model in args.cnn:
-        if 'ensemble' not in model:
-            new_args_cnn.add(model)
-        else:
-            assert model[:-len('_ensemble')] in possible+[''], "Must be ensemble of built in model(s)"  # can also be ensemble of all models which would be '_ensemble' so '' is a valid model
-            base_cnn = model[:-len('_ensemble')]
-            ensemble = [cnn_model for cnn_model in possible if base_cnn in cnn_model]
-            new_args_cnn.update(ensemble)
-    args.cnn = sorted(list(new_args_cnn))
+if args.cnn is not None:
+    if '_ensemble' in '_'.join(args.cnn):  # See if '_ensemble' in any of the arguments
+        new_args_cnn = set()  # Using set so don't have two of the same model in the ensemble
+        for model in args.cnn:
+            if 'ensemble' not in model:
+                new_args_cnn.add(model)
+            else:
+                assert model[:-len('_ensemble')] in possible+[''], "Must be ensemble of built in model(s)"  # can also be ensemble of all models which would be '_ensemble' so '' is a valid model
+                base_cnn = model[:-len('_ensemble')]
+                ensemble = [cnn_model for cnn_model in possible if base_cnn in cnn_model]
+                new_args_cnn.update(ensemble)
+        args.cnn = sorted(list(new_args_cnn))
 
-for cnn in args.cnn:
-    assert(cnn in possible), "Specified cnn not built into gnina!"
+    for cnn in args.cnn:
+        assert(cnn in possible), "Specified cnn not built into gnina!"
 
 # Specifying arguments to skip over
 skip = set(['input', 'output', 'cnn', 'cnn_scoring', 'nogpu', 'seed'])
@@ -116,12 +118,17 @@ with open(args.output, 'w') as outfile:
         print('default arguments')
         for r, l, box, out_prefix in todock:
             sent = f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed {args.seed}'
-            if len(args.cnn) == len(possible):
+            if args.cnn is None:
+                dock_out = out_prefix + 'default_ensemble_' + args.cnn_scoring+'_defaults.sdf.gz'
+            elif len(args.cnn) == len(possible):
                 dock_out = out_prefix+'all_ensemble_'+args.cnn_scoring+'_defaults.sdf.gz'
             else:
                 cnn_out_string = make_out_name(args.cnn)
                 dock_out = out_prefix+cnn_out_string+'_'+args.cnn_scoring+'_defaults.sdf.gz'
-            sent += f' --cnn {" ".join(args.cnn)} --out {dock_out}'
+            if args.cnn is None:
+                sent += f' --out {dock_out}'
+            else:
+                sent += f' --cnn {" ".join(args.cnn)} --out {dock_out}'
 
             if args.nogpu:
                     sent += ' --no_gpu'
@@ -135,16 +142,25 @@ with open(args.output, 'w') as outfile:
                         print(val)
                         for r, l, box, out_prefix in todock:
                             sent = f'gnina -r {r} -l {l} --autobox_ligand {box} --cnn_scoring {args.cnn_scoring} --cpu 1 --seed {args.seed}'
-                            if len(args.cnn) == len(possible):
-                                dock_out = out_prefix+'all_ensemble_'+args.cnn_scoring+'_'+arg+val+'.sdf.gz'
+                            if args.cnn is None:
+                                dock_out = out_prefix + 'default_ensemble_' + args.cnn_scoring + '_' + arg + val + '.sdf.gz'
+                            elif len(args.cnn) == len(possible):
+                                dock_out = out_prefix+'all_ensemble_'+args.cnn_scoring+'_'+ arg + val +'.sdf.gz'
                             else:
                                 cnn_out_string = make_out_name(args.cnn)
-                                dock_out = out_prefix+cnn_out_string+'_'+args.cnn_scoring+'_'+arg+val+'.sdf.gz'
+                                dock_out = out_prefix+cnn_out_string+'_'+args.cnn_scoring+ '_' + arg + val +'.sdf.gz'
 
-                            sent += f' --cnn {" ".join(args.cnn)} --out {dock_out}'
+                            if args.cnn is None:
+                                sent += f' --out {dock_out}'
+                            else:
+                                sent += f' --cnn {" ".join(args.cnn)} --out {dock_out}'
 
                             # adding in the stuff for the specified argument
                             sent += f' --{arg} {val}'
+
+                            #if the cnn_empirical_weight is selected, adding the other necessary gnina flags.
+                            if arg == 'cnn_empirical_weight':
+                                sent+=' --cnn_mix_emp_force --cnn_mix_emp_energy'
 
                             if args.nogpu:
                                     sent += ' --no_gpu'

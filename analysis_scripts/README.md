@@ -14,8 +14,9 @@ Creates a master csv containing rmsd information and scores output by Gnina.
 # Running the full analysis pipeline
 
 In order to get the same results as shown in the paper, you must run a series of sweeps of the parameters within Gnina using the above mentioned scripts.
+1. First you must download all of the data for both the redocking and crossdocking. Then extract both of the *tar.gz* files into this directory using: `tar xzf <filename>`.
 
-1. First step requires a space-delimited file containing the receptor, ligand, autobox\_ligand, and the prefix of the output file (These are provided as *rd\_input\_pairs.txt*,*rd\_wp\_input\_pairs.txt*,*ds\_cd\_input\_pairs.txt*, and *ds\_cd\_wp\_input\_pairs.txt*, where *ds\_cd* indicates downsampled cross-docking, *rd* indicates redocking, and *wp* indicates whole protein). This is used as input to the *make\_gnina\_cmds.py* script along with an output file name, the CNNs to use, the cnn\_scoring method, and any arguments for the parameters.
+1. Now we must create the run files for Gnina. This step requires a space-delimited file containing the receptor, ligand, autobox\_ligand, and the prefix of the output file (These are provided as *rd\_input\_pairs.txt*,*rd\_wp\_input\_pairs.txt*,*ds\_cd\_input\_pairs.txt*, and *ds\_cd\_wp\_input\_pairs.txt*, where *ds\_cd* indicates downsampled cross-docking, *rd* indicates redocking, and *wp* indicates whole protein). This is used as input to the *make\_gnina\_cmds.py* script along with an output file name, the CNNs to use, the cnn\_scoring method, and any arguments for the parameters.
 
     Example: `python make\_gnina\_cmds.py -i rd\_input\_pairs.txt -o redock\_exhaustiveness\_sweep.txt --cnn dense general\_default2018\_3 dense\_3 crossdock\_default2018 redock\_default2018 --exhaustiveness 4 8 16`
     This will create a file *redock\_exhaustiveness\_sweep.txt* containing Gnina run commands for each protein-ligand pair in the input file *rd\_input\_pairs.txt* for each of the exhaustiveness arguments specified. By default the script will use seed=420 and cnn\_scoring=rescore unless specified otherwise.
@@ -56,7 +57,7 @@ In order to get the same results as shown in the paper, you must run a series of
     *The exhaustiveness sweep also requires the same sweep specified using `--cnn_scoring none` so you can get both Vina and Default Ensemble results
 
     ### Whole Protein Sweeps
-    Each of these should use the Default Ensemble (i.e. no argument provided for `--cnn`)
+    Each of these should use the Default Ensemble (i.e. no argument provided for `--cnn`). These should use the files with *wp* in the name for the input, i.e. *ds\_cd\_wp\_input\_pairs.txt* and *rd\_wp\_input\_pairs.txt*.
     |--cnn_scoring |Sweep Argument | values |
 	| rescore | --exhaustiveness | 8,16,32,64 |
 	| none | --exhaustiveness | 8,16,32,64 |
@@ -70,15 +71,10 @@ In order to get the same results as shown in the paper, you must run a series of
             
         eval $p   
             
-        OUT=$(echo "$p" | awk -Fout '{print $2}' | awk '{print $1}')    
-        echo $OUT    
-            
-        mv $OUT OUTPUT_LOCATION
-
     done < MAKE_GNINA_CMDS_OUTPUT.TXT
 
 ```
-    This will run each line in the *MAKE\_GNINA\_CMDS\_OUTPUT.TXT* and move the output file to the *OUTPUT\_LOCATION*. Following the previous example, *MAKE\_GNINA\_CMDS\_OUTPUT.TXT*=*redock\_exhaustiveness\_sweep.txt* and *OUTPUT\_LOCATION*=same directory as the input receptor and ligand
+    This will run each line in the *MAKE\_GNINA\_CMDS\_OUTPUT.TXT*. Following the previous example, *MAKE\_GNINA\_CMDS\_OUTPUT.TXT*=*redock\_exhaustiveness\_sweep.txt*.
 3. After all of the Gnina runs have completed, you need to next run the RMSD calculation using *obrms\_calc.py*. This will create a *rmsds* file from each *sdf.gz* output of the Gnina runs in the last step. Example: `python obrms_calc.py -i rd\_input\_pairs.txt -d redocked\_systems/ --getscores`  Note: only use  *--getscores* if the Gnina runs had *--cnn_scoring*=*rescore*, *refinement*, or *all*.
 
 4. Combine the RMSD and score information into one file for each sweep. This requires the *coalescer.py* script, for each sweep you will need to identify the suffix of the run outputs that will allow you to easily group the files, you also need a set of values such that all of the files that you are coalescing into one csv are named _*\<SUFFIX\>\<VALUE\>.rmsd_. Additionally you will need to use a directory list, which contains all of the directory names, either pocket names or protein names for the cross-docking and redocking respectively, these are provided as *rd\_dirs.txt* and *ds\_cd\_dirs.txt* for redocking and cross-docking, respectively.
