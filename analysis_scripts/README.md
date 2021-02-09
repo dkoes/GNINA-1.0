@@ -11,7 +11,7 @@ Calculates the RMSD from the poses in the Gnina output files to the known ligand
 ### coalescer.py
 Creates a master csv containing rmsd information and scores output by Gnina.
 
-## Running the full analysis pipeline
+## Analysis pipeline for Cross-docking and Redocking with no flexible residues
 
 In order to get the same results as shown in the paper, you must run a series of sweeps of the parameters within Gnina using the above mentioned scripts.
 1. First you must download all of the data for both the redocking and crossdocking into this directory, these can be found at https://bits.csb.pitt.edu/files/gnina1.0_paper/. Then extract both the *crossdocked_ds_data.tar.gz* and *redocking\_all\_data.tar.gz* files into this directory using: `tar xzf <filename>`.
