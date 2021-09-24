@@ -1,5 +1,5 @@
 # GNINA1.0 Paper
-Contains all requisite materials for the GNINA 1.0 paper
+Contains all requisite materials used in the paper [GNINA 1.0: molecular docking with deep learning](https://doi.org/10.1186/s13321-021-00522-2)
 
 ### Contents
 - data: has all of the csvs required to make the figures for the paper
